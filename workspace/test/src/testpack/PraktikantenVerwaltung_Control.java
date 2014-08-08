@@ -19,7 +19,7 @@ public class PraktikantenVerwaltung_Control {
 		                ArrayList<String> datensatz = _view.getInhalt(); 
 		                _model.connectToDatabase("jdbc:sqlite:test.db"); 
 		                //hier überprüfen ob insert update
-		                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update/ordelte) sowie der liste");
+		                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update) sowie der liste");
 		               _view.setInfoPrakt("lol");
 		            } 
 	   }
@@ -28,7 +28,7 @@ public class PraktikantenVerwaltung_Control {
                 ArrayList<String> datensatz = _view.getInhalt(); 
                 _model.connectToDatabase("jdbc:sqlite:test.db"); 
                 //hier überprüfen ob insert update
-                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update/ordelte) sowie der liste");
+                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update) sowie der liste");
                _view.setInfoPrakt("lol");
             } 
 	   }
@@ -37,7 +37,7 @@ public class PraktikantenVerwaltung_Control {
                 ArrayList<String> datensatz = _view.getInhalt(); 
                 _model.connectToDatabase("jdbc:sqlite:test.db"); 
                 //hier überprüfen ob insert update
-                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update/ordelte) sowie der liste");
+                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update) sowie der liste");
                _view.setInfoPrakt("lol");
             } 
 	   }

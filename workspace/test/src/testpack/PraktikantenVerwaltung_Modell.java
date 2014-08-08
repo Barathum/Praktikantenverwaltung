@@ -24,6 +24,7 @@ public class PraktikantenVerwaltung_Modell {
 	    String sql = "INSERT INTO PRAKTIKANTEN (ID,NAME,AGE,ADDRESS,SALARY) " +
                 "VALUES (2, 'Paul', 32, 'California', 20000.00 );";
 	    insertUpdateDeleteTable(sql);
+//	    sdasdasdadsadasd
 	    
 	  }
 	

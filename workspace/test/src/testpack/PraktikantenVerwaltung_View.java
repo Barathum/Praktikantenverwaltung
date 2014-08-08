@@ -108,8 +108,29 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JTextField textField_TelAnsprBearb;
 	private JTextField textField_VornameAnsprBearb;
 	private JTextField textField_NameAnsprBearb;
+	private JTextField textField_RaumAnsprWoch3;
+	private JTextField textField_AbleilAnsprWoch3;
+	private JTextField textField_MailAnsprWoch3;
+	private JTextField textField_VornameAnsprWoch3;
+	private JTextField textField_RaumAnsprWoch2;
+	private JTextField textField_AbteilAnsprWoch2;
+	private JTextField textField_MailAnsprWoch2;
+	private JTextField textField_TelAnsprWoch2;
+	private JTextField textField_VornameAnsprWoch2;
+	private JTextField textField_RaumAnsprWoch1;
+	private JTextField textField_AbteilAnsprWoch1;
+	private JTextField textField_MailAnsprWoch1;
+	private JTextField textField_TelAnsprWoch1;
+	private JTextField textField_VornameAnsprWoch1;
 	private JButton btnSpeichern;
 	private JTextArea textArea_konsole;
+	private JPanel panel_ansprechPartner;
+	private JPanel panel_AnsprWoche1;
+	private JPanel panel_AnsprWoche2;
+	private JPanel panel_AnsprWoche3;
+	private JButton button_woche1;
+	private JButton button_woche2;
+	private JButton button_woche3;
 	
 
 	/**
@@ -702,15 +723,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JPanel panel_8 = new JPanel();
 		panel_8.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JButton button_woche1 = new JButton("1");
-		button_woche1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		button_woche1 = new JButton("1");
 		
-		JButton button_woche2 = new JButton("2");
+		button_woche2 = new JButton("2");
 		
-		JButton button_woche3 = new JButton("3");
+		button_woche3 = new JButton("3");
 		GroupLayout gl_panel_8 = new GroupLayout(panel_8);
 		gl_panel_8.setHorizontalGroup(
 			gl_panel_8.createParallelGroup(Alignment.TRAILING)
@@ -771,7 +788,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		JButton btnNachrichtErstellen = new JButton("Nachricht erstellen");
 		
-		JPanel panel_9 = new JPanel();
+		panel_ansprechPartner = new JPanel();
 		GroupLayout gl_panel_Steckbrief = new GroupLayout(panel_Steckbrief);
 		gl_panel_Steckbrief.setHorizontalGroup(
 			gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
@@ -792,7 +809,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 								.addComponent(panel_5, GroupLayout.PREFERRED_SIZE, 335, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 							.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-								.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 782, GroupLayout.PREFERRED_SIZE)
+								.addComponent(panel_ansprechPartner, GroupLayout.PREFERRED_SIZE, 782, GroupLayout.PREFERRED_SIZE)
 								.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
@@ -809,11 +826,15 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 											.addComponent(lblWochen, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED)
 											.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)))
-									.addGap(32)
 									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)
-										.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblDatenZumPraktikum))))
+										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+											.addGap(32)
+											.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
+												.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblDatenZumPraktikum)))
+										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+											.addGap(68)
+											.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))))
 							.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 									.addGap(4)
@@ -829,7 +850,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
 										.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE))))))
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+					.addContainerGap(53, Short.MAX_VALUE))
 		);
 		gl_panel_Steckbrief.setVerticalGroup(
 			gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
@@ -879,7 +900,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 										.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 										.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))))
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(panel_9, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+							.addComponent(panel_ansprechPartner, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
 							.addContainerGap())
 						.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 							.addGap(77)
@@ -893,25 +914,349 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 								.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
 							.addGap(26))))
 		);
-		panel_9.setLayout(new CardLayout(0, 0));
+		panel_ansprechPartner.setLayout(new CardLayout(0, 0));
 		
-		JPanel panel_AnsprWoche1 = new JPanel();
-		panel_9.add(panel_AnsprWoche1, "name_6993591814156");
+		panel_AnsprWoche1 = new JPanel();
+		panel_ansprechPartner.add(panel_AnsprWoche1, "card_woche1");
 		
-		JLabel lblSeite = new JLabel("Seite1");
-		panel_AnsprWoche1.add(lblSeite);
+		JPanel panel_13 = new JPanel();
+		panel_13.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 		
-		JPanel panel_AnsprWoche2 = new JPanel();
-		panel_9.add(panel_AnsprWoche2, "name_7030513552690");
+		JLabel label_23 = new JLabel("Vorname:");
 		
-		JLabel lblSeite_1 = new JLabel("Seite2");
-		panel_AnsprWoche2.add(lblSeite_1);
+		JLabel label_24 = new JLabel("Nachname(Ansprechpartner):");
 		
-		JPanel panel_AnsprWoche3 = new JPanel();
-		panel_9.add(panel_AnsprWoche3, "name_7023765404031");
+		JLabel label_25 = new JLabel("E-Mail-Adresse:");
 		
-		JLabel lblSeite_2 = new JLabel("Seite3");
-		panel_AnsprWoche3.add(lblSeite_2);
+		JLabel label_26 = new JLabel("Telefonnummer:");
+		
+		JLabel label_27 = new JLabel("Abteilung:");
+		
+		JLabel label_28 = new JLabel("Raumnummer:");
+		
+		textField_RaumAnsprWoch1 = new JTextField();
+		textField_RaumAnsprWoch1.setColumns(10);
+		
+		textField_AbteilAnsprWoch1 = new JTextField();
+		textField_AbteilAnsprWoch1.setColumns(10);
+		
+		textField_MailAnsprWoch1 = new JTextField();
+		textField_MailAnsprWoch1.setColumns(10);
+		
+		textField_TelAnsprWoch1 = new JTextField();
+		textField_TelAnsprWoch1.setColumns(10);
+		
+		textField_VornameAnsprWoch1 = new JTextField();
+		textField_VornameAnsprWoch1.setColumns(10);
+		
+		JComboBox comboBox_NameAnsprWoch1 = new JComboBox();
+		comboBox_NameAnsprWoch1.setEditable(true);
+		GroupLayout gl_panel_13 = new GroupLayout(panel_13);
+		gl_panel_13.setHorizontalGroup(
+			gl_panel_13.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 482, Short.MAX_VALUE)
+				.addGroup(gl_panel_13.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.LEADING)
+						.addComponent(label_23)
+						.addComponent(label_24)
+						.addGroup(gl_panel_13.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(label_25, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(label_26, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(label_27, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_28, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+					.addGap(39)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(textField_RaumAnsprWoch1)
+						.addComponent(textField_AbteilAnsprWoch1)
+						.addComponent(textField_MailAnsprWoch1)
+						.addComponent(textField_TelAnsprWoch1)
+						.addComponent(textField_VornameAnsprWoch1)
+						.addComponent(comboBox_NameAnsprWoch1, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(45, Short.MAX_VALUE))
+		);
+		gl_panel_13.setVerticalGroup(
+			gl_panel_13.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 186, Short.MAX_VALUE)
+				.addGroup(gl_panel_13.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_24)
+						.addComponent(comboBox_NameAnsprWoch1, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_23)
+						.addComponent(textField_VornameAnsprWoch1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_26)
+						.addComponent(textField_TelAnsprWoch1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_25)
+						.addComponent(textField_MailAnsprWoch1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_27)
+						.addComponent(textField_AbteilAnsprWoch1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_13.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_28)
+						.addComponent(textField_RaumAnsprWoch1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(23, Short.MAX_VALUE))
+		);
+		panel_13.setLayout(gl_panel_13);
+		
+		JScrollPane scrollPane_8 = new JScrollPane();
+		GroupLayout gl_panel_AnsprWoche1 = new GroupLayout(panel_AnsprWoche1);
+		gl_panel_AnsprWoche1.setHorizontalGroup(
+			gl_panel_AnsprWoche1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche1.createSequentialGroup()
+					.addComponent(panel_13, GroupLayout.PREFERRED_SIZE, 482, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(scrollPane_8, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(26, Short.MAX_VALUE))
+		);
+		gl_panel_AnsprWoche1.setVerticalGroup(
+			gl_panel_AnsprWoche1.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche1.createSequentialGroup()
+					.addGroup(gl_panel_AnsprWoche1.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_13, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane_8, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		JTextArea textArea_EinsatzortAnsprWoche1 = new JTextArea();
+		scrollPane_8.setViewportView(textArea_EinsatzortAnsprWoche1);
+		panel_AnsprWoche1.setLayout(gl_panel_AnsprWoche1);
+		
+		panel_AnsprWoche2 = new JPanel();
+		panel_ansprechPartner.add(panel_AnsprWoche2, "card_woche2");
+		
+		JPanel panel_12 = new JPanel();
+		panel_12.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		
+		JLabel label_17 = new JLabel("Vorname:");
+		
+		JLabel label_18 = new JLabel("Nachname(Ansprechpartner):");
+		
+		JLabel label_19 = new JLabel("E-Mail-Adresse:");
+		
+		JLabel label_20 = new JLabel("Telefonnummer:");
+		
+		JLabel label_21 = new JLabel("Abteilung:");
+		
+		JLabel label_22 = new JLabel("Raumnummer:");
+		
+		textField_RaumAnsprWoch2 = new JTextField();
+		textField_RaumAnsprWoch2.setColumns(10);
+		
+		textField_AbteilAnsprWoch2 = new JTextField();
+		textField_AbteilAnsprWoch2.setColumns(10);
+		
+		textField_MailAnsprWoch2 = new JTextField();
+		textField_MailAnsprWoch2.setColumns(10);
+		
+		textField_TelAnsprWoch2 = new JTextField();
+		textField_TelAnsprWoch2.setColumns(10);
+		
+		textField_VornameAnsprWoch2 = new JTextField();
+		textField_VornameAnsprWoch2.setColumns(10);
+		
+		JComboBox comboBox_NameAnsprWoch2 = new JComboBox();
+		comboBox_NameAnsprWoch2.setEditable(true);
+		GroupLayout gl_panel_12 = new GroupLayout(panel_12);
+		gl_panel_12.setHorizontalGroup(
+			gl_panel_12.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 482, Short.MAX_VALUE)
+				.addGroup(gl_panel_12.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.LEADING)
+						.addComponent(label_17)
+						.addComponent(label_18)
+						.addGroup(gl_panel_12.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(label_19, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(label_20, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(label_21, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_22, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+					.addGap(39)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(textField_RaumAnsprWoch2)
+						.addComponent(textField_AbteilAnsprWoch2)
+						.addComponent(textField_MailAnsprWoch2)
+						.addComponent(textField_TelAnsprWoch2)
+						.addComponent(textField_VornameAnsprWoch2)
+						.addComponent(comboBox_NameAnsprWoch2, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(45, Short.MAX_VALUE))
+		);
+		gl_panel_12.setVerticalGroup(
+			gl_panel_12.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 186, Short.MAX_VALUE)
+				.addGroup(gl_panel_12.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_18)
+						.addComponent(comboBox_NameAnsprWoch2, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_17)
+						.addComponent(textField_VornameAnsprWoch2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_20)
+						.addComponent(textField_TelAnsprWoch2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_19)
+						.addComponent(textField_MailAnsprWoch2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_21)
+						.addComponent(textField_AbteilAnsprWoch2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_12.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_22)
+						.addComponent(textField_RaumAnsprWoch2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(23, Short.MAX_VALUE))
+		);
+		panel_12.setLayout(gl_panel_12);
+		
+		JScrollPane scrollPane_7 = new JScrollPane();
+		GroupLayout gl_panel_AnsprWoche2 = new GroupLayout(panel_AnsprWoche2);
+		gl_panel_AnsprWoche2.setHorizontalGroup(
+			gl_panel_AnsprWoche2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche2.createSequentialGroup()
+					.addComponent(panel_12, GroupLayout.PREFERRED_SIZE, 482, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(26, Short.MAX_VALUE))
+		);
+		gl_panel_AnsprWoche2.setVerticalGroup(
+			gl_panel_AnsprWoche2.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche2.createSequentialGroup()
+					.addGroup(gl_panel_AnsprWoche2.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_12, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane_7, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		JTextArea textArea_EinsatzortAnsprWoche2 = new JTextArea();
+		scrollPane_7.setViewportView(textArea_EinsatzortAnsprWoche2);
+		panel_AnsprWoche2.setLayout(gl_panel_AnsprWoche2);
+		
+		panel_AnsprWoche3 = new JPanel();
+		panel_ansprechPartner.add(panel_AnsprWoche3, "card_woche3");
+		
+		JPanel panel_11 = new JPanel();
+		panel_11.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+		
+		JLabel label_11 = new JLabel("Vorname:");
+		
+		JLabel label_12 = new JLabel("Nachname(Ansprechpartner):");
+		
+		JLabel label_13 = new JLabel("E-Mail-Adresse:");
+		
+		JLabel label_14 = new JLabel("Telefonnummer:");
+		
+		JLabel label_15 = new JLabel("Abteilung:");
+		
+		JLabel label_16 = new JLabel("Raumnummer:");
+		
+		textField_RaumAnsprWoch3 = new JTextField();
+		textField_RaumAnsprWoch3.setColumns(10);
+		
+		textField_AbleilAnsprWoch3 = new JTextField();
+		textField_AbleilAnsprWoch3.setColumns(10);
+		
+		textField_MailAnsprWoch3 = new JTextField();
+		textField_MailAnsprWoch3.setColumns(10);
+		
+		JTextField textField_TelAnsprWoch3 = new JTextField();
+		textField_TelAnsprWoch3.setColumns(10);
+		
+		textField_VornameAnsprWoch3 = new JTextField();
+		textField_VornameAnsprWoch3.setColumns(10);
+		
+		JComboBox comboBox_NameAnsprWoch3 = new JComboBox();
+		comboBox_NameAnsprWoch3.setEditable(true);
+		GroupLayout gl_panel_11 = new GroupLayout(panel_11);
+		gl_panel_11.setHorizontalGroup(
+			gl_panel_11.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 482, Short.MAX_VALUE)
+				.addGroup(gl_panel_11.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.LEADING)
+						.addComponent(label_11)
+						.addComponent(label_12)
+						.addGroup(gl_panel_11.createParallelGroup(Alignment.TRAILING, false)
+							.addComponent(label_13, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+							.addComponent(label_14, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(label_15, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_16, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
+					.addGap(39)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(textField_RaumAnsprWoch3)
+						.addComponent(textField_AbleilAnsprWoch3)
+						.addComponent(textField_MailAnsprWoch3)
+						.addComponent(textField_TelAnsprWoch3)
+						.addComponent(textField_VornameAnsprWoch3)
+						.addComponent(comboBox_NameAnsprWoch3, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(45, Short.MAX_VALUE))
+		);
+		gl_panel_11.setVerticalGroup(
+			gl_panel_11.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 186, Short.MAX_VALUE)
+				.addGroup(gl_panel_11.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_12)
+						.addComponent(comboBox_NameAnsprWoch3, GroupLayout.PREFERRED_SIZE, 20, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_11)
+						.addComponent(textField_VornameAnsprWoch3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_14)
+						.addComponent(textField_TelAnsprWoch3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_13)
+						.addComponent(textField_MailAnsprWoch3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_15)
+						.addComponent(textField_AbleilAnsprWoch3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_panel_11.createParallelGroup(Alignment.BASELINE)
+						.addComponent(label_16)
+						.addComponent(textField_RaumAnsprWoch3, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(23, Short.MAX_VALUE))
+		);
+		panel_11.setLayout(gl_panel_11);
+		
+		JScrollPane scrollPane_4 = new JScrollPane();
+		GroupLayout gl_panel_AnsprWoche3 = new GroupLayout(panel_AnsprWoche3);
+		gl_panel_AnsprWoche3.setHorizontalGroup(
+			gl_panel_AnsprWoche3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche3.createSequentialGroup()
+					.addComponent(panel_11, GroupLayout.PREFERRED_SIZE, 482, GroupLayout.PREFERRED_SIZE)
+					.addGap(18)
+					.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 256, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(26, Short.MAX_VALUE))
+		);
+		gl_panel_AnsprWoche3.setVerticalGroup(
+			gl_panel_AnsprWoche3.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel_AnsprWoche3.createSequentialGroup()
+					.addGroup(gl_panel_AnsprWoche3.createParallelGroup(Alignment.LEADING)
+						.addComponent(panel_11, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE)
+						.addComponent(scrollPane_4, GroupLayout.PREFERRED_SIZE, 185, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		);
+		
+		JTextArea textArea_EinsatzortAnsprWoche3 = new JTextArea();
+		scrollPane_4.setViewportView(textArea_EinsatzortAnsprWoche3);
+		panel_AnsprWoche3.setLayout(gl_panel_AnsprWoche3);
 		
 		JTextArea textArea_konsole = new JTextArea();
 		textArea_konsole.setBackground(UIManager.getColor("Button.background"));
@@ -1242,6 +1587,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	    menuAnsprechpartner.addActionListener(this);
 	    menuAlleAnsprechpartner.addActionListener(this);
 	    menuAnsprechpartnerbearbeiten.addActionListener(this);
+	    button_woche1.addActionListener(this);
+	    button_woche2.addActionListener(this);
+	    button_woche3.addActionListener(this);
 	}
 
 	public void setPraktSpeichernListener(ActionListener l){ 
@@ -1256,6 +1604,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void actionPerformed(ActionEvent evt) {
 		 Object src = evt.getSource();
 		 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+		 CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 		    if (src == menuEintrag) {
 		    	cardLayout.show(mainPanel, "card_1");
 		    } else if (src == menuSuche) {
@@ -1278,6 +1627,12 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 				btn_NachrichtSchreiben.setVisible(false);
 			} else if (src == menuAnsprechpartnerbearbeiten) {
 				cardLayout.show(mainPanel, "card_5");
+			} else if (src == button_woche1) {
+				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
+			} else if (src == button_woche2) {
+				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");	
+			} else if (src == button_woche3) {
+				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
 			}
 		
 	}

@@ -1308,7 +1308,6 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
     	Dimension preferredSize = component.getPreferredSize();
     	component.setPreferredSize( new Dimension( width, preferredSize.height ) );
     }
-	@Override
 	public void actionPerformed(ActionEvent evt) {
 		 Object src = evt.getSource();
 		 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();

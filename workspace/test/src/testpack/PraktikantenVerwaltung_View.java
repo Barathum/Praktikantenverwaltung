@@ -9,6 +9,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -39,6 +40,7 @@ import javax.swing.plaf.basic.BasicComboPopup;
 
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 import java.awt.SystemColor;
 
 public class PraktikantenVerwaltung_View extends JFrame implements ActionListener{
@@ -124,6 +126,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JTextField textField_VornameAnsprWoch1;
 	private JButton btnSpeichern;
 	private JTextArea textArea_konsole;
+	private JButton button_SpeichernAnspr;
+	private JButton btn_bearbeiten;
+	private JButton btn_loeschen;
+	private JButton btn_info;
 	private JPanel panel_ansprechPartner;
 	private JPanel panel_AnsprWoche1;
 	private JPanel panel_AnsprWoche2;
@@ -131,6 +137,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JButton button_woche1;
 	private JButton button_woche2;
 	private JButton button_woche3;
+	private JComboBox comboBox_anrede;
 	
 
 	/**
@@ -263,7 +270,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JLabel lblBearbeiteAnsprechpartner = new JLabel("Bearbeite  Ansprechpartner");
 		lblBearbeiteAnsprechpartner.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
-		JButton button_SpeichernAnspr = new JButton("Speichern");
+		button_SpeichernAnspr = new JButton("Speichern");
 		
 		JScrollPane scrollPane_6 = new JScrollPane();
 		
@@ -1300,7 +1307,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		datePicker_gb.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 		
 		String comboBoxListe_anrede[] = {"Herr", "Frau"};
-		JComboBox comboBox_anrede = new JComboBox(comboBoxListe_anrede);
+		comboBox_anrede = new JComboBox(comboBoxListe_anrede);
 		
 		Vector comboBoxItems_geburtsort = new Vector();
 		comboBoxItems_geburtsort.add("");
@@ -1535,11 +1542,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JPanel panel_10 = new JPanel();
 		panel_tabllen.add(panel_10, BorderLayout.SOUTH);
 		
-		JButton btn_bearbeiten = new JButton("Bearbeiten");
+		btn_bearbeiten = new JButton("Bearbeiten");
 		
-		JButton btn_loeschen = new JButton("L\u00F6schen");
+		btn_loeschen = new JButton("L\u00F6schen");
 		
-		JButton btn_info = new JButton("Info");
+		btn_info = new JButton("Info");
 		
 		btn_NachrichtSchreiben = new JButton("Nachricht erstellen");
 		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
@@ -1595,6 +1602,16 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
 	} 
+	public void setAnsprSpeichernListener(ActionListener l){
+		this.button_SpeichernAnspr.addActionListener(l);
+	}
+	public void setAnsprLoeschenListener(ActionListener l){
+		this.button_SpeichernAnspr.addActionListener(l);
+	}
+	public void setPraktLoeschenListener(ActionListener l){
+		this.button_SpeichernAnspr.addActionListener(l);
+	}
+	
 	public static void setFixedWidth(Component component, int width )
     {
     	component.setSize( new Dimension( width, Short.MAX_VALUE ) );
@@ -1639,9 +1656,26 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setInfoPrakt(String inf){
 		this.textArea_konsole.setText(inf);
 	}
-	public ArrayList<String> getInhalt(){
+	public ArrayList<String> getInhaltPrakt(){
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		ArrayList<String> liste = new ArrayList<String>();
-			//hier alle eingaben in liste speichern
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) textField_nn.getText());
+			liste.add((String) textField_vn.getText());
+			liste.add((String) df.format(datePicker_gb.getDate()));
+			liste.add((String) comboBox_geburtsort.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+
 		return liste;
 	}
 }

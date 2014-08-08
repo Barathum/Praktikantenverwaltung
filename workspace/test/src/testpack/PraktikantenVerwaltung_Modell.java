@@ -11,22 +11,22 @@ import java.util.ArrayList;
 public class PraktikantenVerwaltung_Modell {
 	
 	
-	 public static void main( String args[] )
-	  {
-	    connectToDatabase("jdbc:sqlite:test.db");
-//	    String sql = "CREATE TABLE PRAKTIKANTEN " +
-//                "(ID INT PRIMARY KEY     NOT NULL," +
-//                " NAME           TEXT, " + 
-//                " AGE            INT, " + 
-//                " ADDRESS        CHAR(50), " + 
-//                " SALARY         REAL)"; 
-//	    createTable(sql);
-	    String sql = "INSERT INTO PRAKTIKANTEN (ID,NAME,AGE,ADDRESS,SALARY) " +
-                "VALUES (2, 'Paul', 32, 'California', 20000.00 );";
-	    insertUpdateDeleteTable(sql);
-//	    sdasdasdadsadasd
-	    
-	  }
+//	 public static void main( String args[] )
+//	  {
+//	    connectToDatabase("jdbc:sqlite:test.db");
+////	    String sql = "CREATE TABLE PRAKTIKANTEN " +
+////                "(ID INT PRIMARY KEY     NOT NULL," +
+////                " NAME           TEXT, " + 
+////                " AGE            INT, " + 
+////                " ADDRESS        CHAR(50), " + 
+////                " SALARY         REAL)"; 
+////	    createTable(sql);
+//	    String sql = "INSERT INTO PRAKTIKANTEN (ID,NAME,AGE,ADDRESS,SALARY) " +
+//                "VALUES (2, 'Paul', 32, 'California', 20000.00 );";
+//	    insertUpdateDeleteTable(sql);
+////	    sdasdasdadsadasd
+//	    
+//	  }
 	
 	 public static Connection connectToDatabase(String d)
 	  {

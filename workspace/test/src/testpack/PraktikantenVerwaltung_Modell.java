@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class PraktikantenVerwaltung_Modell {
 	
 	
-	 public static void main( String args[] )
+	 public void main( String args[] )
 	  {
 	    connectToDatabase("jdbc:sqlite:test.db");
 //	    String sql = "CREATE TABLE PRAKTIKANTEN " +
@@ -28,7 +28,7 @@ public class PraktikantenVerwaltung_Modell {
 	    
 	  }
 	
-	 public static Connection connectToDatabase(String d)
+	 public Connection connectToDatabase(String d)
 	  {
 	    Connection c = null;
 	    try {
@@ -43,7 +43,7 @@ public class PraktikantenVerwaltung_Modell {
 	    return c;
 	  }
 	 
-	 public static void createTable(String sql){
+	 public void createTable(String sql){
 		    Connection c = null;
 		    Statement stmt = null;
 		    try {
@@ -60,7 +60,7 @@ public class PraktikantenVerwaltung_Modell {
 		    System.out.println("Tabelle erfolgreich erstellt");
 	 }
 	 
-	 public static void insertUpdateDeleteTable(String sql){
+	 public void insertUpdateDeleteTable(String sql){
 		 {
 			    Connection c = null;
 			    Statement stmt = null;
@@ -82,7 +82,7 @@ public class PraktikantenVerwaltung_Modell {
 
 	 }
 	 
-	 public void getData(String sql){
+	 public ArrayList<ArrayList<String>> getData(String sql){
 		  {
 			    Connection c = null;
 			    Statement stmt = null;
@@ -110,6 +110,7 @@ public class PraktikantenVerwaltung_Modell {
 			      System.exit(0);
 			    }
 			    System.out.println("Daten geholt");
+			    return daten;
 			  }
 	 }
 }

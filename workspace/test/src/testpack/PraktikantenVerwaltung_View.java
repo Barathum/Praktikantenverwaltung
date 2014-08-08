@@ -10,6 +10,7 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -112,6 +113,8 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JTextField textField_TelAnsprBearb;
 	private JTextField textField_VornameAnsprBearb;
 	private JTextField textField_NameAnsprBearb;
+	private JButton btnSpeichern;
+	private JTextArea textArea_konsole;
 	
 
 	/**
@@ -821,7 +824,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		JScrollPane scrollPane_4 = new JScrollPane();
 		
-		JButton btnSpeichern = new JButton("Speichern");
+		btnSpeichern = new JButton("Speichern");
 		
 		JScrollPane scrollPane_5 = new JScrollPane();
 		
@@ -1298,10 +1301,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	    menuAnsprechpartner.addActionListener(this);
 	    menuAlleAnsprechpartner.addActionListener(this);
 	    menuAnsprechpartnerbearbeiten.addActionListener(this);
-	   
-		
 	}
 
+	public void setPraktSpeichernListener(ActionListener l){ 
+        this.btnSpeichern.addActionListener(l); 
+	} 
 	public static void setFixedWidth(Component component, int width )
     {
     	component.setSize( new Dimension( width, Short.MAX_VALUE ) );
@@ -1335,5 +1339,13 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 				cardLayout.show(mainPanel, "card_5");
 			}
 		
+	}
+	public void setInfoPrakt(String inf){
+		this.textArea_konsole.setText(inf);
+	}
+	public ArrayList<String> getInhalt(){
+		ArrayList<String> liste = new ArrayList<String>();
+			//hier alle eingaben in liste speichern
+		return liste;
 	}
 }

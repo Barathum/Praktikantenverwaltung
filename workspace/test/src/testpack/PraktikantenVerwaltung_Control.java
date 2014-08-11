@@ -45,13 +45,44 @@ public class PraktikantenVerwaltung_Control {
 	   class PraktSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
                ArrayList<String> datensatz = _view.getInhaltPrakt(); 
+               ArrayList<ArrayList<String>> datensatzAnspr = _view.getInhaltAnspr();
                int updateOrInsert = 0;
-               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
+               int updateOrInsertAnspr1 = 0;
+               int updateOrInsertAnspr2 = 0;
+               int updateOrInsertAnspr3 = 0;
+               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+               if (_view.getEditAnspr1()==true) {
+            	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+            		   updateOrInsertAnspr1 = 2;
+					} else {
+							updateOrInsertAnspr1 = 1;
+					}
+               }
+               if (_view.getEditAnspr2()==true) {
+            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+            		   updateOrInsertAnspr2 = 2;
+					} else {
+							updateOrInsertAnspr2 = 1;
+					}
+               }
+               if (_view.getEditAnspr3()==true) {
+            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+	            		   updateOrInsertAnspr3 = 2;
+					} else {
+							updateOrInsertAnspr3 = 1;
+					}
+               }
                if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
 					updateOrInsert = 1;
 				}
                String sql;
-               sql = schreibeEintragsql(updateOrInsert, datensatz);
+               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
+               _model.insertUpdateDeleteTable(sql);
+               sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
+               _model.insertUpdateDeleteTable(sql);
+               sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
+               _model.insertUpdateDeleteTable(sql);
+               sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
                _model.insertUpdateDeleteTable(sql);
 //               HoechstePraktID = getHoechstePraktID();
            } 
@@ -66,18 +97,18 @@ public class PraktikantenVerwaltung_Control {
             } 
 	   }
 	   class AnsprSpeichernListener implements ActionListener{ 
-           public void actionPerformed(ActionEvent e) { 
-                ArrayList<String> datensatz = _view.getInhaltPrakt(); 
-                int updateOrInsert = 0;
-                _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
-                if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
+		   public void actionPerformed(ActionEvent e) { 
+               ArrayList<String> datensatz = null; 
+               int updateOrInsert = 0;
+               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
+               if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
 					updateOrInsert = 1;
 				}
-                String sql;
-                sql = schreibeEintragsql(updateOrInsert, datensatz);
-                _model.insertUpdateDeleteTable("//hier übergeben sql");
-               _view.setInfoPrakt("lol");
-            } 
+               String sql;
+               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
+               _model.insertUpdateDeleteTable(sql);
+//               HoechstePraktID = getHoechstePraktID();
+           }  
 	   }
 	   class AnsprLoeschenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
@@ -90,7 +121,7 @@ public class PraktikantenVerwaltung_Control {
 	   }
 	   
 
-	public String schreibeEintragsql(int i, ArrayList<String> liste){
+	public String schreibeEintragPraktsql(int i, ArrayList<String> liste){
 		String sql;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -119,6 +150,32 @@ public class PraktikantenVerwaltung_Control {
 	                   +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
 	                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"');";
 			System.out.println("insert");
+		}
+		return sql;
+	}
+	public String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
+		String sql;
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		String zeit = sdf.format(time);
+		HoechstePraktID = getHoechstePraktID();
+		HoechstePraktID++;
+		String neuePraktID = "";
+		neuePraktID = "SP" + HoechstePraktID.toString();
+		if (i == 1) {
+			_view.setInfoAnspr("Daten geupdatet am " + zeit);
+			sql = "UPDATE ANSPRECHPARTNER set ID = '" + liste.get(0) + "', NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
+					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla';";
+			System.out.println("update");
+		} else if (i == 2) {
+		      _view.setInfoAnspr("Daten gespeichert am " + zeit);
+			sql = "INSERT INTO ANSPRECHPARTNER " +
+					"VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+	                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"',' bla ');";
+			System.out.println("insert");
+			System.out.println(liste.get(1));
+		}else {
+			sql = "";
 		}
 		return sql;
 	}

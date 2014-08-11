@@ -1714,4 +1714,5 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add((String) letzteAenderung);
 		return liste;
 	}
+	//bla
 }

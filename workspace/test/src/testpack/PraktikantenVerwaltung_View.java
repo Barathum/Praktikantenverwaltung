@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Vector;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -138,23 +139,41 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JButton button_woche2;
 	private JButton button_woche3;
 	private JComboBox comboBox_anrede;
-	
+	private JTextArea textArea_InfoAnspr;
+	private JComboBox comboBox_partners;
+	private JTextArea textArea_anmerkschule;
+	private JComboBox comboBox_miki;
+	private JComboBox comboBox_grad;
+	private JComboBox comboBox_NameAnsprWoch1;
+	private JTextArea textArea_EinsatzortAnsprWoche1;
+	private JComboBox comboBox_NameAnsprWoch2;
+	private JTextArea textArea_EinsatzortAnsprWoche2;
+	private JTextField textField_TelAnsprWoch3;
+	private JTextArea textArea_EinsatzortAnsprWoche3;
+	private JTextArea textArea_anmerkprakt;
+	private JTextArea textArea_anmerkperson;
+	private JComboBox comboBox_status;
+	private Integer idAnspr1 = new Integer(0);
+	private Integer idAnspr2 = new Integer(0);
+	private Integer idAnspr3 = new Integer(0);
+	private String letzteAenderung;
+
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PraktikantenVerwaltung_View frame = new PraktikantenVerwaltung_View();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					PraktikantenVerwaltung_View frame = new PraktikantenVerwaltung_View();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -322,7 +341,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 					.addContainerGap(116, Short.MAX_VALUE))
 		);
 		
-		JTextArea textArea_InfoAnspr = new JTextArea();
+		textArea_InfoAnspr = new JTextArea();
 		textArea_InfoAnspr.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		textArea_InfoAnspr.setForeground(Color.BLACK);
 		textArea_InfoAnspr.setEditable(false);
@@ -382,7 +401,6 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		JLabel label_1 = new JLabel("Vorname:");
 		
-		String comboBoxListe_land[] = {"Deutschland"};
 		
 		
 		Vector comboBoxItems_wohn=new Vector();
@@ -542,7 +560,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JLabel lblAnmerkungen = new JLabel("Anmerkungen:");
 		
 		String comboBoxListe_partners[] = {"Ja", "Nein"};
-		JComboBox comboBox_partners = new JComboBox(comboBoxListe_partners);
+		comboBox_partners = new JComboBox(comboBoxListe_partners);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		
@@ -613,7 +631,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 					.addContainerGap())
 		);
 		
-		JTextArea textArea_anmerkschule = new JTextArea();
+		textArea_anmerkschule = new JTextArea();
 		textArea_anmerkschule.setLineWrap(true);
 		scrollPane.setViewportView(textArea_anmerkschule);
 		panel_5.setLayout(gl_panel_5);
@@ -629,10 +647,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JLabel lblGrad = new JLabel("Grad:");
 		
 		String comboBoxListe_miki[] = {"Ja", "Nein"};
-		JComboBox comboBox_miki = new JComboBox(comboBoxListe_miki);
+		comboBox_miki = new JComboBox(comboBoxListe_miki);
 		
 		String comboBoxListe_grad[] = {"Eltern", "Geschwister", "Onkel/Tante", "Groﬂeltern", "siehe Anmerkungen"};
-		JComboBox comboBox_grad = new JComboBox(comboBoxListe_grad);
+		comboBox_grad = new JComboBox(comboBoxListe_grad);
 		GroupLayout gl_panel_6 = new GroupLayout(panel_6);
 		gl_panel_6.setHorizontalGroup(
 			gl_panel_6.createParallelGroup(Alignment.LEADING)
@@ -691,7 +709,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JLabel lblStatus = new JLabel("Status:");
 		
 		String comboBoxListe_state[] = {"leer", "Eingangsbest‰tigung", "Zusage", "Selbstabsage", "Absage", "anwesend", "abgeschlossen"};
-		JComboBox comboBox_status = new JComboBox(comboBoxListe_state);
+		comboBox_status = new JComboBox(comboBoxListe_state);
 		GroupLayout gl_panel_7 = new GroupLayout(panel_7);
 		gl_panel_7.setHorizontalGroup(
 			gl_panel_7.createParallelGroup(Alignment.LEADING)
@@ -956,7 +974,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_VornameAnsprWoch1 = new JTextField();
 		textField_VornameAnsprWoch1.setColumns(10);
 		
-		JComboBox comboBox_NameAnsprWoch1 = new JComboBox();
+		comboBox_NameAnsprWoch1 = new JComboBox();
 		comboBox_NameAnsprWoch1.setEditable(true);
 		GroupLayout gl_panel_13 = new GroupLayout(panel_13);
 		gl_panel_13.setHorizontalGroup(
@@ -1033,7 +1051,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
-		JTextArea textArea_EinsatzortAnsprWoche1 = new JTextArea();
+		textArea_EinsatzortAnsprWoche1 = new JTextArea();
 		scrollPane_8.setViewportView(textArea_EinsatzortAnsprWoche1);
 		panel_AnsprWoche1.setLayout(gl_panel_AnsprWoche1);
 		
@@ -1070,7 +1088,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_VornameAnsprWoch2 = new JTextField();
 		textField_VornameAnsprWoch2.setColumns(10);
 		
-		JComboBox comboBox_NameAnsprWoch2 = new JComboBox();
+		comboBox_NameAnsprWoch2 = new JComboBox();
 		comboBox_NameAnsprWoch2.setEditable(true);
 		GroupLayout gl_panel_12 = new GroupLayout(panel_12);
 		gl_panel_12.setHorizontalGroup(
@@ -1147,7 +1165,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
-		JTextArea textArea_EinsatzortAnsprWoche2 = new JTextArea();
+		textArea_EinsatzortAnsprWoche2 = new JTextArea();
 		scrollPane_7.setViewportView(textArea_EinsatzortAnsprWoche2);
 		panel_AnsprWoche2.setLayout(gl_panel_AnsprWoche2);
 		
@@ -1178,7 +1196,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_MailAnsprWoch3 = new JTextField();
 		textField_MailAnsprWoch3.setColumns(10);
 		
-		JTextField textField_TelAnsprWoch3 = new JTextField();
+		textField_TelAnsprWoch3 = new JTextField();
 		textField_TelAnsprWoch3.setColumns(10);
 		
 		textField_VornameAnsprWoch3 = new JTextField();
@@ -1261,22 +1279,22 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
-		JTextArea textArea_EinsatzortAnsprWoche3 = new JTextArea();
+		textArea_EinsatzortAnsprWoche3 = new JTextArea();
 		scrollPane_4.setViewportView(textArea_EinsatzortAnsprWoche3);
 		panel_AnsprWoche3.setLayout(gl_panel_AnsprWoche3);
 		
-		JTextArea textArea_konsole = new JTextArea();
+		textArea_konsole = new JTextArea();
 		textArea_konsole.setBackground(UIManager.getColor("Button.background"));
 		textArea_konsole.setLineWrap(true);
 		textArea_konsole.setEnabled(false);
 		textArea_konsole.setEditable(false);
 		scrollPane_5.setViewportView(textArea_konsole);
 		
-		JTextArea textArea_anmerkprakt = new JTextArea();
+		textArea_anmerkprakt = new JTextArea();
 		textArea_anmerkprakt.setLineWrap(true);
 		scrollPane_2.setViewportView(textArea_anmerkprakt);
 		
-		JTextArea textArea_anmerkperson = new JTextArea();
+		textArea_anmerkperson = new JTextArea();
 		textArea_anmerkperson.setLineWrap(true);
 		scrollPane_1.setViewportView(textArea_anmerkperson);
 		
@@ -1656,26 +1674,44 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setInfoPrakt(String inf){
 		this.textArea_konsole.setText(inf);
 	}
+	public void setInfoAnspr(String inf){
+		this.textArea_InfoAnspr.setText(inf);
+	}
 	public ArrayList<String> getInhaltPrakt(){
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		ArrayList<String> liste = new ArrayList<String>();
+			liste.add((String) textField_id.getText());
 			liste.add((String) comboBox_anrede.getSelectedItem());
 			liste.add((String) textField_nn.getText());
 			liste.add((String) textField_vn.getText());
 			liste.add((String) df.format(datePicker_gb.getDate()));
 			liste.add((String) comboBox_geburtsort.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-
+			liste.add((String) comboBox_str.getSelectedItem());
+			liste.add((String) textField_plz.getText());
+			liste.add((String) txtDeutschland.getText());
+			liste.add((String) textField_tele.getText());
+			liste.add((String) textField_mail.getText());
+			liste.add((String) textField_mobil.getText());
+			liste.add((String) textField_haus.getText());
+			liste.add((String) comboBox_wohn.getSelectedItem());
+			liste.add((String) textField_gnn.getText());
+			liste.add((String) textField_gvn.getText());
+			liste.add((String) comboBox_schule.getSelectedItem());
+			liste.add((String) comboBox_schulform.getSelectedItem());
+			liste.add((String) comboBox_partners.getSelectedItem());
+			liste.add((String) textArea_anmerkschule.getText());
+			liste.add((String) comboBox_miki.getSelectedItem());
+			liste.add((String) comboBox_grad.getSelectedItem());
+			liste.add((String) textArea_anmerkperson.getText());
+			liste.add((String) df.format(datePicker_startdatum.getDate()));
+			liste.add((String) df.format(datePicker_enddatum.getDate()));
+			liste.add((String) comboBox_status.getSelectedItem());
+			liste.add((String) textArea_anmerkprakt.getText());
+			liste.add((String) idAnspr1.toString());
+			liste.add((String) idAnspr2.toString());
+			liste.add((String) idAnspr3.toString());
+			liste.add((String) textArea_konsole.getText());
+			liste.add((String) letzteAenderung);
 		return liste;
 	}
 }

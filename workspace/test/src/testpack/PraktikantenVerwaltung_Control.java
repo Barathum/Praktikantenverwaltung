@@ -11,6 +11,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_View _view; 
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
+	private Integer HoechsteAnsprID = 100000;
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_View(); 
@@ -27,10 +28,27 @@ public class PraktikantenVerwaltung_Control {
 		String ID;
 		try {
 			ID = daten.get(daten.size()-1).get(0).substring(2);
-			System.out.println("try");
+//			System.out.println("try");
 		} catch (Exception e) {
 			ID = HoechstePraktID.toString();
-			System.out.println("catch");
+//			System.out.println("catch");
+		}
+		System.out.println(ID);
+		return Integer.parseInt(ID);
+	}
+	private Integer getHoechsteAnsprID(){
+		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		daten = _model.getData("SELECT * FROM ANSPRECHPARTNER;");
+//		System.out.println(daten);
+		String ID;
+		try {
+			ID = daten.get(daten.size()-1).get(0).substring(2);
+//			System.out.println("try");
+			System.out.println(ID);
+		} catch (Exception e) {
+			ID = HoechsteAnsprID.toString();
+//			System.out.println("catch");
+			System.out.println(ID);
 		}
 		System.out.println(ID);
 		return Integer.parseInt(ID);
@@ -158,10 +176,12 @@ public class PraktikantenVerwaltung_Control {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
-		HoechstePraktID = getHoechstePraktID();
-		HoechstePraktID++;
-		String neuePraktID = "";
-		neuePraktID = "SP" + HoechstePraktID.toString();
+		HoechsteAnsprID = getHoechsteAnsprID();
+		System.out.println(HoechsteAnsprID);
+		HoechsteAnsprID++;
+		System.out.println(HoechsteAnsprID);
+		String neueAnsprID = "";
+		neueAnsprID = "AN" + HoechstePraktID.toString();
 		if (i == 1) {
 			_view.setInfoAnspr("Daten geupdatet am " + zeit);
 			sql = "UPDATE ANSPRECHPARTNER set ID = '" + liste.get(0) + "', NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
@@ -170,10 +190,10 @@ public class PraktikantenVerwaltung_Control {
 		} else if (i == 2) {
 		      _view.setInfoAnspr("Daten gespeichert am " + zeit);
 			sql = "INSERT INTO ANSPRECHPARTNER " +
-					"VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+					"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
 	                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"',' bla ');";
-			System.out.println("insert");
-			System.out.println(liste.get(1));
+//			System.out.println("insert");
+//			System.out.println(liste.get(1));
 		}else {
 			sql = "";
 		}

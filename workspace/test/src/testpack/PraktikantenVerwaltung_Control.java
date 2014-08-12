@@ -6,6 +6,8 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Vector;
 
 public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_View _view; 
@@ -42,15 +44,13 @@ public class PraktikantenVerwaltung_Control {
 //		System.out.println(daten);
 		String ID;
 		try {
-			ID = daten.get(daten.size()-1).get(0).substring(2);
+			ID = daten.get(daten.size()-1).get(0);
 //			System.out.println("try");
-			System.out.println(ID);
 		} catch (Exception e) {
 			ID = HoechsteAnsprID.toString();
 //			System.out.println("catch");
-			System.out.println(ID);
 		}
-		System.out.println(ID);
+//		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
 
@@ -59,6 +59,11 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setAnsprSpeichernListener(new AnsprSpeichernListener());
 		            this._view.setAnsprLoeschenListener(new AnsprLoeschenListener());
 		            this._view.setPraktLoeschenListener(new PraktLoeschenListener());
+		            this._view.setAllePraktListener(new AllePraktListener());
+		            this._view.setAlleAnsprListener(new AlleAnsprListener());
+		            this._view.setSuchePraktListener(new SuchePraktListener());
+		            this._view.setSucheAnsprListener(new SucheAnsprListener());
+		            this._view.setNeuerEintragListener(new NeuerEintragListener());
 	   } 
 	   class PraktSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
@@ -137,7 +142,150 @@ public class PraktikantenVerwaltung_Control {
                _view.setInfoPrakt("lol");
             } 
 	   }
-	   
+	   class AllePraktListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+       			daten = _model.getData("SELECT ID , NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN;");
+       			Object[][] Array = new String[daten.size()][];
+       			for (int i = 0; i < daten.size(); i++) {
+       			    ArrayList<String> row = daten.get(i);
+       			    Array[i] = row.toArray(new String[row.size()]);
+       			}
+        	   _view.setDatenPraktListe(Array);
+                _view.showAllePrakt();
+            } 
+	   }
+	   class AlleAnsprListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+       			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER;");
+       			Object[][] Array = new String[daten.size()][];
+       			for (int i = 0; i < daten.size(); i++) {
+       			    ArrayList<String> row = daten.get(i);
+       			    Array[i] = row.toArray(new String[row.size()]);
+       			}
+        	   _view.setDatenAnsprListe(Array);
+                _view.showAlleAnspr();
+            } 
+	   }
+	   class SuchePraktListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   ArrayList<String> suche = new ArrayList<String>();
+        	   suche = _view.getSuchePrakt();
+        	   String suchekrit = new String();
+        	   if(suche.get(0) == "Nachname"){
+        		   suchekrit = "NN";
+        	   }
+       			daten = _model.getData("SELECT ID , NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE " + suchekrit + " LIKE '"+ suche.get(1) +"%' ORDER BY NN DESC;");
+       			Object[][] Array = new String[daten.size()][];
+       			for (int i = 0; i < daten.size(); i++) {
+       			    ArrayList<String> row = daten.get(i);
+       			    Array[i] = row.toArray(new String[row.size()]);
+       			}
+        	   _view.setDatenPraktListe(Array);
+                _view.showAllePrakt();
+            } 
+	   }
+	   class SucheAnsprListener implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   ArrayList<String> suche = new ArrayList<String>();
+        	   suche = _view.getSucheAnspr();
+        	   String suchekrit = new String();
+        	   if(suche.get(0) == "Nachname"){
+        		   suchekrit = "NN";
+        	   }
+       			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER WHERE " + suchekrit + " LIKE '" + suche.get(1) + "%' ORDER BY NN DESC;");
+       			Object[][] Array = new String[daten.size()][];
+       			for (int i = 0; i < daten.size(); i++) {
+       			    ArrayList<String> row = daten.get(i);
+       			    Array[i] = row.toArray(new String[row.size()]);
+       			}
+        	   _view.setDatenAnsprListe(Array);
+               _view.showAlleAnspr();
+            }  
+	   }
+	   class NeuerEintragListener implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   comboBox_autocomplete();
+            }  
+	   }
+	   public void comboBox_autocomplete(){
+       	   ArrayList<ArrayList<String>> daten_comboBoxItemsWohnort = new ArrayList<ArrayList<String>>();
+    	   daten_comboBoxItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN GROUP BY ORT");
+    	   Object[][] Array = new String[daten_comboBoxItemsWohnort.size()][];
+  			for (int i = 0; i < daten_comboBoxItemsWohnort.size(); i++) {
+  			    ArrayList<String> row = daten_comboBoxItemsWohnort.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			Vector V1 = new Vector<String>();
+  			for (int i = 0; i < Array.length; i++) {
+				V1.add(Array[i][0]);
+			}
+  			System.out.println(V1);
+    	   _view.setComboBoxItems_wohn(V1);
+    	   
+    	   ArrayList<ArrayList<String>> daten_comboBoxItemsStr= new ArrayList<ArrayList<String>>();
+    	   daten_comboBoxItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN GROUP BY STR");
+    	   Array = new String[daten_comboBoxItemsStr.size()][];
+  			for (int i = 0; i < daten_comboBoxItemsStr.size(); i++) {
+  			    ArrayList<String> row = daten_comboBoxItemsStr.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			V1 = new Vector<String>();
+  			for (int i = 0; i < Array.length; i++) {
+				V1.add(Array[i][0]);
+			}
+  			System.out.println(V1);
+    	   _view.setComboBoxItems_str(V1);
+    	   
+    	   ArrayList<ArrayList<String>> daten_comboBoxItemsGeburtsort= new ArrayList<ArrayList<String>>();
+    	   daten_comboBoxItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN GROUP BY GO");
+    	   Array = new String[daten_comboBoxItemsGeburtsort.size()][];
+  			for (int i = 0; i < daten_comboBoxItemsGeburtsort.size(); i++) {
+  			    ArrayList<String> row = daten_comboBoxItemsGeburtsort.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			V1 = new Vector<String>();
+  			for (int i = 0; i < Array.length; i++) {
+				V1.add(Array[i][0]);
+			}
+  			System.out.println(V1);
+    	   _view.setComboBoxItems_geburtsort(V1);
+    	   
+    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchule= new ArrayList<ArrayList<String>>();
+    	   daten_comboBoxItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN GROUP BY SCHULE");
+    	   Array = new String[daten_comboBoxItemsSchule.size()][];
+  			for (int i = 0; i < daten_comboBoxItemsSchule.size(); i++) {
+  			    ArrayList<String> row = daten_comboBoxItemsSchule.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			V1 = new Vector<String>();
+  			for (int i = 0; i < Array.length; i++) {
+				V1.add(Array[i][0]);
+			}
+  			System.out.println(V1);
+    	   _view.setComboBoxItems_schule(V1);
+    	   
+    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchulform= new ArrayList<ArrayList<String>>();
+    	   daten_comboBoxItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN GROUP BY SCHULFORM");
+    	   Array = new String[daten_comboBoxItemsSchulform.size()][];
+  			for (int i = 0; i < daten_comboBoxItemsSchulform.size(); i++) {
+  			    ArrayList<String> row = daten_comboBoxItemsSchulform.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			V1 = new Vector<String>();
+  			for (int i = 0; i < Array.length; i++) {
+				V1.add(Array[i][0]);
+			}
+  			System.out.println(V1);
+    	   _view.setComboBoxItems_schulform(V1);
+    	   
+    	   
+    	   
+    	   _view.showNeuerEintrag();
+	   }
 
 	public String schreibeEintragPraktsql(int i, ArrayList<String> liste){
 		String sql;
@@ -177,11 +325,9 @@ public class PraktikantenVerwaltung_Control {
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
 		HoechsteAnsprID = getHoechsteAnsprID();
-		System.out.println(HoechsteAnsprID);
 		HoechsteAnsprID++;
-		System.out.println(HoechsteAnsprID);
 		String neueAnsprID = "";
-		neueAnsprID = "AN" + HoechstePraktID.toString();
+		neueAnsprID = HoechsteAnsprID.toString();
 		if (i == 1) {
 			_view.setInfoAnspr("Daten geupdatet am " + zeit);
 			sql = "UPDATE ANSPRECHPARTNER set ID = '" + liste.get(0) + "', NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
@@ -199,4 +345,5 @@ public class PraktikantenVerwaltung_Control {
 		}
 		return sql;
 	}
+	
 }

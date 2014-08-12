@@ -80,12 +80,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
             "Enddatum", 
             "Anmerkung",
             "Letzte Änderung"};
-	private Object[][] datenprak = {
-		    {"1", "Smith",
-		     "John","Zusage", "11.02.2014", "28.01.2015", "lol","01.02.2004"},
-		     {"2", "blubb",
-			     "John","Absage", "13.02.2014", "01.03.2015", "ssd","03.22.2015"}
-		};
+	private Object[][] datenprak;
 	private String[] spaltennamenansprech = {
             "Nachname",
             "Vorname",
@@ -93,10 +88,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
             "E-Mail-Adresse", 
             "Abteilung", 
             "Raumnummer"};
-	private Object[][] datenansprech = {
-		    {"Ansprechmichnich", "LOL",
-		     "0123456789", "asasa@asas.de", "sadasd", "1"}
-		};
+	private Object[][] datenansprech;
 	private JComboBox comboBox_schule;
 	private Vector comboBoxItems_schule;
 	private JComboBox comboBox_wohn;
@@ -164,6 +156,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private boolean Ansprbearb1gedrueckt = false;
 	private boolean Ansprbearb2gedrueckt = false;
 	private boolean Ansprbearb3gedrueckt = false;
+	private JButton btn_sucheprak;
+	private JButton btn_sucheansp;
+	private JComboBox comboBox_kriteriumprak;
+	private JComboBox comboBox_kriteriumansp;
+	private Vector comboBoxItems_wohn;
 
 
 	/**
@@ -410,27 +407,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		
 		
-		Vector comboBoxItems_wohn=new Vector();
-	    comboBoxItems_wohn.add("");
-	    comboBoxItems_wohn.add("Rethem");
-	    comboBoxItems_wohn.add("Wolfenbüttel");
-	    comboBoxItems_wohn.add("Braunschweig");
-	    comboBoxItems_wohn.add("1");
-	    comboBoxItems_wohn.add("5");
-	    
-		this.comboBox_wohn = new JComboBox(comboBoxItems_wohn);
+		this.comboBox_wohn = new JComboBox();
 		this.comboBox_wohn.setEditable(true);
 		AutoCompleteDecorator.decorate(this.comboBox_wohn);
-		
-		Vector comboBoxItems_str=new Vector();
-		comboBoxItems_str.add("");
-		comboBoxItems_str.add("Lange Straße");
-	    comboBoxItems_str.add("Kurz Straße");
-	    comboBoxItems_str.add("Braunschweig");
-	    comboBoxItems_str.add("1");
-	    comboBoxItems_str.add("5");
 	    
-		this.comboBox_str = new JComboBox(comboBoxItems_str);
+		this.comboBox_str = new JComboBox();
 		this.comboBox_str.setEditable(true);
 		this.comboBox_str.setUI(new BasicComboBoxUI() {
 			           @Override  
@@ -570,28 +551,12 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		comboBox_partners = new JComboBox(comboBoxListe_partners);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		
-		Vector comboBoxItems_schule=new Vector();
-	    comboBoxItems_schule.add("");
-	    comboBoxItems_schule.add("Ostfalia");
-	    comboBoxItems_schule.add("Blubb");
-	    comboBoxItems_schule.add("...");
-	    comboBoxItems_schule.add("1");
-	    comboBoxItems_schule.add("5");
 	    
-		this.comboBox_schule = new JComboBox(comboBoxItems_schule);
+		this.comboBox_schule = new JComboBox();
 		this.comboBox_schule.setEditable(true);
 		AutoCompleteDecorator.decorate(this.comboBox_schule);
 		
-		Vector comboBoxItems_schulform=new Vector();
-		comboBoxItems_schulform.add("");
-		comboBoxItems_schulform.add("Real");
-		comboBoxItems_schulform.add("Haupt");
-		comboBoxItems_schulform.add("Gym");
-		comboBoxItems_schulform.add("Gesamt");
-		comboBoxItems_schulform.add("5");
-	    
-		this.comboBox_schulform = new JComboBox(comboBoxItems_schulform);
+		this.comboBox_schulform = new JComboBox();
 		this.comboBox_schulform.setEditable(true);
 		AutoCompleteDecorator.decorate(this.comboBox_schulform);
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
@@ -1367,16 +1332,8 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		String comboBoxListe_anrede[] = {"Herr", "Frau"};
 		comboBox_anrede = new JComboBox(comboBoxListe_anrede);
-		
-		Vector comboBoxItems_geburtsort = new Vector();
-		comboBoxItems_geburtsort.add("");
-		comboBoxItems_geburtsort.add("Braunschweig");
-		comboBoxItems_geburtsort.add("Walsrode");
-	    comboBoxItems_geburtsort.add("Unter der Brücke");
-	    comboBoxItems_geburtsort.add("1");
-	    comboBoxItems_geburtsort.add("5");
 	    
-		this.comboBox_geburtsort = new JComboBox(comboBoxItems_geburtsort);
+		this.comboBox_geburtsort = new JComboBox();
 		this.comboBox_geburtsort.setEditable(true);
 		this.comboBox_geburtsort.setUI(new BasicComboBoxUI() {
 			           @Override  
@@ -1468,7 +1425,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		
 		String comboBoxListe_kritprak[] = {"Nachname"};
-		JComboBox comboBox_kriteriumprak = new JComboBox(comboBoxListe_kritprak);
+		comboBox_kriteriumprak = new JComboBox(comboBoxListe_kritprak);
 		comboBox_kriteriumprak.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		
 		JLabel lblKriterium = new JLabel("Kriterium:");
@@ -1480,7 +1437,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_suchbegriffprak = new JTextField();
 		textField_suchbegriffprak.setColumns(10);
 		
-		JButton btn_sucheprak = new JButton("Suchen");
+		btn_sucheprak = new JButton("Suchen");
 		GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 		gl_panel_1.setHorizontalGroup(
 			gl_panel_1.createParallelGroup(Alignment.LEADING)
@@ -1543,10 +1500,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_suchbegriffansp.setColumns(10);
 		
 		String comboBoxListe_kritansp[] = {"Nachname"};
-		JComboBox comboBox_kriteriumansp = new JComboBox(comboBoxListe_kritansp);
+		comboBox_kriteriumansp = new JComboBox(comboBoxListe_kritansp);
 		comboBox_kriteriumansp.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		
-		JButton btn_sucheansp = new JButton("Suchen");
+		btn_sucheansp = new JButton("Suchen");
 		GroupLayout gl_panel_3 = new GroupLayout(panel_3);
 		gl_panel_3.setHorizontalGroup(
 			gl_panel_3.createParallelGroup(Alignment.LEADING)
@@ -1649,10 +1606,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		menuEintrag.addActionListener(this);
 	    menuSuche.addActionListener(this);
-	    menuAllePraktikanten.addActionListener(this);
-	    menuAnsprechpartner.addActionListener(this);
 	    menuAlleAnsprechpartner.addActionListener(this);
 	    menuAnsprechpartnerbearbeiten.addActionListener(this);
+	    menuAnsprechpartner.addActionListener(this);
 	    button_woche1.addActionListener(this);
 	    button_woche2.addActionListener(this);
 	    button_woche3.addActionListener(this);
@@ -1675,6 +1631,21 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setPraktLoeschenListener(ActionListener l){
 		this.button_SpeichernAnspr.addActionListener(l);
 	}
+	public void setAllePraktListener(ActionListener l){
+		this.menuAllePraktikanten.addActionListener(l);
+	}
+	public void setAlleAnsprListener(ActionListener l){
+		this.menuAlleAnsprechpartner.addActionListener(l);
+	}
+	public void setSuchePraktListener(ActionListener l){
+		this.btn_sucheprak.addActionListener(l);
+	}
+	public void setSucheAnsprListener(ActionListener l){
+		this.btn_sucheansp.addActionListener(l);
+	}
+	public void setNeuerEintragListener(ActionListener l){
+		this.menuEintrag.addActionListener(l);
+	}
 	
 	public static void setFixedWidth(Component component, int width )
     {
@@ -1682,31 +1653,83 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
     	Dimension preferredSize = component.getPreferredSize();
     	component.setPreferredSize( new Dimension( width, preferredSize.height ) );
     }
+	public void showAllePrakt(){
+		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+		cardLayout.show(mainPanel, "card_4");
+		table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
+		table_suche.setSelectionMode(0);
+		table_suche.setAutoCreateRowSorter(true);
+		scrollPane_Suchliste.setViewportView(table_suche);
+		btn_NachrichtSchreiben.setVisible(true);
+	}
+	public void showAlleAnspr(){
+		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+		cardLayout.show(mainPanel, "card_4");
+		table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenansprech, datenansprech));
+		table_suche.setSelectionMode(0);
+		table_suche.setAutoCreateRowSorter(true);
+		scrollPane_Suchliste.setViewportView(table_suche);
+		btn_NachrichtSchreiben.setVisible(false);
+	}
+	public void showNeuerEintrag(){
+		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+		cardLayout.show(mainPanel, "card_1");
+	}
+	public void setDatenPraktListe(Object[][] daten){
+		this.datenprak = daten;
+	}
+	public void setDatenAnsprListe(Object[][] daten){
+		this.datenansprech = daten;
+	}
+	
+	public void setComboBoxItems_wohn(Vector v){
+		comboBox_wohn.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+		    comboBox_wohn.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_wohn);
+	}
+	public void setComboBoxItems_str(Vector v){
+		comboBox_str.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+		    comboBox_str.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_str);
+	}
+	public void setComboBoxItems_geburtsort(Vector v){
+		comboBox_geburtsort.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+		    comboBox_geburtsort.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_geburtsort);
+	}
+	public void setComboBoxItems_schule(Vector v){
+		comboBox_schule.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+		    comboBox_schule.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_schule);
+	}
+	public void setComboBoxItems_schulform(Vector v){
+		comboBox_schulform.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+			comboBox_schulform.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_schulform);
+	}
+	
 	public void actionPerformed(ActionEvent evt) {
 		 Object src = evt.getSource();
 		 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 		 CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
-		    if (src == menuEintrag) {
-		    	cardLayout.show(mainPanel, "card_1");
-		    } else if (src == menuSuche) {
+		     if (src == menuSuche) {
 		    	cardLayout.show(mainPanel, "card_2");
 		    } else if (src == menuAnsprechpartner) {
 				cardLayout.show(mainPanel, "card_3");
-		    } else if (src == menuAllePraktikanten) {
-				cardLayout.show(mainPanel, "card_4");
-				table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
-				table_suche.setSelectionMode(0);
-				table_suche.setAutoCreateRowSorter(true);
-				scrollPane_Suchliste.setViewportView(table_suche);
-				btn_NachrichtSchreiben.setVisible(true);
-			} else if (src == menuAlleAnsprechpartner) {
-				cardLayout.show(mainPanel, "card_4");
-				table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenansprech, datenansprech));
-				table_suche.setSelectionMode(0);
-				table_suche.setAutoCreateRowSorter(true);
-				scrollPane_Suchliste.setViewportView(table_suche);
-				btn_NachrichtSchreiben.setVisible(false);
-			} else if (src == menuAnsprechpartnerbearbeiten) {
+		    } else if (src == menuAnsprechpartnerbearbeiten) {
 				cardLayout.show(mainPanel, "card_5");
 			} else if (src == button_woche1) {
 				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
@@ -1761,6 +1784,18 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	}
 	public boolean getEditAnspr3(){
 		return Ansprbearb3gedrueckt;
+	}
+	public ArrayList<String> getSuchePrakt(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_kriteriumprak.getSelectedItem());
+		s.add(this.textField_suchbegriffprak.getText());
+		return s;
+	}
+	public ArrayList<String>  getSucheAnspr(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_kriteriumansp.getSelectedItem());
+		s.add(this.textField_suchbegriffansp.getText());
+		return s;
 	}
 	public ArrayList<String> getInhaltPrakt(){
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");

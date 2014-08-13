@@ -75,7 +75,8 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JTextField textField_suchbegriffansp;
 	private JTable table_suche;
 	private JScrollPane scrollPane_Suchliste;
-	private JButton btn_NachrichtSchreiben;
+	private JScrollPane scrollPane_SuchlisteAnspr;
+	private JButton btn_praktNachrichtSchreiben;
 	private String[] spaltennamenprak = {"ID",
             "Nachname",
             "Vorname",
@@ -124,9 +125,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JButton btnSpeichern;
 	private JTextArea textArea_konsole;
 	private JButton button_SpeichernAnspr;
-	private JButton btn_bearbeiten;
-	private JButton btn_loeschen;
-	private JButton btn_info;
+	private JButton btn_praktbearbeiten;
+	private JButton btn_praktloeschen;
+	private JButton btn_praktinfo;
 	private JPanel panel_ansprechPartner;
 	private JPanel panel_AnsprWoche1;
 	private JPanel panel_AnsprWoche2;
@@ -1563,36 +1564,36 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		lblSucheNachAnsprechpartnern.setBounds(400, 125, 216, 14);
 		panel_Ansprech.add(lblSucheNachAnsprechpartnern);
 		
-		JPanel panel_tabllen = new JPanel();
-		mainPanel.add(panel_tabllen, "card_4");
-		panel_tabllen.setLayout(new BorderLayout(0, 0));
+		JPanel panel_tabllenPrakt = new JPanel();
+		mainPanel.add(panel_tabllenPrakt, "card_4");
+		panel_tabllenPrakt.setLayout(new BorderLayout(0, 0));
 		
 		scrollPane_Suchliste = new JScrollPane();
-		panel_tabllen.add(scrollPane_Suchliste);
+		panel_tabllenPrakt.add(scrollPane_Suchliste);
 		scrollPane_Suchliste.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		
 		JPanel panel_10 = new JPanel();
-		panel_tabllen.add(panel_10, BorderLayout.SOUTH);
+		panel_tabllenPrakt.add(panel_10, BorderLayout.SOUTH);
 		
-		btn_bearbeiten = new JButton("Bearbeiten");
+		btn_praktbearbeiten = new JButton("Bearbeiten");
 		
-		btn_loeschen = new JButton("L\u00F6schen");
+		btn_praktloeschen = new JButton("L\u00F6schen");
 		
-		btn_info = new JButton("Info");
+		btn_praktinfo = new JButton("Info");
 		
-		btn_NachrichtSchreiben = new JButton("Nachricht erstellen");
+		btn_praktNachrichtSchreiben = new JButton("Nachricht erstellen");
 		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
 		gl_panel_10.setHorizontalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_10.createSequentialGroup()
 					.addGap(20)
-					.addComponent(btn_bearbeiten)
+					.addComponent(btn_praktbearbeiten)
 					.addGap(18)
-					.addComponent(btn_loeschen, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btn_praktloeschen, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(btn_info, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+					.addComponent(btn_praktinfo, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 					.addGap(18)
-					.addComponent(btn_NachrichtSchreiben)
+					.addComponent(btn_praktNachrichtSchreiben)
 					.addContainerGap(808, Short.MAX_VALUE))
 		);
 		gl_panel_10.setVerticalGroup(
@@ -1600,15 +1601,57 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 				.addGroup(gl_panel_10.createSequentialGroup()
 					.addGap(9)
 					.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btn_bearbeiten)
-						.addComponent(btn_loeschen)
-						.addComponent(btn_info)
-						.addComponent(btn_NachrichtSchreiben))
+						.addComponent(btn_praktbearbeiten)
+						.addComponent(btn_praktloeschen)
+						.addComponent(btn_praktinfo)
+						.addComponent(btn_praktNachrichtSchreiben))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel_10.setLayout(gl_panel_10);
 		
-		/**
+		
+		 
+		 JPanel panel_tabellenAnspr = new JPanel();
+		 mainPanel.add(panel_tabellenAnspr, "card_6");
+		 panel_tabellenAnspr.setLayout(new BorderLayout(0, 0));
+		 
+		 scrollPane_SuchlisteAnspr = new JScrollPane();
+		 panel_tabellenAnspr.add(scrollPane_SuchlisteAnspr);
+		 scrollPane_SuchlisteAnspr.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		 
+		 JPanel panel_9 = new JPanel();
+		 panel_tabellenAnspr.add(panel_9, BorderLayout.SOUTH);
+		 
+		 JButton buttonAnsprBearb = new JButton("Bearbeiten");
+		 
+		 JButton buttonAnsprLoesch = new JButton("L\u00F6schen");
+		 
+		 JButton buttonAnsprInfo = new JButton("Info");
+		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
+		 gl_panel_9.setHorizontalGroup(
+		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
+		 		.addGroup(gl_panel_9.createSequentialGroup()
+		 			.addGap(20)
+		 			.addComponent(buttonAnsprBearb)
+		 			.addGap(18)
+		 			.addComponent(buttonAnsprLoesch, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+		 			.addGap(18)
+		 			.addComponent(buttonAnsprInfo, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+		 			.addContainerGap(953, Short.MAX_VALUE))
+		 );
+		 gl_panel_9.setVerticalGroup(
+		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
+		 		.addGroup(gl_panel_9.createSequentialGroup()
+		 			.addGap(9)
+		 			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+		 				.addComponent(buttonAnsprBearb)
+		 				.addComponent(buttonAnsprLoesch)
+		 				.addComponent(buttonAnsprInfo))
+		 			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		 );
+		 panel_9.setLayout(gl_panel_9);
+		
+		 /**
 		 * Anfügen der Menüeinträge in das Startmenu
 		 */
 		 JMenuBar menu = new JMenuBar();
@@ -1660,14 +1703,14 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	 * @param l Listener der übergeben wird
 	 */
 	public void setAnsprLoeschenListener(ActionListener l){
-		this.btn_loeschen.addActionListener(l);
+		this.btn_praktloeschen.addActionListener(l);
 	}
 	/**
 	 * Setzt einen Listener auf den LöschenButton in der Praktikantenlisten Ansicht
 	 * @param l Listener der übergeben wird
 	 */
 	public void setPraktLoeschenListener(ActionListener l){
-		this.btn_loeschen.addActionListener(l);
+		this.btn_praktloeschen.addActionListener(l);
 	}
 	/**
 	 * Setzt einen Listener auf den Menüeintrag für Alle Praktikanten
@@ -1754,7 +1797,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		table_suche.setSelectionMode(0);
 		table_suche.setAutoCreateRowSorter(true);
 		scrollPane_Suchliste.setViewportView(table_suche);
-		btn_NachrichtSchreiben.setVisible(true);
+		btn_praktNachrichtSchreiben.setVisible(true);
 	}
 	/**
 	 * Funkion um die Tabelle für Ansprechpartner anzuzeigen
@@ -1762,12 +1805,12 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void showAlleAnspr(){
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
-		cardLayout.show(mainPanel, "card_4");
+		cardLayout.show(mainPanel, "card_6");
 		table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenansprech, datenansprech));
 		table_suche.setSelectionMode(0);
 		table_suche.setAutoCreateRowSorter(true);
-		scrollPane_Suchliste.setViewportView(table_suche);
-		btn_NachrichtSchreiben.setVisible(false);
+		scrollPane_SuchlisteAnspr.setViewportView(table_suche);
+	
 	}
 	/**
 	 * Neuen Eintrag Seite anzeigen

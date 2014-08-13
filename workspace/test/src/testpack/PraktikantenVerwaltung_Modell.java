@@ -27,7 +27,11 @@ public class PraktikantenVerwaltung_Modell {
 ////	    sdasdasdadsadasd
 //	    
 //	  }
-	
+	/**
+	 * Beut verbindung mit Datenbank d auf
+	 * @param d
+	 * @return
+	 */
 	 public Connection connectToDatabase(String d)
 	  {
 	    Connection c = null;
@@ -42,7 +46,9 @@ public class PraktikantenVerwaltung_Modell {
 	    System.out.println("Datenbank verbunden");
 	    return c;
 	  }
-	 
+	 /**
+	  * Erstellt Tabellen Praktikante und Ansprechpartner
+	  */
 	 public void createTables(){
 		    Connection c = null;
 		    Statement stmt = null;
@@ -102,7 +108,10 @@ public class PraktikantenVerwaltung_Modell {
 		    }
 		    System.out.println("Tabelle erfolgreich erstellt");
 	 }
-	 
+	 /**
+	  * Führt den SQL Befehl sql aus
+	  * @param sql
+	  */
 	 public void insertUpdateDeleteTable(String sql){
 		 {
 			    Connection c = null;
@@ -124,7 +133,11 @@ public class PraktikantenVerwaltung_Modell {
 			  }
 
 	 }
-	 
+	 /**
+	  * Führt den Befehl sql aus und schreibt das Ergebnis in 2DArraylist
+	  * @param sql
+	  * @return
+	  */
 	 public ArrayList<ArrayList<String>> getData(String sql){
 		  {
 			    Connection c = null;

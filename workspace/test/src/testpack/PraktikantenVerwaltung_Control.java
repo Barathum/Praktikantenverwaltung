@@ -10,20 +10,35 @@ import java.util.Collections;
 import java.util.Vector;
 
 public class PraktikantenVerwaltung_Control {
+	/**
+	 * setzen der Fields
+	 */
 	private PraktikantenVerwaltung_View _view; 
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
 	private Integer HoechsteAnsprID = 100000;
 	private String neuePraktID = "";
+	private String neueAnsprID = "0";
+	/**
+	 * Konstruktor der Modell und View Initialisiert und die Listener anfügt
+	 */
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_View(); 
 //		_model.createTables();
+		comboBox_autocomplete();
 		addListener();
 	}
+	/**
+	 * Zeigt den View an
+	 */
 	public void showView(){ 
 		        this._view.setVisible(true); 
 	}
+	/**
+	 * gibt die Aktuell höchste Praktikanten ID aus der Datenbank zurück
+	 * @return
+	 */
 	private Integer getHoechstePraktID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM PRAKTIKANTEN;");
@@ -39,6 +54,10 @@ public class PraktikantenVerwaltung_Control {
 		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
+	/**
+	 * Gibt die höchste Ansprechpartner Id aus der Datenbank zurück
+	 * @return
+	 */
 	private Integer getHoechsteAnsprID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM ANSPRECHPARTNER;");
@@ -54,7 +73,9 @@ public class PraktikantenVerwaltung_Control {
 //		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
-
+	/**
+	 * fügt die Listener dem View hinzu
+	 */
 	   private void addListener(){ 
 		            this._view.setPraktSpeichernListener(new PraktSpeichernListener());
 		            this._view.setAnsprSpeichernListener(new AnsprSpeichernListener());
@@ -68,8 +89,17 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
 		            this._view.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
 		            this._view.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
+		            this._view.setSchulformAusfuellListener(new SchulformAusfuellListener());
 		            
 	   } 
+	   /**
+	    * Innere Klasse für den Praktikanten Speichern Listener
+	    * Prüft ob Praktikanten Id vorhanden und ob die Ansprechpartner IDS vorhanden sind
+	    * ruft danach Methode zum schreiben des SQL Befehls auf
+	    * Übergibt dann dem Model den SQL Befehl zur Ausführung
+	    * @author Barathum
+	    *
+	    */
 	   class PraktSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
                ArrayList<String> datensatz = _view.getInhaltPrakt(); 
@@ -104,18 +134,27 @@ public class PraktikantenVerwaltung_Control {
 					updateOrInsert = 1;
 				}
                String sql;
-               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
-               _model.insertUpdateDeleteTable(sql);
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
                _model.insertUpdateDeleteTable(sql);
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
                _model.insertUpdateDeleteTable(sql);
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
                _model.insertUpdateDeleteTable(sql);
+               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
+               _model.insertUpdateDeleteTable(sql);
+               _view.setAnspr1Id(neueAnsprID);
+               _view.setAnspr2Id(neueAnsprID);
+               _view.setAnspr3Id(neueAnsprID);
+               System.out.println();
                _view.setPraktId(neuePraktID);
 //               HoechstePraktID = getHoechstePraktID();
            } 
 	   }
+	   /**
+	    * Innere Klasse für den Praktikanten Löschen Listener
+	    * @author Barathum
+	    *
+	    */
 	   class PraktLoeschenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 ArrayList<String> datensatz = _view.getInhaltPrakt(); 
@@ -125,6 +164,14 @@ public class PraktikantenVerwaltung_Control {
                _view.setInfoPrakt("lol");
             } 
 	   }
+	   /**
+	    * Innere Klasse für den Ansprechpartner Speichern Listener
+	    * Prüft ob der aktuell bearbeitete Ansprechpartner eine ID hat
+	    * Ruft dann die SQL Methode auf
+	    * gibt den fertigen SQL Befehl an das Modell weiter
+	    * @author Barathum
+	    *
+	    */
 	   class AnsprSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
                ArrayList<String> datensatz = null; 
@@ -139,6 +186,11 @@ public class PraktikantenVerwaltung_Control {
 //               HoechstePraktID = getHoechstePraktID();
            }  
 	   }
+	   /**
+	    * Innere Klasse für den Ansprechpartner Löschen Listener
+	    * @author Barathum
+	    *
+	    */
 	   class AnsprLoeschenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 ArrayList<String> datensatz = _view.getInhaltPrakt(); 
@@ -148,6 +200,13 @@ public class PraktikantenVerwaltung_Control {
                _view.setInfoPrakt("lol");
             } 
 	   }
+	   /**
+	    * Innere Klasse für den Listener für die gesamte Praktikanten Liste
+	    * Wandelt den Return vom Model in ein Array um und übergibt dieses an den View
+	    * Zeigt dann im view Das Listen Fenster auf
+	    * @author Barathum
+	    *
+	    */
 	   class AllePraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -161,6 +220,13 @@ public class PraktikantenVerwaltung_Control {
                 _view.showAllePrakt();
             } 
 	   }
+	   /**
+	    * Innere Klasse für den Listener für die gesamte Ansprechpartner Liste
+	    * Wandelt den Return vom Model in ein Array um und übergibt dieses an den View
+	    * Zeigt dann im view Das Listen Fenster auf
+	    * @author Barathum
+	    *
+	    */
 	   class AlleAnsprListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -174,6 +240,14 @@ public class PraktikantenVerwaltung_Control {
                 _view.showAlleAnspr();
             } 
 	   }
+	   /**
+	    * Innere Klasse für den Suche Praktikanten Listener
+	    * holt Sich Sucheingabe aus View
+	    * Wandelt dann die Suchanfrage in einen SQL Befehl um
+	    * Wandelt das Ergebnis um und zeigt es im View an
+	    * @author Barathum
+	    *
+	    */
 	   class SuchePraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -193,6 +267,14 @@ public class PraktikantenVerwaltung_Control {
                 _view.showAllePrakt();
             } 
 	   }
+	   /**
+	    * Innere Klasse für den Suche Ansprechpartner Listener
+	    * holt Sich Sucheingabe aus View
+	    * Wandelt dann die Suchanfrage in einen SQL Befehl um
+	    * Wandelt das Ergebnis um und zeigt es im View an
+	    * @author Barathum
+	    *
+	    */
 	   class SucheAnsprListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -212,12 +294,24 @@ public class PraktikantenVerwaltung_Control {
                _view.showAlleAnspr();
             }  
 	   }
+	   /**
+	    * Innere Klasse für den Neuen Eintrag Listener
+	    * Ruft die Methode für die Autovervollständigung der Comboboxen auf
+	    * Setzt die Praktikante ID zurück
+	    * @author Barathum
+	    *
+	    */
 	   class NeuerEintragListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
 			   comboBox_autocomplete();
 			   _view.setPraktId("");
             }  
 	   }
+	   /**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
 	   class AnsprAusfuellListener1 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
 			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -229,6 +323,11 @@ public class PraktikantenVerwaltung_Control {
        			_view.setInhaltAnspr1(daten);
             }  
 	   }
+	   /**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
 	   class AnsprAusfuellListener2 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
 			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -238,6 +337,11 @@ public class PraktikantenVerwaltung_Control {
        			_view.setInhaltAnspr2(daten);
             }  
 	   }
+	   /**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
 	   class AnsprAusfuellListener3 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
 			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -247,9 +351,27 @@ public class PraktikantenVerwaltung_Control {
        			_view.setInhaltAnspr3(daten);
             }  
 	   }
+	   class SchulformAusfuellListener implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   ArrayList<String> sname = new ArrayList<String>();
+        	   sname = _view.getNameSchule();
+       			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "%' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '';");
+       			_view.setInhaltSchulform(daten);
+            }  
+	   }
+	   /**
+	    * Methode die den ComboBoxen Autovervollständigung gibt
+	    * Holt Daten aus DB
+	    * Wandelt in einen Vector um
+	    * setzt im View den Inhalt der ComboBoxen
+	    */
 	   public void comboBox_autocomplete(){
+		   /**
+		    * Wohnort
+		    */
        	   ArrayList<ArrayList<String>> daten_comboBoxItemsWohnort = new ArrayList<ArrayList<String>>();
-    	   daten_comboBoxItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN GROUP BY ORT");
+    	   daten_comboBoxItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' GROUP BY ORT");
     	   Object[][] Array = new String[daten_comboBoxItemsWohnort.size()][];
   			for (int i = 0; i < daten_comboBoxItemsWohnort.size(); i++) {
   			    ArrayList<String> row = daten_comboBoxItemsWohnort.get(i);
@@ -259,11 +381,14 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
-  			System.out.println(V1);
+//  			System.out.println(V1);
     	   _view.setComboBoxItems_wohn(V1);
     	   
+    	   /**
+    	    * Straße
+    	    */
     	   ArrayList<ArrayList<String>> daten_comboBoxItemsStr= new ArrayList<ArrayList<String>>();
-    	   daten_comboBoxItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN GROUP BY STR");
+    	   daten_comboBoxItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' GROUP BY STR");
     	   Array = new String[daten_comboBoxItemsStr.size()][];
   			for (int i = 0; i < daten_comboBoxItemsStr.size(); i++) {
   			    ArrayList<String> row = daten_comboBoxItemsStr.get(i);
@@ -273,11 +398,14 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
-  			System.out.println(V1);
+//  			System.out.println(V1);
     	   _view.setComboBoxItems_str(V1);
     	   
+    	   /**
+    	    * Geburtsort
+    	    */
     	   ArrayList<ArrayList<String>> daten_comboBoxItemsGeburtsort= new ArrayList<ArrayList<String>>();
-    	   daten_comboBoxItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN GROUP BY GO");
+    	   daten_comboBoxItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' GROUP BY GO");
     	   Array = new String[daten_comboBoxItemsGeburtsort.size()][];
   			for (int i = 0; i < daten_comboBoxItemsGeburtsort.size(); i++) {
   			    ArrayList<String> row = daten_comboBoxItemsGeburtsort.get(i);
@@ -287,11 +415,14 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
-  			System.out.println(V1);
+//  			System.out.println(V1);
     	   _view.setComboBoxItems_geburtsort(V1);
     	   
+    	   /**
+    	    * Schule
+    	    */
     	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchule= new ArrayList<ArrayList<String>>();
-    	   daten_comboBoxItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN GROUP BY SCHULE");
+    	   daten_comboBoxItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' GROUP BY SCHULE");
     	   Array = new String[daten_comboBoxItemsSchule.size()][];
   			for (int i = 0; i < daten_comboBoxItemsSchule.size(); i++) {
   			    ArrayList<String> row = daten_comboBoxItemsSchule.get(i);
@@ -301,11 +432,14 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
-  			System.out.println(V1);
+//  			System.out.println(V1);
     	   _view.setComboBoxItems_schule(V1);
     	   
+    	   /**
+    	    * Schulform
+    	    */
     	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchulform= new ArrayList<ArrayList<String>>();
-    	   daten_comboBoxItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN GROUP BY SCHULFORM");
+    	   daten_comboBoxItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' GROUP BY SCHULFORM");
     	   Array = new String[daten_comboBoxItemsSchulform.size()][];
   			for (int i = 0; i < daten_comboBoxItemsSchulform.size(); i++) {
   			    ArrayList<String> row = daten_comboBoxItemsSchulform.get(i);
@@ -315,9 +449,13 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
+  			_view.setComboBoxItems_schulform(V1);
   			
+  			/**
+  			 * Nachname Ansprechpartner
+  			 */
   			ArrayList<ArrayList<String>> daten_comboBoxItemsNameAnspr= new ArrayList<ArrayList<String>>();
-  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER ORDER BY NN");
+  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' ORDER BY NN");
      	   Array = new String[daten_comboBoxItemsNameAnspr.size()][];
    			for (int i = 0; i < daten_comboBoxItemsNameAnspr.size(); i++) {
    			    ArrayList<String> row = daten_comboBoxItemsNameAnspr.get(i);
@@ -327,12 +465,21 @@ public class PraktikantenVerwaltung_Control {
    			for (int i = 0; i < Array.length; i++) {
  				V1.add(Array[i][0]);
  			}
-  			System.out.println(V1);
+//  			System.out.println(V1);
     	   _view.setComboBoxItems_AnsprNN(V1);
     	   
+    	   /**
+    	    * zeigt neuen Eintrag
+    	    */
     	   _view.showNeuerEintrag();
 	   }
 
+	   /**
+	    * Methode zum schreiben der SQL Befehle für Praktikanten
+	    * @param i update(0)/insert(1)
+	    * @param liste Datenliste Praktikant
+	    * @return
+	    */
 	public String schreibeEintragPraktsql(int i, ArrayList<String> liste){
 		String sql;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
@@ -365,21 +512,26 @@ public class PraktikantenVerwaltung_Control {
 		}
 		return sql;
 	}
+	/**
+	 * Methode zum schreiben der SQL Befehle für Ansprechpartner
+	 * @param i update(1)/insert(2)
+	 * @param liste Datenliste Ansprechpartner
+	 * @return
+	 */
 	public String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
 		String sql;
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
-		HoechsteAnsprID = getHoechsteAnsprID();
-		HoechsteAnsprID++;
-		String neueAnsprID = "";
-		neueAnsprID = HoechsteAnsprID.toString();
 		if (i == 1) {
 			_view.setInfoAnspr("Daten geupdatet am " + zeit);
 			sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
 					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla' WHERE ID = '" + liste.get(0) + "';";
 			System.out.println("update");
 		} else if (i == 2) {
+			HoechsteAnsprID = getHoechsteAnsprID();
+			HoechsteAnsprID++;
+			neueAnsprID = HoechsteAnsprID.toString();
 		      _view.setInfoAnspr("Daten gespeichert am " + zeit);
 			sql = "INSERT INTO ANSPRECHPARTNER " +
 					"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 

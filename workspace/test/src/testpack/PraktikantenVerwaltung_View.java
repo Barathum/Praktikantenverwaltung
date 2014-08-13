@@ -46,10 +46,11 @@ import java.awt.SystemColor;
 
 public class PraktikantenVerwaltung_View extends JFrame implements ActionListener{
 
-	//
+	/**
+	 * erstellen der Fields
+	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	
 	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
 	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
@@ -165,7 +166,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 
 
 	/**
-	 * Launch the application.
+	 * Alte Main
 	 */
 //	public static void main(String[] args) {
 //		EventQueue.invokeLater(new Runnable() {
@@ -181,7 +182,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 //	}
 
 	/**
-	 * Create the frame.
+	 * Frame mit allen Panels usw. erstellen
 	 */
 	public PraktikantenVerwaltung_View() {
 		setResizable(true);
@@ -1593,7 +1594,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		);
 		panel_10.setLayout(gl_panel_10);
 		
-		
+		/**
+		 * Anfügen der Menüeinträge in das Startmenu
+		 */
 		 JMenuBar menu = new JMenuBar();
 		    JMenu start = new JMenu("Start");
 		    start.add(menuEintrag);
@@ -1605,6 +1608,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
 		
+		    /**
+		     * ActionListener den einzelnen Menüeinträgen und Buttons zuweisen
+		     */
 		menuEintrag.addActionListener(this);
 	    menuSuche.addActionListener(this);
 	    menuAlleAnsprechpartner.addActionListener(this);
@@ -1620,49 +1626,111 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	    
 	}
 
+	/**
+	 * Setzt einen Listener auf den Speichernbutton auf der Praktikanten Ansicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
 	} 
+	/**
+	 * Setzt einen Listener auf den Speicher Button in der Ansprechpartner erstellen Ansicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAnsprSpeichernListener(ActionListener l){
 		this.button_SpeichernAnspr.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den LöschenButton in der Ansprechpartnerlisten Ansicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAnsprLoeschenListener(ActionListener l){
-		this.button_SpeichernAnspr.addActionListener(l);
+		this.btn_loeschen.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den LöschenButton in der Praktikantenlisten Ansicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setPraktLoeschenListener(ActionListener l){
-		this.button_SpeichernAnspr.addActionListener(l);
+		this.btn_loeschen.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den Menüeintrag für Alle Praktikanten
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAllePraktListener(ActionListener l){
 		this.menuAllePraktikanten.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den Menüeintrag für Alle Ansprechpartner
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAlleAnsprListener(ActionListener l){
 		this.menuAlleAnsprechpartner.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den Suchen Button in der Praktikantensuche
+	 * @param l Listener der übergeben wird
+	 */
 	public void setSuchePraktListener(ActionListener l){
 		this.btn_sucheprak.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den Suchen Button in der Ansprechpartneransicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setSucheAnsprListener(ActionListener l){
 		this.btn_sucheansp.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf den Menüeintrag für die Neuer Eintrag Ansicht
+	 * @param l Listener der übergeben wird
+	 */
 	public void setNeuerEintragListener(ActionListener l){
 		this.menuEintrag.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 1 
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAnsprAusfuellListener1(ActionListener l){
 		this.comboBox_NameAnsprWoch1.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 2
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAnsprAusfuellListener2(ActionListener l){
 		this.comboBox_NameAnsprWoch2.addActionListener(l);
 	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 3 
+	 * @param l Listener der übergeben wird
+	 */
 	public void setAnsprAusfuellListener3(ActionListener l){
 		this.comboBox_NameAnsprWoch3.addActionListener(l);
 	}
-	
+	/**
+	 * Setzt einen Listener auf die ComboBox Schule 
+	 * @param l Listener der übergeben wird
+	 */
+	public void setSchulformAusfuellListener(ActionListener l){
+		this.comboBox_schule.addActionListener(l);
+	}
+	/**
+	 * setzt bestimmte Breite eines Komponenten
+	 * @param component
+	 * @param width
+	 */
 	public static void setFixedWidth(Component component, int width )
     {
     	component.setSize( new Dimension( width, Short.MAX_VALUE ) );
     	Dimension preferredSize = component.getPreferredSize();
     	component.setPreferredSize( new Dimension( width, preferredSize.height ) );
     }
+	/**
+	 * Funktion um die Tabelle für Praktikanten anzuzeigen
+	 */
 	public void showAllePrakt(){
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
@@ -1673,6 +1741,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		scrollPane_Suchliste.setViewportView(table_suche);
 		btn_NachrichtSchreiben.setVisible(true);
 	}
+	/**
+	 * Funkion um die Tabelle für Ansprechpartner anzuzeigen
+	 */
 	public void showAlleAnspr(){
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
@@ -1683,18 +1754,32 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		scrollPane_Suchliste.setViewportView(table_suche);
 		btn_NachrichtSchreiben.setVisible(false);
 	}
+	/**
+	 * Neuen Eintrag Seite anzeigen
+	 */
 	public void showNeuerEintrag(){
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 		cardLayout.show(mainPanel, "card_1");
 	}
+	/**
+	 * Setter für die Daten die in der Tabelle Praktikanten angezeigt werden sollen
+	 * @param daten
+	 */
 	public void setDatenPraktListe(Object[][] daten){
 		this.datenprak = daten;
 	}
+	/**
+	 * Setter für die Daten die in der Tabelle Ansprechpartner angezeigt werden sollen
+	 * @param daten
+	 */
 	public void setDatenAnsprListe(Object[][] daten){
 		this.datenansprech = daten;
 	}
-	
+	/**
+	 * Setzt den Inhalt der ComboBox Wohnort
+	 * @param v
+	 */
 	public void setComboBoxItems_wohn(Vector v){
 		comboBox_wohn.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
@@ -1702,6 +1787,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_wohn);
 	}
+	/**
+	 * Setzt den Inhalt der ComboBox Straße
+	 * @param v
+	 */
 	public void setComboBoxItems_str(Vector v){
 		comboBox_str.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
@@ -1709,6 +1798,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_str);
 	}
+	/**
+	 * Setzt den Inhalt der ComboBox Geburtsort
+	 * @param v
+	 */
 	public void setComboBoxItems_geburtsort(Vector v){
 		comboBox_geburtsort.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
@@ -1716,6 +1809,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_geburtsort);
 	}
+	/**
+	 * Setzt den Inhalt der ComboBox Schule
+	 * @param v
+	 */
 	public void setComboBoxItems_schule(Vector v){
 		comboBox_schule.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
@@ -1723,6 +1820,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_schule);
 	}
+	/**
+	 * Setzt den Inhalt der ComboBox Schulform
+	 * @param v
+	 */
 	public void setComboBoxItems_schulform(Vector v){
 		comboBox_schulform.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
@@ -1730,6 +1831,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_schulform);
 	}
+	/**
+	 * Setzt den Inhalt der ComboBoxen der Ansprechpartner Nachnamen
+	 * @param v
+	 */
 	public void setComboBoxItems_AnsprNN(Vector v){
 		comboBox_NameAnsprWoch1.removeAllItems();
 		comboBox_NameAnsprWoch2.removeAllItems();
@@ -1744,7 +1849,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch2);
 		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch3);
 	}
-	
+	/**
+	 * Fängt die Events der Action Listener ab
+	 * Durchschalten der Ansicht
+	 * Freischalten der Anderen Ansprechpartner Eingabefelder
+	 */
 	public void actionPerformed(ActionEvent evt) {
 		 Object src = evt.getSource();
 		 CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
@@ -1794,48 +1903,101 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			}
 		
 	}
+	/**
+	 * setzt das Praktikanten Info/Konsolenfeld
+	 * @param inf
+	 */
 	public void setInfoPrakt(String inf){
 		this.textArea_konsole.setText(inf);
 	}
+	/**
+	 * setzt das Ansprechpartner Info/Konsolenfeld
+	 * @param inf
+	 */
 	public void setInfoAnspr(String inf){
 		this.textArea_InfoAnspr.setText(inf);
 	}
+	/**
+	 * Wurde Ansprechpartner1 bearbeitet
+	 * @return
+	 */
 	public boolean getEditAnspr1(){
 		return Ansprbearb1gedrueckt;
 	}
+	/**
+	 * Wurde Ansprechpartner2 bearbeitet
+	 * @return
+	 */
 	public boolean getEditAnspr2(){
 		return Ansprbearb2gedrueckt;
 	}
+	/**
+	 * Wurde Ansprechpartner3 bearbeitet
+	 * @return
+	 */
 	public boolean getEditAnspr3(){
 		return Ansprbearb3gedrueckt;
 	}
+	/**
+	 * Gibt eine Arrayliste zurück mit Suchkriterium(Nachname, Vorname, etc.)und dem Suchbegriff für Praktikanten
+	 * @return
+	 */
 	public ArrayList<String> getSuchePrakt(){
 		ArrayList<String>  s = new ArrayList<String> ();
 		s.add((String) this.comboBox_kriteriumprak.getSelectedItem());
 		s.add(this.textField_suchbegriffprak.getText());
 		return s;
 	}
+	/**
+	 * Gibt eine Arrayliste zurück mit Suchkriterium(Nachname, Vorname, etc.)und dem Suchbegriff für Ansprechpartner
+	 * @return
+	 */
 	public ArrayList<String>  getSucheAnspr(){
 		ArrayList<String>  s = new ArrayList<String> ();
 		s.add((String) this.comboBox_kriteriumansp.getSelectedItem());
 		s.add(this.textField_suchbegriffansp.getText());
 		return s;
 	}
+	/**
+	 * gibt die Eingabe zurück die in der ComboBox NachnameAnsprechpartner 1 gemacht wurde
+	 * @return
+	 */
 	public ArrayList<String>  getNameAnspr1(){
 		ArrayList<String>  s = new ArrayList<String> ();
 		s.add((String) this.comboBox_NameAnsprWoch1.getSelectedItem());
 		return s;
 	}
+	/**
+	 * gibt die Eingabe zurück die in der ComboBox NachnameAnsprechpartner 2 gemacht wurde
+	 * @return
+	 */
 	public ArrayList<String>  getNameAnspr2(){
 		ArrayList<String>  s = new ArrayList<String> ();
 		s.add((String) this.comboBox_NameAnsprWoch2.getSelectedItem());
 		return s;
 	}
+	/**
+	 * gibt die Eingabe zurück die in der ComboBox NachnameAnsprechpartner 3 gemacht wurde
+	 * @return
+	 */
 	public ArrayList<String>  getNameAnspr3(){
 		ArrayList<String>  s = new ArrayList<String> ();
 		s.add((String) this.comboBox_NameAnsprWoch3.getSelectedItem());
 		return s;
 	}
+	/**
+	 * gibt die Eingabe zurück die in der ComboBox Schule gemacht wurde
+	 * @return
+	 */
+	public ArrayList<String>  getNameSchule(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_schule.getSelectedItem());
+		return s;
+	}
+	/**
+	 * Setzt den Inhalt der Ansprechpartner1 Felder entsprechend der Liste
+	 * @param liste
+	 */
 	public void setInhaltAnspr1(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr1 = Integer.parseInt(liste.get(0).get(0));
@@ -1849,6 +2011,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			idAnspr1 = 0;
 		}
 	}
+	/**
+	 * Setzt den Inhalt der Ansprechpartner2 Felder entsprechend der Liste
+	 * @param liste
+	 */
 	public void setInhaltAnspr2(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr2 = Integer.parseInt(liste.get(0).get(0));
@@ -1862,6 +2028,10 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			idAnspr2 = 0;
 		}
 	}
+	/**
+	 * Setzt den Inhalt der Ansprechpartner3 Felder entsprechend der Liste
+	 * @param liste
+	 */
 	public void setInhaltAnspr3(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr3 = Integer.parseInt(liste.get(0).get(0));
@@ -1875,10 +2045,46 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			idAnspr3 = 0;
 		}
 	}
+	/**
+	 * Setzt den Inhalt des Schulform Feldes
+	 * @param liste
+	 */
+	public void setInhaltSchulform(ArrayList<ArrayList<String>> liste){
+		try {
+			comboBox_schulform.setSelectedItem(liste.get(0).get(0));
+		} catch (Exception e) {
+			comboBox_schulform.setSelectedItem("");
+		}
+	}
+	/**
+	 * Setzt das Feld Praktikanten ID auf den Wert von id
+	 * @param id
+	 */
 	public void setPraktId(String id){
 		textField_id.setText(id);
 	}
-	
+	/**
+	 * Setzt die ID von Ansprechpartner 1
+	 */
+	public void setAnspr1Id(String id){
+		idAnspr1 = Integer.parseInt(id);
+	}
+	/**
+	 * Setzt die ID von Ansprechpartner 2
+	 */
+	public void setAnspr2Id(String id){
+		idAnspr2 = Integer.parseInt(id);
+	}
+	/**
+	 * Setzt die ID von Ansprechpartner 3
+	 */
+	public void setAnspr3Id(String id){
+		idAnspr3 = Integer.parseInt(id);
+	}
+	/**
+	 * Gibt alle Inhalte der Felder beim Praktikanten zurück
+	 * @return
+	 */
 	public ArrayList<String> getInhaltPrakt(){
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		ArrayList<String> liste = new ArrayList<String>();
@@ -1910,12 +2116,19 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add((String) comboBox_status.getSelectedItem());
 			liste.add((String) textArea_anmerkprakt.getText());
 			liste.add((String) idAnspr1.toString());
+			System.out.println(idAnspr1.toString());
 			liste.add((String) idAnspr2.toString());
+			System.out.println(idAnspr2.toString());
 			liste.add((String) idAnspr3.toString());
+			System.out.println(idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
 			liste.add((String) letzteAenderung);
 		return liste;
 	}
+	/**
+	 * Gibt die Inhalte der Ansprechpartner zurück
+	 * @return
+	 */
 	public ArrayList<ArrayList<String>> getInhaltAnspr(){
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();

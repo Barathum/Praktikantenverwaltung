@@ -46,6 +46,7 @@ import java.awt.SystemColor;
 
 public class PraktikantenVerwaltung_View extends JFrame implements ActionListener{
 
+	//
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	
@@ -1646,6 +1647,15 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setNeuerEintragListener(ActionListener l){
 		this.menuEintrag.addActionListener(l);
 	}
+	public void setAnsprAusfuellListener1(ActionListener l){
+		this.comboBox_NameAnsprWoch1.addActionListener(l);
+	}
+	public void setAnsprAusfuellListener2(ActionListener l){
+		this.comboBox_NameAnsprWoch2.addActionListener(l);
+	}
+	public void setAnsprAusfuellListener3(ActionListener l){
+		this.comboBox_NameAnsprWoch3.addActionListener(l);
+	}
 	
 	public static void setFixedWidth(Component component, int width )
     {
@@ -1719,6 +1729,20 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			comboBox_schulform.addItem(v.get(i));
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_schulform);
+	}
+	public void setComboBoxItems_AnsprNN(Vector v){
+		comboBox_NameAnsprWoch1.removeAllItems();
+		comboBox_NameAnsprWoch2.removeAllItems();
+		comboBox_NameAnsprWoch3.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+			comboBox_NameAnsprWoch1.addItem(v.get(i));
+			comboBox_NameAnsprWoch2.addItem(v.get(i));
+			comboBox_NameAnsprWoch3.addItem(v.get(i));
+			System.out.println(i);
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch1);
+		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch2);
+		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch3);
 	}
 	
 	public void actionPerformed(ActionEvent evt) {
@@ -1797,6 +1821,64 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		s.add(this.textField_suchbegriffansp.getText());
 		return s;
 	}
+	public ArrayList<String>  getNameAnspr1(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_NameAnsprWoch1.getSelectedItem());
+		return s;
+	}
+	public ArrayList<String>  getNameAnspr2(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_NameAnsprWoch2.getSelectedItem());
+		return s;
+	}
+	public ArrayList<String>  getNameAnspr3(){
+		ArrayList<String>  s = new ArrayList<String> ();
+		s.add((String) this.comboBox_NameAnsprWoch3.getSelectedItem());
+		return s;
+	}
+	public void setInhaltAnspr1(ArrayList<ArrayList<String>> liste){
+		try {
+			idAnspr1 = Integer.parseInt(liste.get(0).get(0));
+			textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
+			textField_TelAnsprWoch1.setText(liste.get(0).get(3));
+			textField_MailAnsprWoch1.setText(liste.get(0).get(4));
+			textField_AbteilAnsprWoch1.setText(liste.get(0).get(5));
+			textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
+			textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
+		} catch (Exception e) {
+			idAnspr1 = 0;
+		}
+	}
+	public void setInhaltAnspr2(ArrayList<ArrayList<String>> liste){
+		try {
+			idAnspr2 = Integer.parseInt(liste.get(0).get(0));
+			textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
+			textField_TelAnsprWoch2.setText(liste.get(0).get(3));
+			textField_MailAnsprWoch2.setText(liste.get(0).get(4));
+			textField_AbteilAnsprWoch2.setText(liste.get(0).get(5));
+			textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
+			textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
+		} catch (Exception e) {
+			idAnspr2 = 0;
+		}
+	}
+	public void setInhaltAnspr3(ArrayList<ArrayList<String>> liste){
+		try {
+			idAnspr3 = Integer.parseInt(liste.get(0).get(0));
+			textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
+			textField_TelAnsprWoch3.setText(liste.get(0).get(3));
+			textField_MailAnsprWoch3.setText(liste.get(0).get(4));
+			textField_AbteilAnsprWoch3.setText(liste.get(0).get(5));
+			textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
+			textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
+		} catch (Exception e) {
+			idAnspr3 = 0;
+		}
+	}
+	public void setPraktId(String id){
+		textField_id.setText(id);
+	}
+	
 	public ArrayList<String> getInhaltPrakt(){
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
 		ArrayList<String> liste = new ArrayList<String>();

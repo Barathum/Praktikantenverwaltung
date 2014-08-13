@@ -14,6 +14,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
 	private Integer HoechsteAnsprID = 100000;
+	private String neuePraktID = "";
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_View(); 
@@ -64,6 +65,10 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setSuchePraktListener(new SuchePraktListener());
 		            this._view.setSucheAnsprListener(new SucheAnsprListener());
 		            this._view.setNeuerEintragListener(new NeuerEintragListener());
+		            this._view.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
+		            this._view.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
+		            this._view.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
+		            
 	   } 
 	   class PraktSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
@@ -107,6 +112,7 @@ public class PraktikantenVerwaltung_Control {
                _model.insertUpdateDeleteTable(sql);
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
                _model.insertUpdateDeleteTable(sql);
+               _view.setPraktId(neuePraktID);
 //               HoechstePraktID = getHoechstePraktID();
            } 
 	   }
@@ -196,7 +202,7 @@ public class PraktikantenVerwaltung_Control {
         	   if(suche.get(0) == "Nachname"){
         		   suchekrit = "NN";
         	   }
-       			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER WHERE " + suchekrit + " LIKE '" + suche.get(1) + "%' ORDER BY NN DESC;");
+       			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER WHERE " + suchekrit + " LIKE '" + suche.get(1) + "%' ORDER BY NN;");
        			Object[][] Array = new String[daten.size()][];
        			for (int i = 0; i < daten.size(); i++) {
        			    ArrayList<String> row = daten.get(i);
@@ -209,6 +215,36 @@ public class PraktikantenVerwaltung_Control {
 	   class NeuerEintragListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
 			   comboBox_autocomplete();
+			   _view.setPraktId("");
+            }  
+	   }
+	   class AnsprAusfuellListener1 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   ArrayList<String> name = new ArrayList<String>();
+        	   name = _view.getNameAnspr1();
+        	   System.out.println(name);
+       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
+//       			System.out.println(daten);
+       			_view.setInhaltAnspr1(daten);
+            }  
+	   }
+	   class AnsprAusfuellListener2 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   ArrayList<String> name = new ArrayList<String>();
+        	   name = _view.getNameAnspr2();
+       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
+       			_view.setInhaltAnspr2(daten);
+            }  
+	   }
+	   class AnsprAusfuellListener3 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   ArrayList<String> name = new ArrayList<String>();
+        	   name = _view.getNameAnspr3();
+       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
+       			_view.setInhaltAnspr3(daten);
             }  
 	   }
 	   public void comboBox_autocomplete(){
@@ -279,10 +315,20 @@ public class PraktikantenVerwaltung_Control {
   			for (int i = 0; i < Array.length; i++) {
 				V1.add(Array[i][0]);
 			}
+  			
+  			ArrayList<ArrayList<String>> daten_comboBoxItemsNameAnspr= new ArrayList<ArrayList<String>>();
+  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER ORDER BY NN");
+     	   Array = new String[daten_comboBoxItemsNameAnspr.size()][];
+   			for (int i = 0; i < daten_comboBoxItemsNameAnspr.size(); i++) {
+   			    ArrayList<String> row = daten_comboBoxItemsNameAnspr.get(i);
+   			    Array[i] = row.toArray(new String[row.size()]);
+   			}
+   			V1 = new Vector<String>();
+   			for (int i = 0; i < Array.length; i++) {
+ 				V1.add(Array[i][0]);
+ 			}
   			System.out.println(V1);
-    	   _view.setComboBoxItems_schulform(V1);
-    	   
-    	   
+    	   _view.setComboBoxItems_AnsprNN(V1);
     	   
     	   _view.showNeuerEintrag();
 	   }
@@ -292,22 +338,22 @@ public class PraktikantenVerwaltung_Control {
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
-		HoechstePraktID = getHoechstePraktID();
-		HoechstePraktID++;
-		String neuePraktID = "";
-		neuePraktID = "SP" + HoechstePraktID.toString();
 		if (i == 0) {
 			_view.setInfoPrakt("Daten geupdatet am " + zeit);
-			sql = "UPDATE PRAKTIKANTEN set ID = '" + liste.get(0) + "', ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
+			sql = "UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
 					"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
 					"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
 					"', GNN = '" + liste.get(14) + "', GVN = '" + liste.get(15) + "', SCHULE = '" + liste.get(16) + "', SCHULFORM = '" + liste.get(17) + "', PARTNERS = '" + liste.get(18) +
 					"', ANMERKSCHULE = '" + liste.get(19) + "', MIKI = '" + liste.get(20) + "', GRAD = '" + liste.get(21) + "', ANMERKPERSON = '" + liste.get(22) + "', STARTDATUM = '" + liste.get(23) +
 					"', ENDDATUM = '" + liste.get(24) + "', STATUS = '" + liste.get(25) + "', ANMERKPRAKT = '" + liste.get(26) + "', ANSPR1 = '" + liste.get(27) + "', ANSPR2 = '" + liste.get(28) +
 					"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +
-					"';";
+					"' WHERE ID = '" + liste.get(0) + "';";
 			System.out.println("update");
 		} else {
+			HoechstePraktID = getHoechstePraktID();
+			HoechstePraktID++;
+			neuePraktID = "SP" + HoechstePraktID.toString();
+			
 		      _view.setInfoPrakt("Daten gespeichert am " + zeit);
 			sql = "INSERT INTO PRAKTIKANTEN " +
 	                   "VALUES ('" + neuePraktID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
@@ -330,8 +376,8 @@ public class PraktikantenVerwaltung_Control {
 		neueAnsprID = HoechsteAnsprID.toString();
 		if (i == 1) {
 			_view.setInfoAnspr("Daten geupdatet am " + zeit);
-			sql = "UPDATE ANSPRECHPARTNER set ID = '" + liste.get(0) + "', NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
-					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla';";
+			sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
+					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla' WHERE ID = '" + liste.get(0) + "';";
 			System.out.println("update");
 		} else if (i == 2) {
 		      _view.setInfoAnspr("Daten gespeichert am " + zeit);

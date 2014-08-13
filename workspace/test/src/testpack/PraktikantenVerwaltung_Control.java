@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Vector;
 
+import javax.swing.JTable;
+
 public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
@@ -195,11 +197,15 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class PraktLoeschenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-                ArrayList<String> datensatz = _view.getInhaltPrakt(); 
-                _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
-                //hier überprüfen ob insert update
-                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update) sowie der liste");
-               _view.setInfoPrakt("lol");
+                JTable table = _view.getTable();
+                int markierteReiheNR =  table.getSelectedRow();
+                ArrayList<String> liste = new ArrayList<String>();
+                String id = (String) table.getValueAt(markierteReiheNR, 0);
+                liste.add(id);
+                String sql;
+                sql = schreibeEintragPraktsql(4, liste);
+                _model.insertUpdateDeleteTable(sql);
+                
             } 
 	   }
 	   /**
@@ -541,7 +547,9 @@ public class PraktikantenVerwaltung_Control {
 					"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +
 					"' WHERE ID = '" + liste.get(0) + "';";
 //			System.out.println("update");
-		} else {
+		}else if (i == 4) {
+			sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
+		}else{
 			HoechstePraktID = getHoechstePraktID();
 			HoechstePraktID++;
 			neuePraktID = "SP" + HoechstePraktID.toString();

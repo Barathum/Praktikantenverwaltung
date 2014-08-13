@@ -166,6 +166,8 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private JComboBox comboBox_kriteriumprak;
 	private JComboBox comboBox_kriteriumansp;
 	private Vector comboBoxItems_wohn;
+	private JButton buttonAnsprBearb;
+	private JButton buttonAnsprLoesch;
 
 
 	/**
@@ -1622,9 +1624,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		 JPanel panel_9 = new JPanel();
 		 panel_tabellenAnspr.add(panel_9, BorderLayout.SOUTH);
 		 
-		 JButton buttonAnsprBearb = new JButton("Bearbeiten");
+		 buttonAnsprBearb = new JButton("Bearbeiten");
 		 
-		 JButton buttonAnsprLoesch = new JButton("L\u00F6schen");
+		 buttonAnsprLoesch = new JButton("L\u00F6schen");
 		 
 		 JButton buttonAnsprInfo = new JButton("Info");
 		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
@@ -1703,7 +1705,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	 * @param l Listener der übergeben wird
 	 */
 	public void setAnsprLoeschenListener(ActionListener l){
-		this.btn_praktloeschen.addActionListener(l);
+		this.buttonAnsprLoesch.addActionListener(l);
 	}
 	/**
 	 * Setzt einen Listener auf den LöschenButton in der Praktikantenlisten Ansicht
@@ -1810,7 +1812,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		table_suche.setSelectionMode(0);
 		table_suche.setAutoCreateRowSorter(true);
 		scrollPane_SuchlisteAnspr.setViewportView(table_suche);
-	
+	}
+	public JTable getTable(){
+		return table_suche;
 	}
 	/**
 	 * Neuen Eintrag Seite anzeigen

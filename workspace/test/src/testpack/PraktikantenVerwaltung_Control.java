@@ -27,6 +27,9 @@ public class PraktikantenVerwaltung_Control {
 		this._view = new PraktikantenVerwaltung_View(); 
 //		_model.createTables();
 		comboBox_autocomplete();
+		_view.setNameAnspr1("");
+		_view.setNameAnspr2("");
+		_view.setNameAnspr3("");
 		addListener();
 	}
 	/**
@@ -51,7 +54,7 @@ public class PraktikantenVerwaltung_Control {
 			ID = HoechstePraktID.toString();
 //			System.out.println("catch");
 		}
-		System.out.println(ID);
+//		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
 	/**
@@ -117,14 +120,14 @@ public class PraktikantenVerwaltung_Control {
 					}
                }
                if (_view.getEditAnspr2()==true) {
-            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
             		   updateOrInsertAnspr2 = 2;
 					} else {
 							updateOrInsertAnspr2 = 1;
 					}
                }
                if (_view.getEditAnspr3()==true) {
-            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
 	            		   updateOrInsertAnspr3 = 2;
 					} else {
 							updateOrInsertAnspr3 = 1;
@@ -133,20 +136,55 @@ public class PraktikantenVerwaltung_Control {
                if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
 					updateOrInsert = 1;
 				}
+               
                String sql;
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
                _model.insertUpdateDeleteTable(sql);
+               System.out.println(datensatzAnspr.get(0).get(0));
+               if (_view.getEditAnspr1()==true) {
+            	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+            		   datensatz.set(27, neueAnsprID);
+					}
+               }
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
                _model.insertUpdateDeleteTable(sql);
+               if (_view.getEditAnspr1()==true) {
+            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
+            		   datensatz.set(28, neueAnsprID);
+					}
+               }
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
                _model.insertUpdateDeleteTable(sql);
+               if (_view.getEditAnspr1()==true) {
+            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
+            		   datensatz.set(29, neueAnsprID);
+					}
+               }
+               
                sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
                _model.insertUpdateDeleteTable(sql);
-               _view.setAnspr1Id(neueAnsprID);
-               _view.setAnspr2Id(neueAnsprID);
-               _view.setAnspr3Id(neueAnsprID);
-               System.out.println();
+               
                _view.setPraktId(neuePraktID);
+               
+               /**
+                * autocomplete beim speichern
+                */
+               comboBox_autocomplete();
+               /**
+                * Ausgewählten Ansprechpartner beibehalten
+                */
+               String name1 = datensatzAnspr.get(0).get(1);
+               String name2 = datensatzAnspr.get(1).get(1);
+               String name3 = datensatzAnspr.get(2).get(1);
+               _view.setNameAnspr1(name1);
+               _view.setNameAnspr2(name2);
+               _view.setNameAnspr3(name3);
+               String id1 = datensatzAnspr.get(0).get(0);
+               String id2 = datensatzAnspr.get(1).get(0);
+               String id3 = datensatzAnspr.get(2).get(0);
+               _view.setAnspr1Id(id1);
+               _view.setAnspr2Id(id2);
+               _view.setAnspr3Id(id3);
 //               HoechstePraktID = getHoechstePraktID();
            } 
 	   }
@@ -305,6 +343,13 @@ public class PraktikantenVerwaltung_Control {
 		   public void actionPerformed(ActionEvent e) { 
 			   comboBox_autocomplete();
 			   _view.setPraktId("");
+			   _view.setNameAnspr1("");
+			   _view.setNameAnspr2("");
+			   _view.setNameAnspr3("");
+			   _view.setAnspr1Id("0");
+			   _view.setAnspr2Id("0");
+			   _view.setAnspr3Id("0");
+			   _view.resetAnprBearb();
             }  
 	   }
 	   /**
@@ -317,7 +362,7 @@ public class PraktikantenVerwaltung_Control {
 			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			   ArrayList<String> name = new ArrayList<String>();
         	   name = _view.getNameAnspr1();
-        	   System.out.println(name);
+//        	   System.out.println(name);
        			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
 //       			System.out.println(daten);
        			_view.setInhaltAnspr1(daten);
@@ -495,7 +540,7 @@ public class PraktikantenVerwaltung_Control {
 					"', ENDDATUM = '" + liste.get(24) + "', STATUS = '" + liste.get(25) + "', ANMERKPRAKT = '" + liste.get(26) + "', ANSPR1 = '" + liste.get(27) + "', ANSPR2 = '" + liste.get(28) +
 					"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +
 					"' WHERE ID = '" + liste.get(0) + "';";
-			System.out.println("update");
+//			System.out.println("update");
 		} else {
 			HoechstePraktID = getHoechstePraktID();
 			HoechstePraktID++;
@@ -508,7 +553,7 @@ public class PraktikantenVerwaltung_Control {
 	                   +"','"+ liste.get(13) +"','"+ liste.get(14) +"','"+ liste.get(15) +"','"+ liste.get(16) +"','"+ liste.get(17) +"','"+ liste.get(18) +"','"+ liste.get(19)
 	                   +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
 	                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"');";
-			System.out.println("insert");
+//			System.out.println("insert");
 		}
 		return sql;
 	}
@@ -527,7 +572,7 @@ public class PraktikantenVerwaltung_Control {
 			_view.setInfoAnspr("Daten geupdatet am " + zeit);
 			sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
 					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla' WHERE ID = '" + liste.get(0) + "';";
-			System.out.println("update");
+//			System.out.println("update");
 		} else if (i == 2) {
 			HoechsteAnsprID = getHoechsteAnsprID();
 			HoechsteAnsprID++;

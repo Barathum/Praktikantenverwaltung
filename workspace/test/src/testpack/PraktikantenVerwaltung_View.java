@@ -10,9 +10,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Vector;
 
 import javax.swing.AbstractButton;
@@ -620,11 +622,12 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		JLabel lblGrad = new JLabel("Grad:");
 		
-		String comboBoxListe_miki[] = {"Ja", "Nein"};
+		String comboBoxListe_miki[] = {"Nein" , "Ja"};
 		comboBox_miki = new JComboBox(comboBoxListe_miki);
 		
-		String comboBoxListe_grad[] = {"Eltern", "Geschwister", "Onkel/Tante", "Großeltern", "siehe Anmerkungen"};
+		String comboBoxListe_grad[] = {"-" , "Eltern", "Geschwister", "Onkel/Tante", "Großeltern", "siehe Anmerkungen"};
 		comboBox_grad = new JComboBox(comboBoxListe_grad);
+		comboBox_grad.setEnabled(false);
 		GroupLayout gl_panel_6 = new GroupLayout(panel_6);
 		gl_panel_6.setHorizontalGroup(
 			gl_panel_6.createParallelGroup(Alignment.LEADING)
@@ -675,7 +678,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		datePicker_startdatum = new JXDatePicker();
 		datePicker_startdatum.setDate(Calendar.getInstance().getTime());
 		datePicker_startdatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
-		
+
 		datePicker_enddatum = new JXDatePicker();
 		datePicker_enddatum.setDate(Calendar.getInstance().getTime());
 		datePicker_enddatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
@@ -954,7 +957,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_VornameAnsprWoch1.setColumns(10);
 		
 		comboBox_NameAnsprWoch1 = new JComboBox();
-		comboBox_NameAnsprWoch1.setEditable(true);
+		comboBox_NameAnsprWoch1.setEditable(false);
 		
 		button_editAnspr1 = new JButton("");
 		
@@ -1080,7 +1083,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_VornameAnsprWoch2.setColumns(10);
 		
 		comboBox_NameAnsprWoch2 = new JComboBox();
-		comboBox_NameAnsprWoch2.setEditable(true);
+		comboBox_NameAnsprWoch2.setEditable(false);
 		
 		button_editAnspr2 = new JButton("");
 		GroupLayout gl_panel_12 = new GroupLayout(panel_12);
@@ -1205,7 +1208,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textField_VornameAnsprWoch3.setColumns(10);
 		
 		comboBox_NameAnsprWoch3 = new JComboBox();
-		comboBox_NameAnsprWoch3.setEditable(true);
+		comboBox_NameAnsprWoch3.setEditable(false);
 		
 		button_editAnspr3 = new JButton("");
 		GroupLayout gl_panel_11 = new GroupLayout(panel_11);
@@ -1331,6 +1334,17 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		datePicker_gb = new JXDatePicker();
 		datePicker_gb.setDate(Calendar.getInstance().getTime());
 		datePicker_gb.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+		
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		Date datestart = new Date();
+        try {
+			datestart = sdfToDate.parse("01.01.1995");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		datePicker_gb.setDate(datestart);
 		
 		String comboBoxListe_anrede[] = {"Herr", "Frau"};
 		comboBox_anrede = new JComboBox(comboBoxListe_anrede);
@@ -1622,6 +1636,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	    button_editAnspr1.addActionListener(this);
 	    button_editAnspr2.addActionListener(this);
 	    button_editAnspr3.addActionListener(this);
+	    comboBox_miki.addActionListener(this);
 
 	    
 	}
@@ -1843,11 +1858,14 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			comboBox_NameAnsprWoch1.addItem(v.get(i));
 			comboBox_NameAnsprWoch2.addItem(v.get(i));
 			comboBox_NameAnsprWoch3.addItem(v.get(i));
-			System.out.println(i);
+//			System.out.println(i);
 		}
 		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch1);
 		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch2);
 		AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch3);
+//		comboBox_NameAnsprWoch1.setEditable(false);
+//		comboBox_NameAnsprWoch2.setEditable(false);
+//		comboBox_NameAnsprWoch3.setEditable(false);
 	}
 	/**
 	 * Fängt die Events der Action Listener ab
@@ -1900,8 +1918,47 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 				textArea_EinsatzortAnsprWoche3.setEditable(true);
 				Ansprbearb3gedrueckt = true;
 				button_editAnspr3.setEnabled(false);
+			} else if (src == comboBox_miki) {
+				if (comboBox_miki.getSelectedItem() == "Nein") {
+					comboBox_grad.setSelectedItem("-");
+					comboBox_grad.setEnabled(false);
+				}else{
+					comboBox_grad.setEnabled(true);
+				}
 			}
 		
+	}
+	
+	public void resetAnprBearb(){
+//		comboBox_NameAnsprWoch1.setEditable(false);
+		textField_VornameAnsprWoch1.setEditable(false);
+		textField_TelAnsprWoch1.setEditable(false);
+		textField_MailAnsprWoch1.setEditable(false);
+		textField_AbteilAnsprWoch1.setEditable(false);
+		textField_RaumAnsprWoch1.setEditable(false);
+		textArea_EinsatzortAnsprWoche1.setEditable(false);
+		Ansprbearb1gedrueckt = false;
+		button_editAnspr1.setEnabled(true);
+		
+//		comboBox_NameAnsprWoch2.setEditable(false);
+		textField_VornameAnsprWoch2.setEditable(false);
+		textField_TelAnsprWoch2.setEditable(false);
+		textField_MailAnsprWoch2.setEditable(false);
+		textField_AbteilAnsprWoch2.setEditable(false);
+		textField_RaumAnsprWoch2.setEditable(false);
+		textArea_EinsatzortAnsprWoche2.setEditable(false);
+		Ansprbearb2gedrueckt = false;
+		button_editAnspr2.setEnabled(true);
+		
+//		comboBox_NameAnsprWoch3.setEditable(false);
+		textField_VornameAnsprWoch3.setEditable(false);
+		textField_TelAnsprWoch3.setEditable(false);
+		textField_MailAnsprWoch3.setEditable(false);
+		textField_AbteilAnsprWoch3.setEditable(false);
+		textField_RaumAnsprWoch3.setEditable(false);
+		textArea_EinsatzortAnsprWoche3.setEditable(false);
+		Ansprbearb3gedrueckt = false;
+		button_editAnspr3.setEnabled(true);
 	}
 	/**
 	 * setzt das Praktikanten Info/Konsolenfeld
@@ -2082,6 +2139,24 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		idAnspr3 = Integer.parseInt(id);
 	}
 	/**
+	 * Setzt die ID von Ansprechpartner 1
+	 */
+	public void setNameAnspr1(String name){
+		comboBox_NameAnsprWoch1.setSelectedItem(name);
+	}
+	/**
+	 * Setzt die ID von Ansprechpartner 2
+	 */
+	public void setNameAnspr2(String name){
+		comboBox_NameAnsprWoch2.setSelectedItem(name);
+	}
+	/**
+	 * Setzt die ID von Ansprechpartner 3
+	 */
+	public void setNameAnspr3(String name){
+		comboBox_NameAnsprWoch3.setSelectedItem(name);
+	}
+	/**
 	 * Gibt alle Inhalte der Felder beim Praktikanten zurück
 	 * @return
 	 */
@@ -2116,11 +2191,8 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add((String) comboBox_status.getSelectedItem());
 			liste.add((String) textArea_anmerkprakt.getText());
 			liste.add((String) idAnspr1.toString());
-			System.out.println(idAnspr1.toString());
 			liste.add((String) idAnspr2.toString());
-			System.out.println(idAnspr2.toString());
 			liste.add((String) idAnspr3.toString());
-			System.out.println(idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
 			liste.add((String) letzteAenderung);
 		return liste;
@@ -2162,7 +2234,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			eintrag.add((String) textField_RaumAnsprWoch3.getText());
 			eintrag.add((String) textArea_EinsatzortAnsprWoche3.getText());
 			liste.add(eintrag);
-			System.out.println(liste);
+//			System.out.println(liste);
 		return liste;
 	}
 }

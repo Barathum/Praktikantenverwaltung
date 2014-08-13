@@ -43,7 +43,7 @@ public class PraktikantenVerwaltung_Modell {
 	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 	      System.exit(0);
 	    }
-	    System.out.println("Datenbank verbunden");
+//	    System.out.println("Datenbank verbunden");
 	    return c;
 	  }
 	 /**
@@ -106,7 +106,7 @@ public class PraktikantenVerwaltung_Modell {
 		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		      System.exit(0);
 		    }
-		    System.out.println("Tabelle erfolgreich erstellt");
+//		    System.out.println("Tabelle erfolgreich erstellt");
 	 }
 	 /**
 	  * Führt den SQL Befehl sql aus
@@ -129,7 +129,7 @@ public class PraktikantenVerwaltung_Modell {
 			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			      System.exit(0);
 			    }
-			    System.out.println("Daten erfolgreich eingefügt/geändert/gelöscht");
+//			    System.out.println("Daten erfolgreich eingefügt/geändert/gelöscht");
 			  }
 
 	 }
@@ -165,7 +165,7 @@ public class PraktikantenVerwaltung_Modell {
 			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			      System.exit(0);
 			    }
-			    System.out.println("Daten geholt");
+//			    System.out.println("Daten geholt");
 			    return daten;
 			  }
 	 }

@@ -142,7 +142,7 @@ public class PraktikantenVerwaltung_Control {
                String sql;
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
                _model.insertUpdateDeleteTable(sql);
-               System.out.println(datensatzAnspr.get(0).get(0));
+//               System.out.println(datensatzAnspr.get(0).get(0));
                if (_view.getEditAnspr1()==true) {
             	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
             		   datensatz.set(27, neueAnsprID);

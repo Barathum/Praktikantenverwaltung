@@ -153,6 +153,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private Integer idAnspr1 = new Integer(0);
 	private Integer idAnspr2 = new Integer(0);
 	private Integer idAnspr3 = new Integer(0);
+	private Integer idAnsprBearb = new Integer(0);
 	private String letzteAenderung;
 	private JComboBox comboBox_NameAnsprWoch3;
 	private JButton button_editAnspr2;
@@ -168,6 +169,9 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	private Vector comboBoxItems_wohn;
 	private JButton buttonAnsprBearb;
 	private JButton buttonAnsprLoesch;
+	private JTextArea textArea_AnmerkOrtBearb;
+	private JButton buttonAnsprInfo;
+	private JLabel lblBearbeiteAnsprechpartner;
 
 
 	/**
@@ -297,7 +301,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		JLabel label_10 = new JLabel("Anmerkungen zum Einsatzort");
 		label_10.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		JLabel lblBearbeiteAnsprechpartner = new JLabel("Bearbeite  Ansprechpartner");
+		lblBearbeiteAnsprechpartner = new JLabel("Bearbeite  Ansprechpartner");
 		lblBearbeiteAnsprechpartner.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		button_SpeichernAnspr = new JButton("Speichern");
@@ -358,7 +362,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		textArea_InfoAnspr.setEditable(false);
 		scrollPane_6.setViewportView(textArea_InfoAnspr);
 		
-		JTextArea textArea_AnmerkOrtBearb = new JTextArea();
+		textArea_AnmerkOrtBearb = new JTextArea();
 		scrollPane_3.setViewportView(textArea_AnmerkOrtBearb);
 		panel_ansprbearb.setLayout(gl_panel_ansprbearb);
 		
@@ -1628,7 +1632,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		 
 		 buttonAnsprLoesch = new JButton("L\u00F6schen");
 		 
-		 JButton buttonAnsprInfo = new JButton("Info");
+		 buttonAnsprInfo = new JButton("Info");
 		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
 		 gl_panel_9.setHorizontalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -1707,12 +1711,21 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setAnsprLoeschenListener(ActionListener l){
 		this.buttonAnsprLoesch.addActionListener(l);
 	}
+	public void setAnsprBearbeitenListener(ActionListener l){
+		this.buttonAnsprBearb.addActionListener(l);
+	}
+	public void setAnsprInfoListener(ActionListener l){
+		this.buttonAnsprInfo.addActionListener(l);
+	}
 	/**
 	 * Setzt einen Listener auf den LöschenButton in der Praktikantenlisten Ansicht
 	 * @param l Listener der übergeben wird
 	 */
 	public void setPraktLoeschenListener(ActionListener l){
 		this.btn_praktloeschen.addActionListener(l);
+	}
+	public void setPraktBearbeitenListener(ActionListener l){
+		this.btn_praktbearbeiten.addActionListener(l);
 	}
 	/**
 	 * Setzt einen Listener auf den Menüeintrag für Alle Praktikanten
@@ -1793,13 +1806,18 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	 */
 	public void showAllePrakt(){
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
-		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+//		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 		cardLayout.show(mainPanel, "card_4");
 		table_suche = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
 		table_suche.setSelectionMode(0);
 		table_suche.setAutoCreateRowSorter(true);
 		scrollPane_Suchliste.setViewportView(table_suche);
 		btn_praktNachrichtSchreiben.setVisible(true);
+	}
+	public void showAnsprBearb(){
+		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+//		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+		cardLayout.show(mainPanel, "card_5");
 	}
 	/**
 	 * Funkion um die Tabelle für Ansprechpartner anzuzeigen
@@ -1927,9 +1945,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		    	cardLayout.show(mainPanel, "card_2");
 		    } else if (src == menuAnsprechpartner) {
 				cardLayout.show(mainPanel, "card_3");
-		    } else if (src == menuAnsprechpartnerbearbeiten) {
-				cardLayout.show(mainPanel, "card_5");
-			} else if (src == button_woche1) {
+		    } else if (src == button_woche1) {
 				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
 			} else if (src == button_woche2) {
 				cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");	
@@ -2203,12 +2219,18 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setNameAnspr3(String name){
 		comboBox_NameAnsprWoch3.setSelectedItem(name);
 	}
+	public void setStatebutton_SpeichernAnspr(boolean s){
+		button_SpeichernAnspr.setEnabled(s);
+	}
+	public void setText_AnprbearbLabel(String t){
+		lblBearbeiteAnsprechpartner.setText(t);
+	}
 	/**
 	 * Gibt alle Inhalte der Felder beim Praktikanten zurück
 	 * @return
 	 */
 	public ArrayList<String> getInhaltPrakt(){
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) textField_id.getText());
 			liste.add((String) comboBox_anrede.getSelectedItem());
@@ -2241,7 +2263,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add((String) idAnspr2.toString());
 			liste.add((String) idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
-			liste.add((String) letzteAenderung);
+			liste.add((String) df.format(System.currentTimeMillis()));
 		return liste;
 	}
 	/**
@@ -2283,5 +2305,29 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add(eintrag);
 //			System.out.println(liste);
 		return liste;
+	}
+	public void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten){
+		idAnsprBearb = Integer.parseInt(daten.get(0).get(0));
+		textField_NameAnsprBearb.setText(daten.get(0).get(1));
+		textField_VornameAnsprBearb.setText(daten.get(0).get(2));
+		textField_TelAnsprBearb.setText(daten.get(0).get(3));
+		textField_MailAnsprBearb.setText(daten.get(0).get(4));
+		textField_AbteilAnsprBearb.setText(daten.get(0).get(5));
+		textField_RaumAnsprBearb.setText(daten.get(0).get(6));
+		textArea_AnmerkOrtBearb.setText(daten.get(0).get(7));
+		textArea_InfoAnspr.setText(daten.get(0).get(8));
+	}
+	public ArrayList<String> getInhaltAnsprBearb(){
+		ArrayList<String> liste = new ArrayList<String>();
+		liste.add((String) idAnsprBearb.toString());
+		liste.add((String) textField_NameAnsprBearb.getText());
+		liste.add((String) textField_VornameAnsprBearb.getText());
+		liste.add((String) textField_TelAnsprBearb.getText());
+		liste.add((String) textField_MailAnsprBearb.getText());
+		liste.add((String) textField_AbteilAnsprBearb.getText());
+		liste.add((String) textField_RaumAnsprBearb.getText());
+		liste.add((String) textArea_AnmerkOrtBearb.getText());
+		liste.add((String) textArea_InfoAnspr.getText());
+	return liste;
 	}
 }

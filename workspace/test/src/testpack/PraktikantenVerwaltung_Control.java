@@ -28,10 +28,8 @@ public class PraktikantenVerwaltung_Control {
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_View(); 
 //		_model.createTables();
-		comboBox_autocomplete();
-		_view.setNameAnspr1("");
-		_view.setNameAnspr2("");
-		_view.setNameAnspr3("");
+		NeuerEintrag();
+		NeuerEintrag();
 		addListener();
 	}
 	/**
@@ -95,7 +93,9 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
 		            this._view.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
 		            this._view.setSchulformAusfuellListener(new SchulformAusfuellListener());
-		            
+		            this._view.setAnsprBearbeitenListener(new AnsprBearbeitenListener());
+		            this._view.setPraktBearbeitenListener(new PraktBearbeitenListener());
+		            this._view.setAnsprInfoListener(new AnsprInfoListener());
 	   } 
 	   /**
 	    * Innere Klasse für den Praktikanten Speichern Listener
@@ -205,7 +205,20 @@ public class PraktikantenVerwaltung_Control {
                 String sql;
                 sql = schreibeEintragPraktsql(4, liste);
                 _model.insertUpdateDeleteTable(sql);
-                
+                allePraktAnzeigen();
+            } 
+	   }
+	   class PraktBearbeitenListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+                JTable table = _view.getTable();
+                int markierteReiheNR =  table.getSelectedRow();
+                ArrayList<String> liste = new ArrayList<String>();
+                String id = (String) table.getValueAt(markierteReiheNR, 0);
+                liste.add(id);
+                String sql;
+                sql = getEintragPrakt(0, liste);
+                daten = _model.getData(sql);
             } 
 	   }
 	   /**
@@ -218,14 +231,9 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AnsprSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-               ArrayList<String> datensatz = null; 
-               int updateOrInsert = 0;
-               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
-               if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
-					updateOrInsert = 1;
-				}
+			   ArrayList<String> datensatzAnspr = _view.getInhaltAnsprBearb();
                String sql;
-               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
+               sql = schreibeEintragAnsprsql(1, datensatzAnspr);
                _model.insertUpdateDeleteTable(sql);
 //               HoechstePraktID = getHoechstePraktID();
            }  
@@ -237,11 +245,61 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AnsprLoeschenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-                ArrayList<String> datensatz = _view.getInhaltPrakt(); 
-                _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db"); 
-                //hier überprüfen ob insert update
-                _model.insertUpdateDeleteTable("//hier übergeben int(insert/update) sowie der liste");
-               _view.setInfoPrakt("lol");
+        	   JTable table = _view.getTable();
+               int markierteReiheNR =  table.getSelectedRow();
+               ArrayList<String> liste = new ArrayList<String>();
+               String nn = (String) table.getValueAt(markierteReiheNR, 0);
+               String vn = (String) table.getValueAt(markierteReiheNR, 1);
+               String tele = (String) table.getValueAt(markierteReiheNR, 2);
+               liste.add(nn);
+               liste.add(vn);
+               liste.add(tele);
+               String sql;
+               sql = schreibeEintragAnsprsql(4, liste);
+               _model.insertUpdateDeleteTable(sql);
+               alleAnprAnzeigen();
+            } 
+	   }
+	   class AnsprBearbeitenListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   JTable table = _view.getTable();
+               int markierteReiheNR =  table.getSelectedRow();
+               ArrayList<String> liste = new ArrayList<String>();
+               String nn = (String) table.getValueAt(markierteReiheNR, 0);
+               String vn = (String) table.getValueAt(markierteReiheNR, 1);
+               String tele = (String) table.getValueAt(markierteReiheNR, 2);
+               liste.add(nn);
+               liste.add(vn);
+               liste.add(tele);
+               String sql;
+               sql = getEintragAnspr(0, liste);
+               daten = _model.getData(sql);
+               _view.setInhaltAnsprBearb(daten);
+               _view.setStatebutton_SpeichernAnspr(true);
+               _view.setText_AnprbearbLabel("Ansprechpartner bearbeiten");
+               _view.showAnsprBearb();
+            } 
+	   }
+	   class AnsprInfoListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   JTable table = _view.getTable();
+               int markierteReiheNR =  table.getSelectedRow();
+               ArrayList<String> liste = new ArrayList<String>();
+               String nn = (String) table.getValueAt(markierteReiheNR, 0);
+               String vn = (String) table.getValueAt(markierteReiheNR, 1);
+               String tele = (String) table.getValueAt(markierteReiheNR, 2);
+               liste.add(nn);
+               liste.add(vn);
+               liste.add(tele);
+               String sql;
+               sql = getEintragAnspr(0, liste);
+               daten = _model.getData(sql);
+               _view.setInhaltAnsprBearb(daten);
+               _view.setStatebutton_SpeichernAnspr(false);
+               _view.setText_AnprbearbLabel("Ansprechpartner Info");
+               _view.showAnsprBearb();
             } 
 	   }
 	   /**
@@ -253,16 +311,19 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AllePraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-       			daten = _model.getData("SELECT ID , NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN;");
-       			Object[][] Array = new String[daten.size()][];
-       			for (int i = 0; i < daten.size(); i++) {
-       			    ArrayList<String> row = daten.get(i);
-       			    Array[i] = row.toArray(new String[row.size()]);
-       			}
-        	   _view.setDatenPraktListe(Array);
-                _view.showAllePrakt();
+        	   allePraktAnzeigen();
             } 
+	   }
+	   public void allePraktAnzeigen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+  			daten = _model.getData("SELECT ID , NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN;");
+  			Object[][] Array = new String[daten.size()][];
+  			for (int i = 0; i < daten.size(); i++) {
+  			    ArrayList<String> row = daten.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			_view.setDatenPraktListe(Array);
+           _view.showAllePrakt();
 	   }
 	   /**
 	    * Innere Klasse für den Listener für die gesamte Ansprechpartner Liste
@@ -273,16 +334,19 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AlleAnsprListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-       			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER;");
-       			Object[][] Array = new String[daten.size()][];
-       			for (int i = 0; i < daten.size(); i++) {
-       			    ArrayList<String> row = daten.get(i);
-       			    Array[i] = row.toArray(new String[row.size()]);
-       			}
-        	   _view.setDatenAnsprListe(Array);
-                _view.showAlleAnspr();
+        	   alleAnprAnzeigen();
             } 
+	   }
+	   public void alleAnprAnzeigen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+  			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER;");
+  			Object[][] Array = new String[daten.size()][];
+  			for (int i = 0; i < daten.size(); i++) {
+  			    ArrayList<String> row = daten.get(i);
+  			    Array[i] = row.toArray(new String[row.size()]);
+  			}
+  			_view.setDatenAnsprListe(Array);
+           _view.showAlleAnspr();
 	   }
 	   /**
 	    * Innere Klasse für den Suche Praktikanten Listener
@@ -347,16 +411,19 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class NeuerEintragListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-			   comboBox_autocomplete();
-			   _view.setPraktId("");
-			   _view.setNameAnspr1("");
-			   _view.setNameAnspr2("");
-			   _view.setNameAnspr3("");
-			   _view.setAnspr1Id("0");
-			   _view.setAnspr2Id("0");
-			   _view.setAnspr3Id("0");
-			   _view.resetAnprBearb();
+			   NeuerEintrag();
             }  
+	   }
+	   public void NeuerEintrag(){
+		   comboBox_autocomplete();
+		   _view.setPraktId("");
+		   _view.setNameAnspr1("");
+		   _view.setNameAnspr2("");
+		   _view.setNameAnspr3("");
+		   _view.setAnspr1Id("0");
+		   _view.setAnspr2Id("0");
+		   _view.setAnspr3Id("0");
+		   _view.resetAnprBearb();
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -537,7 +604,9 @@ public class PraktikantenVerwaltung_Control {
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
 		if (i == 0) {
-			_view.setInfoPrakt("Daten geupdatet am " + zeit);
+			String info = "Daten geupdatet am " + zeit;
+			_view.setInfoPrakt(info);
+			liste.set(30, info);
 			sql = "UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
 					"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
 					"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
@@ -554,7 +623,9 @@ public class PraktikantenVerwaltung_Control {
 			HoechstePraktID++;
 			neuePraktID = "SP" + HoechstePraktID.toString();
 			
-		      _view.setInfoPrakt("Daten gespeichert am " + zeit);
+			String info = "Daten gespeichert am " + zeit;
+			_view.setInfoPrakt(info);
+			liste.set(30, info);
 			sql = "INSERT INTO PRAKTIKANTEN " +
 	                   "VALUES ('" + neuePraktID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
 	                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','"+ liste.get(8) +"','"+ liste.get(9) +"','"+ liste.get(10) +"','"+ liste.get(11) +"','"+ liste.get(12)
@@ -563,6 +634,11 @@ public class PraktikantenVerwaltung_Control {
 	                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"');";
 //			System.out.println("insert");
 		}
+		return sql;
+	}
+	public String getEintragPrakt(int i, ArrayList<String> liste){
+		String sql;
+		sql = "SELECT * from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
 		return sql;
 	}
 	/**
@@ -577,23 +653,32 @@ public class PraktikantenVerwaltung_Control {
 		Timestamp time = new Timestamp(System.currentTimeMillis());
 		String zeit = sdf.format(time);
 		if (i == 1) {
-			_view.setInfoAnspr("Daten geupdatet am " + zeit);
+			String info = "Daten geupdatet am " + zeit;
+			_view.setInfoAnspr(info);
 			sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
-					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = 'bla' WHERE ID = '" + liste.get(0) + "';";
+					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + "' WHERE ID = '" + liste.get(0) + "';";
 //			System.out.println("update");
 		} else if (i == 2) {
 			HoechsteAnsprID = getHoechsteAnsprID();
 			HoechsteAnsprID++;
 			neueAnsprID = HoechsteAnsprID.toString();
-		      _view.setInfoAnspr("Daten gespeichert am " + zeit);
+			String info = "Daten gespeichert am " + zeit;
+			_view.setInfoAnspr(info);
 			sql = "INSERT INTO ANSPRECHPARTNER " +
 					"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
-	                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"',' bla ');";
+	                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info + "');";
 //			System.out.println("insert");
 //			System.out.println(liste.get(1));
-		}else {
+		}else if ( i== 4) {
+			sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+		} else {
 			sql = "";
 		}
+		return sql;
+	}
+	public String getEintragAnspr(int i, ArrayList<String> liste){
+		String sql;
+		sql = "SELECT * from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
 		return sql;
 	}
 	

@@ -58,7 +58,6 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
 	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
-	JMenuItem menuAnsprechpartnerbearbeiten = new JMenuItem("Bearbeite Ansprechpartner");
 	private JTextField textField_id;
 	private JTextField textField_nn;
 	private JTextField textField_vn;
@@ -1667,7 +1666,6 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		    start.add(menuAnsprechpartner);
 		    start.add(menuAllePraktikanten);
 		    start.add(menuAlleAnsprechpartner);
-		    start.add(menuAnsprechpartnerbearbeiten);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
 		
@@ -1677,7 +1675,6 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		menuEintrag.addActionListener(this);
 	    menuSuche.addActionListener(this);
 	    menuAlleAnsprechpartner.addActionListener(this);
-	    menuAnsprechpartnerbearbeiten.addActionListener(this);
 	    menuAnsprechpartner.addActionListener(this);
 	    button_woche1.addActionListener(this);
 	    button_woche2.addActionListener(this);
@@ -1689,6 +1686,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 
 	    
 	}
+	
 
 	/**
 	 * Setzt einen Listener auf den Speichernbutton auf der Praktikanten Ansicht
@@ -1711,12 +1709,16 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setAnsprLoeschenListener(ActionListener l){
 		this.buttonAnsprLoesch.addActionListener(l);
 	}
+	
 	public void setAnsprBearbeitenListener(ActionListener l){
 		this.buttonAnsprBearb.addActionListener(l);
 	}
 	public void setAnsprInfoListener(ActionListener l){
 		this.buttonAnsprInfo.addActionListener(l);
 	}
+	public void setPraktInfoListener(ActionListener l){ 
+        this.btn_praktinfo.addActionListener(l); 
+	} 
 	/**
 	 * Setzt einen Listener auf den LöschenButton in der Praktikantenlisten Ansicht
 	 * @param l Listener der übergeben wird
@@ -1818,6 +1820,11 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
 //		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 		cardLayout.show(mainPanel, "card_5");
+	}
+	public void showPraktBearb(){
+		CardLayout cardLayout = (CardLayout) mainPanel.getLayout();
+//		CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+		cardLayout.show(mainPanel, "card_1");
 	}
 	/**
 	 * Funkion um die Tabelle für Ansprechpartner anzuzeigen
@@ -2121,6 +2128,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setInhaltAnspr1(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr1 = Integer.parseInt(liste.get(0).get(0));
+			comboBox_NameAnsprWoch1.setSelectedItem(liste.get(0).get(1));
 			textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
 			textField_TelAnsprWoch1.setText(liste.get(0).get(3));
 			textField_MailAnsprWoch1.setText(liste.get(0).get(4));
@@ -2138,6 +2146,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setInhaltAnspr2(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr2 = Integer.parseInt(liste.get(0).get(0));
+			comboBox_NameAnsprWoch2.setSelectedItem(liste.get(0).get(1));
 			textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
 			textField_TelAnsprWoch2.setText(liste.get(0).get(3));
 			textField_MailAnsprWoch2.setText(liste.get(0).get(4));
@@ -2155,6 +2164,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setInhaltAnspr3(ArrayList<ArrayList<String>> liste){
 		try {
 			idAnspr3 = Integer.parseInt(liste.get(0).get(0));
+			comboBox_NameAnsprWoch3.setSelectedItem(liste.get(0).get(1));
 			textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
 			textField_TelAnsprWoch3.setText(liste.get(0).get(3));
 			textField_MailAnsprWoch3.setText(liste.get(0).get(4));
@@ -2222,21 +2232,26 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	public void setStatebutton_SpeichernAnspr(boolean s){
 		button_SpeichernAnspr.setEnabled(s);
 	}
+	
 	public void setText_AnprbearbLabel(String t){
 		lblBearbeiteAnsprechpartner.setText(t);
+	}
+	public void setStatebutton_SpeichernPrakt(boolean s){
+		btnSpeichern.setEnabled(s);
+		btnSpeichern.setVisible(s);
 	}
 	/**
 	 * Gibt alle Inhalte der Felder beim Praktikanten zurück
 	 * @return
 	 */
 	public ArrayList<String> getInhaltPrakt(){
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) textField_id.getText());
 			liste.add((String) comboBox_anrede.getSelectedItem());
 			liste.add((String) textField_nn.getText());
 			liste.add((String) textField_vn.getText());
-			liste.add((String) df.format(datePicker_gb.getDate()));
+			liste.add((String) sdfToDate.format(datePicker_gb.getDate()));
 			liste.add((String) comboBox_geburtsort.getSelectedItem());
 			liste.add((String) comboBox_str.getSelectedItem());
 			liste.add((String) textField_plz.getText());
@@ -2255,15 +2270,15 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 			liste.add((String) comboBox_miki.getSelectedItem());
 			liste.add((String) comboBox_grad.getSelectedItem());
 			liste.add((String) textArea_anmerkperson.getText());
-			liste.add((String) df.format(datePicker_startdatum.getDate()));
-			liste.add((String) df.format(datePicker_enddatum.getDate()));
+			liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()));
+			liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()));
 			liste.add((String) comboBox_status.getSelectedItem());
 			liste.add((String) textArea_anmerkprakt.getText());
 			liste.add((String) idAnspr1.toString());
 			liste.add((String) idAnspr2.toString());
 			liste.add((String) idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
-			liste.add((String) df.format(System.currentTimeMillis()));
+			liste.add((String) sdfToDate.format(System.currentTimeMillis()));
 		return liste;
 	}
 	/**
@@ -2271,7 +2286,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	 * @return
 	 */
 	public ArrayList<ArrayList<String>> getInhaltAnspr(){
-		DateFormat df = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
 			ArrayList<String> eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr1.toString());
@@ -2329,5 +2344,55 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		liste.add((String) textArea_AnmerkOrtBearb.getText());
 		liste.add((String) textArea_InfoAnspr.getText());
 	return liste;
+	}
+	public void setInhaltPraktBearb(ArrayList<ArrayList<String>> daten){
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		textField_id.setText(daten.get(0).get(0));
+		comboBox_anrede.setSelectedItem(daten.get(0).get(1));
+		textField_nn.setText(daten.get(0).get(2));
+		textField_vn.setText(daten.get(0).get(3));
+		try {
+			datePicker_gb.setDate(sdfToDate.parse(daten.get(0).get(4)));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		comboBox_geburtsort.setSelectedItem(daten.get(0).get(5));
+		comboBox_str.setSelectedItem(daten.get(0).get(6));
+		textField_plz.setText(daten.get(0).get(7));
+		txtDeutschland.setText(daten.get(0).get(8));
+		textField_tele.setText(daten.get(0).get(9));
+		textField_mail.setText(daten.get(0).get(10));
+		textField_mobil.setText(daten.get(0).get(11));
+		textField_haus.setText(daten.get(0).get(12));
+		comboBox_wohn.setSelectedItem(daten.get(0).get(13));
+		textField_gnn.setText(daten.get(0).get(14));
+		textField_gvn.setText(daten.get(0).get(15));
+		comboBox_schule.setSelectedItem(daten.get(0).get(16));
+		comboBox_schulform.setSelectedItem(daten.get(0).get(17));
+		comboBox_partners.setSelectedItem(daten.get(0).get(18));
+		textArea_anmerkschule.setText(daten.get(0).get(19));
+		comboBox_miki.setSelectedItem(daten.get(0).get(20));
+		comboBox_grad.setSelectedItem(daten.get(0).get(21));
+		textArea_anmerkperson.setText(daten.get(0).get(22));
+		try {
+			datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			datePicker_enddatum.setDate(sdfToDate.parse(daten.get(0).get(24)));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		comboBox_status.setSelectedItem(daten.get(0).get(25));
+		textArea_anmerkprakt.setText(daten.get(0).get(26));
+		idAnspr1 = Integer.parseInt(daten.get(0).get(27));
+		idAnspr2 = Integer.parseInt(daten.get(0).get(28));
+		idAnspr3 = Integer.parseInt(daten.get(0).get(29));
+		textArea_konsole.setText(daten.get(0).get(30));
+
 	}
 }

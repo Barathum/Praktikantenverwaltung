@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Vector;
 
@@ -96,6 +97,7 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setAnsprBearbeitenListener(new AnsprBearbeitenListener());
 		            this._view.setPraktBearbeitenListener(new PraktBearbeitenListener());
 		            this._view.setAnsprInfoListener(new AnsprInfoListener());
+		            this._view.setPraktInfoListener(new PraktInfoListener());
 	   } 
 	   /**
 	    * Innere Klasse für den Praktikanten Speichern Listener
@@ -211,14 +213,53 @@ public class PraktikantenVerwaltung_Control {
 	   class PraktBearbeitenListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-                JTable table = _view.getTable();
-                int markierteReiheNR =  table.getSelectedRow();
-                ArrayList<String> liste = new ArrayList<String>();
-                String id = (String) table.getValueAt(markierteReiheNR, 0);
-                liste.add(id);
-                String sql;
-                sql = getEintragPrakt(0, liste);
-                daten = _model.getData(sql);
+        	   ArrayList<ArrayList<String>> datenAnspr1 = new ArrayList<ArrayList<String>>();
+        	   ArrayList<ArrayList<String>> datenAnspr2 = new ArrayList<ArrayList<String>>();
+        	   ArrayList<ArrayList<String>> datenAnspr3 = new ArrayList<ArrayList<String>>();
+        	   JTable table = _view.getTable();
+               int markierteReiheNR =  table.getSelectedRow();
+               ArrayList<String> liste = new ArrayList<String>();
+               String id = (String) table.getValueAt(markierteReiheNR, 0);
+               liste.add(id);
+               String sql;
+               sql = getEintragPrakt(0, liste);
+               daten = _model.getData(sql);
+               _view.setInhaltPraktBearb(daten);
+               datenAnspr1 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(27) + "'");
+               datenAnspr2 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(28) + "'");
+               datenAnspr3 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(29) + "'");
+               _view.setInhaltAnspr1(datenAnspr1);
+               _view.setInhaltAnspr2(datenAnspr2);
+               _view.setInhaltAnspr3(datenAnspr3);
+               _view.setStatebutton_SpeichernPrakt(true);
+              _view.showPraktBearb();
+                
+            } 
+	   }
+	   class PraktInfoListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   ArrayList<ArrayList<String>> datenAnspr1 = new ArrayList<ArrayList<String>>();
+        	   ArrayList<ArrayList<String>> datenAnspr2 = new ArrayList<ArrayList<String>>();
+        	   ArrayList<ArrayList<String>> datenAnspr3 = new ArrayList<ArrayList<String>>();
+        	   JTable table = _view.getTable();
+               int markierteReiheNR =  table.getSelectedRow();
+               ArrayList<String> liste = new ArrayList<String>();
+               String id = (String) table.getValueAt(markierteReiheNR, 0);
+               liste.add(id);
+               String sql;
+               sql = getEintragPrakt(0, liste);
+               daten = _model.getData(sql);
+               _view.setInhaltPraktBearb(daten);
+               datenAnspr1 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(27) + "'");
+               datenAnspr2 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(28) + "'");
+               datenAnspr3 = _model.getData("Select * from ANSPRECHPARTNER where ID = '" + daten.get(0).get(29) + "'");
+               _view.setInhaltAnspr1(datenAnspr1);
+               _view.setInhaltAnspr2(datenAnspr2);
+               _view.setInhaltAnspr3(datenAnspr3);
+               _view.setStatebutton_SpeichernPrakt(false);
+              _view.showPraktBearb();
+                
             } 
 	   }
 	   /**
@@ -424,6 +465,24 @@ public class PraktikantenVerwaltung_Control {
 		   _view.setAnspr2Id("0");
 		   _view.setAnspr3Id("0");
 		   _view.resetAnprBearb();
+		   _view.setStatebutton_SpeichernPrakt(true);
+		   ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
+		   ArrayList<String> liste1 = new ArrayList<>();
+		   for (int i = 0; i < 32; i++) {
+			   liste1.add("");
+		}
+		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		   String heute = sdfToDate.format(Calendar.getInstance().getTime());
+		   liste1.add(4, "01.01.1995");
+		   liste1.add(8, "Deutschland");
+		   liste1.add(23, heute);
+		   liste1.add(24, heute);
+		   liste1.add(27, "0");
+		   liste1.add(28, "0");
+		   liste1.add(29, "0");
+		   liste.add(liste1);
+		   _view.setInhaltPraktBearb(liste);
+		   
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder

@@ -108,7 +108,14 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setPraktBearbeitenListener(new PraktBearbeitenListener());
 		            this._view.setAnsprInfoListener(new AnsprInfoListener());
 		            this._view.setPraktInfoListener(new PraktInfoListener());
+		            this._viewStart.setNeuerPraktListener(new NeuerPraktListener());
 	   } 
+	   class NeuerPraktListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+                _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
+                _viewprakt.setVisible(true);
+            } 
+	   }
 	   /**
 	    * Innere Klasse für den Praktikanten Speichern Listener
 	    * Prüft ob Praktikanten Id vorhanden und ob die Ansprechpartner IDS vorhanden sind

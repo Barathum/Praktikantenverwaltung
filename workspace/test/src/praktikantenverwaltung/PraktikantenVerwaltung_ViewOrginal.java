@@ -1756,7 +1756,7 @@ public class PraktikantenVerwaltung_ViewOrginal extends JFrame implements Action
 	 */
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
-	} 
+	}
 	/**
 	 * Setzt einen Listener auf den Speicher Button in der Ansprechpartner erstellen Ansicht
 	 * @param l Listener der übergeben wird

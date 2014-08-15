@@ -16,7 +16,7 @@ public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
 	 */
-	private PraktikantenVerwaltung_View _view; 
+	private PraktikantenVerwaltung_ViewTabelle _view; 
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
 	private Integer HoechsteAnsprID = 100000;
@@ -27,7 +27,7 @@ public class PraktikantenVerwaltung_Control {
 	 */
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
-		this._view = new PraktikantenVerwaltung_View(); 
+		this._view = new PraktikantenVerwaltung_ViewTabelle(); 
 //		_model.createTables();
 		NeuerEintrag();
 		NeuerEintrag();
@@ -189,6 +189,7 @@ public class PraktikantenVerwaltung_Control {
                _view.setAnspr1Id(id1);
                _view.setAnspr2Id(id2);
                _view.setAnspr3Id(id3);
+               
 //               HoechstePraktID = getHoechstePraktID();
            } 
 	   }
@@ -481,8 +482,21 @@ public class PraktikantenVerwaltung_Control {
 		   liste1.add(28, "0");
 		   liste1.add(29, "0");
 		   liste.add(liste1);
-		   _view.setInhaltPraktBearb(liste);
 		   
+		   _view.setInhaltPraktBearb(liste);
+		   Anspr1Ausfuellen();
+		   Anspr2Ausfuellen();
+		   Anspr3Ausfuellen();
+//		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//		   ArrayList<String> daten1 = new ArrayList<>();
+//		   for (int i = 0; i < 8; i++) {
+//			   daten1.add("");
+//		   }
+//		   daten1.add(0, "0");
+//		   daten.add(daten1);
+//		   _view.setInhaltAnspr1(daten);
+//		   _view.setInhaltAnspr2(daten);
+//		   _view.setInhaltAnspr3(daten);
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -491,14 +505,17 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AnsprAusfuellListener1 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			   ArrayList<String> name = new ArrayList<String>();
-        	   name = _view.getNameAnspr1();
-//        	   System.out.println(name);
-       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
-//       			System.out.println(daten);
-       			_view.setInhaltAnspr1(daten);
+			 Anspr1Ausfuellen(); 
             }  
+	   }
+	   public void Anspr1Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+    	   id = _view.getAnspr1ID();
+//    	   System.out.println(name);
+   			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+//   			System.out.println(daten);
+   			_view.setInhaltAnspr1(daten);
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -507,12 +524,15 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AnsprAusfuellListener2 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			   ArrayList<String> name = new ArrayList<String>();
-        	   name = _view.getNameAnspr2();
-       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
-       			_view.setInhaltAnspr2(daten);
+			   Anspr2Ausfuellen();
             }  
+	   }
+	   public void Anspr2Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+    	   id = _view.getAnspr2ID();
+   			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+   			_view.setInhaltAnspr2(daten);
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -521,12 +541,15 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class AnsprAusfuellListener3 implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			   ArrayList<String> name = new ArrayList<String>();
-        	   name = _view.getNameAnspr3();
-       			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE NN LIKE '" + name.get(0) + "%' ORDER BY NN;");
-       			_view.setInhaltAnspr3(daten);
+			   Anspr3Ausfuellen();
             }  
+	   }
+	   public void Anspr3Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+    	   id = _view.getAnspr3ID();
+   			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+   			_view.setInhaltAnspr3(daten);
 	   }
 	   class SchulformAusfuellListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 

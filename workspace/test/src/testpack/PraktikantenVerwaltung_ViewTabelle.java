@@ -51,7 +51,7 @@ import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 import java.awt.SystemColor;
 
-public class PraktikantenVerwaltung_View extends JFrame implements ActionListener{
+public class PraktikantenVerwaltung_ViewTabelle extends JFrame implements ActionListener{
 
 	/**
 	 * erstellen der Fields
@@ -197,7 +197,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	/**
 	 * Frame mit allen Panels usw. erstellen
 	 */
-	public PraktikantenVerwaltung_View() {
+	public PraktikantenVerwaltung_ViewTabelle() {
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(5, 5, 1280, 720);
@@ -2456,5 +2456,14 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		idAnspr3 = Integer.parseInt(daten.get(0).get(29));
 		textArea_konsole.setText(daten.get(0).get(30));
 
+	}
+	public Integer getAnspr1ID(){
+		return this.idAnspr1;
+	}
+	public Integer getAnspr2ID(){
+		return this.idAnspr2;
+	}
+	public Integer getAnspr3ID(){
+		return this.idAnspr3;
 	}
 }

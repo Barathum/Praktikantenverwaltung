@@ -1,4 +1,4 @@
-package testpack;
+package praktikantenverwaltung;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,7 +16,7 @@ public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
 	 */
-	private PraktikantenVerwaltung_ViewTabelle _view; 
+	private PraktikantenVerwaltung_ViewOrginal _view; 
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
 	private Integer HoechsteAnsprID = 100000;
@@ -27,7 +27,7 @@ public class PraktikantenVerwaltung_Control {
 	 */
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
-		this._view = new PraktikantenVerwaltung_ViewTabelle(); 
+		this._view = new PraktikantenVerwaltung_ViewOrginal(); 
 //		_model.createTables();
 		NeuerEintrag();
 		NeuerEintrag();

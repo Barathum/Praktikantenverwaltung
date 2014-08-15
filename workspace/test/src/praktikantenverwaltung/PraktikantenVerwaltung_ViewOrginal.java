@@ -1,4 +1,4 @@
-package testpack;
+package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -51,7 +51,7 @@ import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 import java.awt.SystemColor;
 
-public class PraktikantenVerwaltung_ViewTabelle extends JFrame implements ActionListener{
+public class PraktikantenVerwaltung_ViewOrginal extends JFrame implements ActionListener{
 
 	/**
 	 * erstellen der Fields
@@ -197,7 +197,7 @@ public class PraktikantenVerwaltung_ViewTabelle extends JFrame implements Action
 	/**
 	 * Frame mit allen Panels usw. erstellen
 	 */
-	public PraktikantenVerwaltung_ViewTabelle() {
+	public PraktikantenVerwaltung_ViewOrginal() {
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(5, 5, 1280, 720);

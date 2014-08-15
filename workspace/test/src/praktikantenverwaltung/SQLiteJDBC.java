@@ -1,4 +1,4 @@
-package testpack;
+package praktikantenverwaltung;
 
 import java.sql.*;
 

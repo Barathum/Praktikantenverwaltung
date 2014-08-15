@@ -1,4 +1,4 @@
-package testpack;
+package praktikantenverwaltung;
 
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;

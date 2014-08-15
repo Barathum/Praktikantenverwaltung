@@ -1,4 +1,4 @@
-package testpack;
+package praktikantenverwaltung;
 
 import java.awt.List;
 import java.sql.Connection;

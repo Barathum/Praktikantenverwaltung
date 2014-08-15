@@ -7,6 +7,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -17,7 +18,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
 import javax.swing.AbstractButton;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -40,9 +43,11 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.plaf.basic.BasicComboPopup;
+import javax.swing.text.DefaultFormatterFactory;
 
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 import java.awt.SystemColor;
 
@@ -681,13 +686,31 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		
 		JLabel lblEnddatum = new JLabel("Enddatum:");
 		
+		SimpleDateFormat longFormat = new SimpleDateFormat( "dd.MM.yyyy" );
+		SimpleDateFormat shortFormat = new SimpleDateFormat( "dd.MM.yy" );
+		Date startDate = new Date( 0 );//01.01.1970
+		shortFormat.set2DigitYearStart( startDate );
+
+		DatePickerFormatter formatter = new DatePickerFormatter(
+		// invers sequence for parsing to satisfy the year parsing rules
+		        new DateFormat[] {shortFormat, longFormat}) {
+
+		            @Override
+		            public String valueToString(Object value) throws ParseException {
+		                if (value == null) return null;
+		                return getFormats()[1].format(value);
+		            }
+		        } ;
+		DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter );
 		datePicker_startdatum = new JXDatePicker();
 		datePicker_startdatum.setDate(Calendar.getInstance().getTime());
 		datePicker_startdatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+		datePicker_startdatum.getEditor().setFormatterFactory(factory);
 
 		datePicker_enddatum = new JXDatePicker();
 		datePicker_enddatum.setDate(Calendar.getInstance().getTime());
 		datePicker_enddatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+		datePicker_enddatum.getEditor().setFormatterFactory(factory);
 		
 		JLabel lblStatus = new JLabel("Status:");
 		
@@ -1351,6 +1374,7 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 		}
 
 		datePicker_gb.setDate(datestart);
+		datePicker_gb.getEditor().setFormatterFactory(factory);
 		
 		String comboBoxListe_anrede[] = {"Herr", "Frau"};
 		comboBox_anrede = new JComboBox(comboBoxListe_anrede);
@@ -1683,10 +1707,48 @@ public class PraktikantenVerwaltung_View extends JFrame implements ActionListene
 	    button_editAnspr2.addActionListener(this);
 	    button_editAnspr3.addActionListener(this);
 	    comboBox_miki.addActionListener(this);
-
+	    comboBox_anrede.addActionListener(enterAction);
+		textField_nn.addActionListener(enterAction);
+		textField_vn.addActionListener(enterAction);
+		datePicker_gb.addActionListener(enterAction);
+//		comboBox_geburtsort.addActionListener(enterAction);
+//		comboBox_str.addActionListener(enterAction);
+		textField_plz.addActionListener(enterAction);
+		txtDeutschland.addActionListener(enterAction);
+		textField_tele.addActionListener(enterAction);
+		textField_mail.addActionListener(enterAction);
+		textField_mobil.addActionListener(enterAction);
+		textField_haus.addActionListener(enterAction);
+//		comboBox_wohn.addActionListener(enterAction);
+		textField_gnn.addActionListener(enterAction);
+		textField_gvn.addActionListener(enterAction);
+//		comboBox_schule.addActionListener(enterAction);
+//		comboBox_schulform.addActionListener(enterAction);
+//		comboBox_partners.addActionListener(enterAction);
+//		textArea_anmerkschule.addActionListener(enterAction);
+//		comboBox_miki.addActionListener(enterAction);
+//		comboBox_grad.addActionListener(enterAction);
+//		textArea_anmerkperson.addActionListener(enterAction);
+		datePicker_startdatum.addActionListener(enterAction);
+		datePicker_enddatum.addActionListener(enterAction);
+//		comboBox_status.addActionListener(enterAction);
+//		textArea_anmerkprakt.addActionListener(enterAction);
+//		textArea_konsole.addActionListener(enterAction);
 	    
 	}
-	
+	Action enterAction = new AbstractAction()
+	{
+	    @Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+//	    	try {
+	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		        manager.getFocusOwner().transferFocus();
+//			} catch (Exception e2) {
+//				// TODO: handle exception
+//			}
+	    }
+	};
 
 	/**
 	 * Setzt einen Listener auf den Speichernbutton auf der Praktikanten Ansicht

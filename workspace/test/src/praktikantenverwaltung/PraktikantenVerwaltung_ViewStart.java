@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -109,6 +110,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		    start.add(menuAlleAnsprechpartner);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
+	}
+	public void setNeuerPraktListener(ActionListener l){ 
+        this.menuEintrag.addActionListener(l); 
 	}
 
 }

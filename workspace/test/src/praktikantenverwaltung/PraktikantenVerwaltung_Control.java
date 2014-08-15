@@ -16,7 +16,12 @@ public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
 	 */
-	private PraktikantenVerwaltung_ViewOrginal _view; 
+	private PraktikantenVerwaltung_ViewOrginal _view;
+	private PraktikantenVerwaltung_ViewPrakt _viewprakt;
+	private PraktikantenVerwaltung_ViewtabellePrakt _viewprakttabelle;
+	private PraktikantenVerwaltung_ViewTabelleAnspr _viewansprtabelle;
+	private PraktikantenVerwaltung_ViewAnspr _viewansprbearb;
+	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
 	private Integer HoechsteAnsprID = 100000;
@@ -28,6 +33,11 @@ public class PraktikantenVerwaltung_Control {
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_ViewOrginal(); 
+		this._viewprakt = new PraktikantenVerwaltung_ViewPrakt();
+		this._viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt();
+		this._viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr();
+		this._viewansprbearb = new PraktikantenVerwaltung_ViewAnspr();
+		this._viewStart = new PraktikantenVerwaltung_ViewStart();
 //		_model.createTables();
 		NeuerEintrag();
 		NeuerEintrag();
@@ -37,7 +47,7 @@ public class PraktikantenVerwaltung_Control {
 	 * Zeigt den View an
 	 */
 	public void showView(){ 
-		        this._view.setVisible(true); 
+		        this._viewStart.setVisible(true); 
 	}
 	/**
 	 * gibt die Aktuell höchste Praktikanten ID aus der Datenbank zurück

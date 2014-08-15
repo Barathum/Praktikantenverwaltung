@@ -42,11 +42,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
-	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
-	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
-	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
-	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
 	private JTextField textField_id;
 	private JTextField textField_nn;
 	private JTextField textField_vn;
@@ -65,23 +60,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private JScrollPane scrollPane_Suchliste;
 	private JScrollPane scrollPane_SuchlisteAnspr;
 	private JButton btn_praktNachrichtSchreiben;
-	private String[] spaltennamenprak = {"ID",
-            "Nachname",
-            "Vorname",
-            "Status",
-            "Startdatum",
-            "Enddatum", 
-            "Anmerkung",
-            "Letzte Änderung"};
-	private Object[][] datenprak;
-	private String[] spaltennamenansprech = {
-            "Nachname",
-            "Vorname",
-            "Telefonnummer",
-            "E-Mail-Adresse", 
-            "Abteilung", 
-            "Raumnummer"};
-	private Object[][] datenansprech;
 	private JComboBox comboBox_schule;
 	private Vector comboBoxItems_schule;
 	private JComboBox comboBox_wohn;
@@ -90,12 +68,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private JComboBox comboBox_str;
 	private JComboBox comboBox_geburtsort;
 	private JTextField textField_plz;
-	private JTextField textField_RaumAnsprBearb;
-	private JTextField textField_AbteilAnsprBearb;
-	private JTextField textField_MailAnsprBearb;
-	private JTextField textField_TelAnsprBearb;
-	private JTextField textField_VornameAnsprBearb;
-	private JTextField textField_NameAnsprBearb;
 	private JTextField textField_RaumAnsprWoch3;
 	private JTextField textField_AbteilAnsprWoch3;
 	private JTextField textField_MailAnsprWoch3;
@@ -112,7 +84,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private JTextField textField_VornameAnsprWoch1;
 	private JButton btnSpeichern;
 	private JTextArea textArea_konsole;
-	private JButton button_SpeichernAnspr;
 	private JButton btn_praktbearbeiten;
 	private JButton btn_praktloeschen;
 	private JButton btn_praktinfo;
@@ -124,7 +95,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private JButton button_woche2;
 	private JButton button_woche3;
 	private JComboBox comboBox_anrede;
-	private JTextArea textArea_InfoAnspr;
 	private JComboBox comboBox_partners;
 	private JTextArea textArea_anmerkschule;
 	private JComboBox comboBox_miki;
@@ -157,9 +127,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private Vector comboBoxItems_wohn;
 	private JButton buttonAnsprBearb;
 	private JButton buttonAnsprLoesch;
-	private JTextArea textArea_AnmerkOrtBearb;
 	private JButton buttonAnsprInfo;
-	private JLabel lblBearbeiteAnsprechpartner;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 
@@ -178,165 +146,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			
 			JPanel panel_Steckbrief = new JPanel();
 			mainPanel.add(panel_Steckbrief, "card_1");
-			
-			JPanel panel_ansprbearb = new JPanel();
-			mainPanel.add(panel_ansprbearb, "card_5");
-			
-			JPanel panel_2 = new JPanel();
-			panel_2.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
-			
-			JLabel label_4 = new JLabel("Vorname:");
-			
-			JLabel label_5 = new JLabel("Nachname(Ansprechpartner):");
-			
-			JLabel label_6 = new JLabel("E-Mail-Adresse:");
-			
-			JLabel label_7 = new JLabel("Telefonnummer:");
-			
-			JLabel label_8 = new JLabel("Abteilung:");
-			
-			JLabel label_9 = new JLabel("Raumnummer:");
-			
-			textField_RaumAnsprBearb = new JTextField();
-			textField_RaumAnsprBearb.setColumns(10);
-			
-			textField_AbteilAnsprBearb = new JTextField();
-			textField_AbteilAnsprBearb.setColumns(10);
-			
-			textField_MailAnsprBearb = new JTextField();
-			textField_MailAnsprBearb.setColumns(10);
-			
-			textField_TelAnsprBearb = new JTextField();
-			textField_TelAnsprBearb.setColumns(10);
-			
-			textField_VornameAnsprBearb = new JTextField();
-			textField_VornameAnsprBearb.setColumns(10);
-			
-			textField_NameAnsprBearb = new JTextField();
-			textField_NameAnsprBearb.setColumns(10);
-			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-			gl_panel_2.setHorizontalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_2.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-							.addComponent(label_4)
-							.addComponent(label_5)
-							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(label_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(label_7, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addComponent(label_8, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-							.addComponent(label_9, GroupLayout.PREFERRED_SIZE, 94, GroupLayout.PREFERRED_SIZE))
-						.addGap(39)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(textField_RaumAnsprBearb)
-							.addComponent(textField_AbteilAnsprBearb)
-							.addComponent(textField_MailAnsprBearb)
-							.addComponent(textField_TelAnsprBearb)
-							.addComponent(textField_VornameAnsprBearb)
-							.addComponent(textField_NameAnsprBearb, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE))
-						.addGap(29))
-			);
-			gl_panel_2.setVerticalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_2.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_5)
-							.addComponent(textField_NameAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_4)
-							.addComponent(textField_VornameAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_7)
-							.addComponent(textField_TelAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_6)
-							.addComponent(textField_MailAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_8)
-							.addComponent(textField_AbteilAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-							.addComponent(label_9)
-							.addComponent(textField_RaumAnsprBearb, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(23, Short.MAX_VALUE))
-			);
-			panel_2.setLayout(gl_panel_2);
-			
-			JScrollPane scrollPane_3 = new JScrollPane();
-			
-			JLabel label_10 = new JLabel("Anmerkungen zum Einsatzort");
-			label_10.setFont(new Font("Tahoma", Font.BOLD, 12));
-			
-			lblBearbeiteAnsprechpartner = new JLabel("Bearbeite  Ansprechpartner");
-			lblBearbeiteAnsprechpartner.setFont(new Font("Tahoma", Font.BOLD, 14));
-			
-			button_SpeichernAnspr = new JButton("Speichern");
-			
-			JScrollPane scrollPane_6 = new JScrollPane();
-			
-			JLabel lblInfo = new JLabel("Info");
-			GroupLayout gl_panel_ansprbearb = new GroupLayout(panel_ansprbearb);
-			gl_panel_ansprbearb.setHorizontalGroup(
-				gl_panel_ansprbearb.createParallelGroup(Alignment.TRAILING)
-					.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-						.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-								.addGap(142)
-								.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 538, GroupLayout.PREFERRED_SIZE)
-								.addGap(32)
-								.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-									.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE)
-									.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-								.addGap(365)
-								.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-									.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblInfo))))
-						.addContainerGap(425, Short.MAX_VALUE))
-					.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-						.addContainerGap(560, Short.MAX_VALUE)
-						.addComponent(lblBearbeiteAnsprechpartner, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-						.addGap(488))
-			);
-			gl_panel_ansprbearb.setVerticalGroup(
-				gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-						.addGap(114)
-						.addComponent(lblBearbeiteAnsprechpartner)
-						.addGap(69)
-						.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING, false)
-							.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-								.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(scrollPane_3))
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 186, GroupLayout.PREFERRED_SIZE))
-						.addGap(34)
-						.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-								.addComponent(lblInfo)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE))
-							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(116, Short.MAX_VALUE))
-			);
-			
-			textArea_InfoAnspr = new JTextArea();
-			textArea_InfoAnspr.setFont(new Font("Monospaced", Font.PLAIN, 13));
-			textArea_InfoAnspr.setForeground(Color.BLACK);
-			textArea_InfoAnspr.setEditable(false);
-			scrollPane_6.setViewportView(textArea_InfoAnspr);
-			
-			textArea_AnmerkOrtBearb = new JTextArea();
-			scrollPane_3.setViewportView(textArea_AnmerkOrtBearb);
-			panel_ansprbearb.setLayout(gl_panel_ansprbearb);
 			
 			JPanel panel = new JPanel();
 			panel.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));

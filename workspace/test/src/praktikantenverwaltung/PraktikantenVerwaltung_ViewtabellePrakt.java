@@ -44,14 +44,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
-	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
-	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
-	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
-	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
 	private JTable table_suche;
 	private JScrollPane scrollPane_Suchliste;
-	private JButton btn_praktNachrichtSchreiben;
 	private String[] spaltennamenprak = {"ID",
             "Nachname",
             "Vorname",
@@ -61,27 +55,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
             "Anmerkung",
             "Letzte Änderung"};
 	private Object[][] datenprak;
-	private String[] spaltennamenansprech = {
-            "Nachname",
-            "Vorname",
-            "Telefonnummer",
-            "E-Mail-Adresse", 
-            "Abteilung", 
-            "Raumnummer"};
-	private Object[][] datenansprech;
-	private Vector comboBoxItems_schule;
 	private JButton btn_praktbearbeiten;
 	private JButton btn_praktloeschen;
-	private JButton btn_praktinfo;
-	private Integer idAnspr1 = new Integer(0);
-	private Integer idAnspr2 = new Integer(0);
-	private Integer idAnspr3 = new Integer(0);
-	private Integer idAnsprBearb = new Integer(0);
-	private String letzteAenderung;
-	private boolean Ansprbearb1gedrueckt = false;
-	private boolean Ansprbearb2gedrueckt = false;
-	private boolean Ansprbearb3gedrueckt = false;
-	private Vector comboBoxItems_wohn;
+	private JButton btn_praktNachrichtSchreiben;
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(){
 		setResizable(true);
@@ -108,8 +84,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		
 		btn_praktloeschen = new JButton("L\u00F6schen");
 		
-		btn_praktinfo = new JButton("Info");
-		
 		btn_praktNachrichtSchreiben = new JButton("Nachricht erstellen");
 		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
 		gl_panel_10.setHorizontalGroup(
@@ -119,11 +93,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 					.addComponent(btn_praktbearbeiten)
 					.addGap(18)
 					.addComponent(btn_praktloeschen, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addComponent(btn_praktinfo, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addGap(47)
 					.addComponent(btn_praktNachrichtSchreiben)
-					.addContainerGap(808, Short.MAX_VALUE))
+					.addContainerGap(888, Short.MAX_VALUE))
 		);
 		gl_panel_10.setVerticalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
@@ -132,7 +104,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 					.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btn_praktbearbeiten)
 						.addComponent(btn_praktloeschen)
-						.addComponent(btn_praktinfo)
 						.addComponent(btn_praktNachrichtSchreiben))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);

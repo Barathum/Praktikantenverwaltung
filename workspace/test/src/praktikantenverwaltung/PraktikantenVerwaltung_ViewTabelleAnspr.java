@@ -44,22 +44,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
-	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
-	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
-	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
-	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
 	private JTable table_suche;
 	private JScrollPane scrollPane_SuchlisteAnspr;
-	private String[] spaltennamenprak = {"ID",
-            "Nachname",
-            "Vorname",
-            "Status",
-            "Startdatum",
-            "Enddatum", 
-            "Anmerkung",
-            "Letzte Änderung"};
-	private Object[][] datenprak;
 	private String[] spaltennamenansprech = {
             "Nachname",
             "Vorname",
@@ -68,19 +54,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
             "Abteilung", 
             "Raumnummer"};
 	private Object[][] datenansprech;
-	private Vector comboBoxItems_schule;
-	private Integer idAnspr1 = new Integer(0);
-	private Integer idAnspr2 = new Integer(0);
-	private Integer idAnspr3 = new Integer(0);
-	private Integer idAnsprBearb = new Integer(0);
-	private String letzteAenderung;
-	private boolean Ansprbearb1gedrueckt = false;
-	private boolean Ansprbearb2gedrueckt = false;
-	private boolean Ansprbearb3gedrueckt = false;
-	private Vector comboBoxItems_wohn;
 	private JButton buttonAnsprBearb;
 	private JButton buttonAnsprLoesch;
-	private JButton buttonAnsprInfo;
 
 	/**
 	 * Create the frame.
@@ -110,8 +85,6 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 buttonAnsprBearb = new JButton("Bearbeiten");
 		 
 		 buttonAnsprLoesch = new JButton("L\u00F6schen");
-		 
-		 buttonAnsprInfo = new JButton("Info");
 		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
 		 gl_panel_9.setHorizontalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -120,9 +93,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 			.addComponent(buttonAnsprBearb)
 		 			.addGap(18)
 		 			.addComponent(buttonAnsprLoesch, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-		 			.addGap(18)
-		 			.addComponent(buttonAnsprInfo, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-		 			.addContainerGap(953, Short.MAX_VALUE))
+		 			.addContainerGap(1056, Short.MAX_VALUE))
 		 );
 		 gl_panel_9.setVerticalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -130,8 +101,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 			.addGap(9)
 		 			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
 		 				.addComponent(buttonAnsprBearb)
-		 				.addComponent(buttonAnsprLoesch)
-		 				.addComponent(buttonAnsprInfo))
+		 				.addComponent(buttonAnsprLoesch))
 		 			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		 );
 		 panel_9.setLayout(gl_panel_9);

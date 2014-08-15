@@ -47,38 +47,8 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
-	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
-	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
-	private JTable table_suche;
-	private String[] spaltennamenprak = {"ID",
-            "Nachname",
-            "Vorname",
-            "Status",
-            "Startdatum",
-            "Enddatum", 
-            "Anmerkung",
-            "Letzte Änderung"};
-	private Object[][] datenprak;
-	private String[] spaltennamenansprech = {
-            "Nachname",
-            "Vorname",
-            "Telefonnummer",
-            "E-Mail-Adresse", 
-            "Abteilung", 
-            "Raumnummer"};
-	private Object[][] datenansprech;
-	private Vector comboBoxItems_schule;
-	private Integer idAnspr1 = new Integer(0);
-	private Integer idAnspr2 = new Integer(0);
-	private Integer idAnspr3 = new Integer(0);
-	private Integer idAnsprBearb = new Integer(0);
-	private String letzteAenderung;
-	private boolean Ansprbearb1gedrueckt = false;
-	private boolean Ansprbearb2gedrueckt = false;
-	private boolean Ansprbearb3gedrueckt = false;
-	private Vector comboBoxItems_wohn;
 
 	/**
 	 * Create the frame.
@@ -103,8 +73,6 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		 JMenuBar menu = new JMenuBar();
 		    JMenu start = new JMenu("Start");
 		    start.add(menuEintrag);
-		    start.add(menuSuche);
-		    start.add(menuAnsprechpartner);
 		    start.add(menuAllePraktikanten);
 		    start.add(menuAlleAnsprechpartner);
 		    menu.add(start);

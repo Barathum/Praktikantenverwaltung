@@ -140,6 +140,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private String neueAnsprID = "0";
 	private JXDatePicker datePicker_Antwortfrist;
 	private JTextArea textArea_anmerkprakt;
+	private JCheckBox chckbxDatenVollst;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
@@ -747,7 +748,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			datePicker_Antwortfrist.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 			datePicker_Antwortfrist.getEditor().setFormatterFactory(factory);
 			
-			JCheckBox chckbxDatenVollst = new JCheckBox("");
+			chckbxDatenVollst = new JCheckBox("");
 			
 			JLabel lblAntwortBis = new JLabel("Antwort bis:");
 			
@@ -1355,7 +1356,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			liste.add((String) idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
 			liste.add((String) sdfToDate.format(System.currentTimeMillis()));
-			liste.add((String) 
+			if (chckbxDatenVollst.isSelected()) {
+				liste.add("1");
+			}else {
+				liste.add("0");
+			}
+			liste.add((String) sdfToDate.format(datePicker_Antwortfrist.getDate()));
 		return liste;
 	}
 	/**
@@ -1374,6 +1380,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			eintrag.add((String) textField_AbteilAnsprWoch1.getText());
 			eintrag.add((String) textField_RaumAnsprWoch1.getText());
 			eintrag.add((String) textArea_EinsatzortAnsprWoche1.getText());
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
 			liste.add(eintrag);
 			eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr2.toString());
@@ -1384,6 +1395,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			eintrag.add((String) textField_AbteilAnsprWoch2.getText());
 			eintrag.add((String) textField_RaumAnsprWoch2.getText());
 			eintrag.add((String) textArea_EinsatzortAnsprWoche2.getText());
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
 			liste.add(eintrag);
 			eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr3.toString());
@@ -1394,6 +1410,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			eintrag.add((String) textField_AbteilAnsprWoch3.getText());
 			eintrag.add((String) textField_RaumAnsprWoch3.getText());
 			eintrag.add((String) textArea_EinsatzortAnsprWoche3.getText());
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
+			eintrag.add("");
 			liste.add(eintrag);
 //			System.out.println(liste);
 		return liste;
@@ -1578,7 +1599,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				String info = "Daten geupdatet am " + zeit;
 				setInfoAnspr(info);
 				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
-						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + "' WHERE ID = '" + liste.get(0) + "';";
+						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + 
+						 "', BLOCKIERENVON = '" + liste.get(8) + "', BLOCKIERENBIS = '" + liste.get(9) + "', ETECH = '" + liste.get(10) + "', KAUFM = '" + liste.get(11) + "', INF = '" + liste.get(12) +"' WHERE ID = '" + liste.get(0) + "';";
 //				System.out.println("update");
 			} else if (i == 2) {
 				HoechsteAnsprID = _control.getHoechsteAnsprID();
@@ -1588,7 +1610,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				setInfoAnspr(info);
 				sql = "INSERT INTO ANSPRECHPARTNER " +
 						"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
-		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info + "');";
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info +"','" + liste.get(8) +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "');";
 //				System.out.println("insert");
 //				System.out.println(liste.get(1));
 			}else if ( i== 4) {

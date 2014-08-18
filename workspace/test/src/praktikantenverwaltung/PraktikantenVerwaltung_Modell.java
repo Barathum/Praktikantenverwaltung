@@ -101,7 +101,6 @@ public class PraktikantenVerwaltung_Modell {
 	                   " RNR TEXT, " +
 	                   " ANMERKEINSATZORT TEXT, " +
 	                   " INFO TEXT, " +
-	                   " EDIT  TEXT, " +
 	                   " BLOCKIERENVON  TEXT, " +
 	                   " BLOCKIERENBIS  TEXT, " +
 	                   " ETECH  TEXT, " +

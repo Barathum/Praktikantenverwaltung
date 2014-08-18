@@ -87,7 +87,9 @@ public class PraktikantenVerwaltung_Modell {
 	                   " ANSPR2 TEXT, " +
 	                   " ANSPR3 TEXT, " +
 	                   " INFO TEXT, " +
-	                   " EDIT TEXT)"; 
+	                   " EDIT TEXT, " +
+	                   " UNTERLAGENVOLLST TEXT, " +
+	                   " ANTWORTBIS TEXT)"; 
 		      stmt.executeUpdate(sql);
 		      sql = "CREATE TABLE ANSPRECHPARTNER " +
 	                   "(ID TEXT," +
@@ -98,7 +100,13 @@ public class PraktikantenVerwaltung_Modell {
 	                   " ABTEILUNG TEXT, " +
 	                   " RNR TEXT, " +
 	                   " ANMERKEINSATZORT TEXT, " +
-	                   " INFO TEXT)";
+	                   " INFO TEXT, " +
+	                   " EDIT  TEXT, " +
+	                   " BLOCKIERENVON  TEXT, " +
+	                   " BLOCKIERENBIS  TEXT, " +
+	                   " ETECH  TEXT, " +
+	                   " KAUFM  TEXT, " +
+	                   " INF TEXT)";
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      c.close();

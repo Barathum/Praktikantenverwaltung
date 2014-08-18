@@ -48,7 +48,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	JMenuItem menuNeuerPraktikant = new JMenuItem("Neuer Praktikant");
-	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Praktikant");
+	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Ansprechpartner");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige Praktikantentabelle");
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige Ansprechpartnertabelle");
 
@@ -83,6 +83,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	}
 	public void setNeuerPraktListener(ActionListener l){ 
         this.menuNeuerPraktikant.addActionListener(l); 
+	}
+	public void setNeuerAnsprListener(ActionListener l){ 
+        this.menuNeuerAnsprechpartner.addActionListener(l); 
 	}
 
 }

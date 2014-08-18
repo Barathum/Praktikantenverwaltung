@@ -20,7 +20,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewPrakt _viewprakt;
 	private PraktikantenVerwaltung_ViewtabellePrakt _viewprakttabelle;
 	private PraktikantenVerwaltung_ViewTabelleAnspr _viewansprtabelle;
-	private PraktikantenVerwaltung_ViewAnspr _viewansprbearb;
+	private PraktikantenVerwaltung_ViewAnspr _viewanspr;
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
 	private Integer HoechstePraktID = 100000;
@@ -36,7 +36,7 @@ public class PraktikantenVerwaltung_Control {
 //		this._viewprakt = new PraktikantenVerwaltung_ViewPrakt();
 		this._viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt();
 		this._viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr();
-		this._viewansprbearb = new PraktikantenVerwaltung_ViewAnspr();
+//		this._viewanspr = new PraktikantenVerwaltung_ViewAnspr();
 		this._viewStart = new PraktikantenVerwaltung_ViewStart();
 //		_model.createTables();
 //		NeuerEintrag();
@@ -109,12 +109,20 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setAnsprInfoListener(new AnsprInfoListener());
 		            this._view.setPraktInfoListener(new PraktInfoListener());
 		            this._viewStart.setNeuerPraktListener(new NeuerPraktListener());
+		            this._viewStart.setNeuerAnsprListener(new NeuerAnsprListener());
 	   } 
 	   class NeuerPraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
 //                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
                 _viewprakt.setVisible(true);
+            } 
+	   }
+	   class NeuerAnsprListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   _viewanspr = new PraktikantenVerwaltung_ViewAnspr();
+//                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
+        	   _viewanspr.setVisible(true);
             } 
 	   }
 	   

@@ -1295,6 +1295,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			liste.add((String) idAnspr3.toString());
 			liste.add((String) textArea_konsole.getText());
 			liste.add((String) sdfToDate.format(System.currentTimeMillis()));
+			liste.add((String) 
 		return liste;
 	}
 	/**
@@ -1485,7 +1486,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						"', GNN = '" + liste.get(14) + "', GVN = '" + liste.get(15) + "', SCHULE = '" + liste.get(16) + "', SCHULFORM = '" + liste.get(17) + "', PARTNERS = '" + liste.get(18) +
 						"', ANMERKSCHULE = '" + liste.get(19) + "', MIKI = '" + liste.get(20) + "', GRAD = '" + liste.get(21) + "', ANMERKPERSON = '" + liste.get(22) + "', STARTDATUM = '" + liste.get(23) +
 						"', ENDDATUM = '" + liste.get(24) + "', STATUS = '" + liste.get(25) + "', ANMERKPRAKT = '" + liste.get(26) + "', ANSPR1 = '" + liste.get(27) + "', ANSPR2 = '" + liste.get(28) +
-						"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +
+						"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +"', UNTERLAGENVOLLST = '" + liste.get(32) + "', ANTWORTBIS = '" + liste.get(33) +
 						"' WHERE ID = '" + liste.get(0) + "';";
 //				System.out.println("update");
 			}else if (i == 4) {
@@ -1503,7 +1504,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','"+ liste.get(8) +"','"+ liste.get(9) +"','"+ liste.get(10) +"','"+ liste.get(11) +"','"+ liste.get(12)
 		                   +"','"+ liste.get(13) +"','"+ liste.get(14) +"','"+ liste.get(15) +"','"+ liste.get(16) +"','"+ liste.get(17) +"','"+ liste.get(18) +"','"+ liste.get(19)
 		                   +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
-		                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"');";
+		                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"','"+ liste.get(32) +"','"+ liste.get(33) +"');";
 //				System.out.println("insert");
 			}
 			return sql;

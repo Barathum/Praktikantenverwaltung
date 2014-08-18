@@ -43,49 +43,18 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	JMenuItem menuEintrag = new JMenuItem("Neuer Eintrag");
-	JMenuItem menuSuche = new JMenuItem("Suche Praktikanten");
-	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige alle Praktikanten");
-	JMenuItem menuAnsprechpartner = new JMenuItem("Suche Ansprechpartner");
-	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige alle Ansprechpartner");
-	private JTable table_suche;
-	private String[] spaltennamenprak = {"ID",
-            "Nachname",
-            "Vorname",
-            "Status",
-            "Startdatum",
-            "Enddatum", 
-            "Anmerkung",
-            "Letzte Änderung"};
-	private Object[][] datenprak;
-	private String[] spaltennamenansprech = {
-            "Nachname",
-            "Vorname",
-            "Telefonnummer",
-            "E-Mail-Adresse", 
-            "Abteilung", 
-            "Raumnummer"};
-	private Object[][] datenansprech;
-	private Vector comboBoxItems_schule;
 	private JTextField textField_RaumAnsprBearb;
 	private JTextField textField_AbteilAnsprBearb;
 	private JTextField textField_MailAnsprBearb;
 	private JTextField textField_TelAnsprBearb;
 	private JTextField textField_VornameAnsprBearb;
 	private JTextField textField_NameAnsprBearb;
-	private JButton button_SpeichernAnspr;
 	private JTextArea textArea_InfoAnspr;
-	private Integer idAnspr1 = new Integer(0);
-	private Integer idAnspr2 = new Integer(0);
-	private Integer idAnspr3 = new Integer(0);
 	private Integer idAnsprBearb = new Integer(0);
 	private String letzteAenderung;
-	private boolean Ansprbearb1gedrueckt = false;
-	private boolean Ansprbearb2gedrueckt = false;
-	private boolean Ansprbearb3gedrueckt = false;
-	private Vector comboBoxItems_wohn;
 	private JTextArea textArea_AnmerkOrtBearb;
 	private JLabel lblBearbeiteAnsprechpartner;
+	private JButton button_SpeichernAnspr;
 
 	/**
 	 * Create the frame.

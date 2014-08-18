@@ -5,7 +5,9 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,10 +40,12 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
-public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
+public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
 	/**
 	 * erstellen der Fields
 	 */
+	private PraktikantenVerwaltung_Modell _model; 
+	private PraktikantenVerwaltung_Control _control; 
 	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JTextField textField_id;
@@ -130,9 +134,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	private JButton buttonAnsprBearb;
 	private JButton buttonAnsprLoesch;
 	private JButton buttonAnsprInfo;
+	private Integer HoechstePraktID = 100000;
+	private Integer HoechsteAnsprID = 100000;
+	private String neuePraktID = "";
+	private String neueAnsprID = "0";
 
 	public PraktikantenVerwaltung_ViewPrakt(){
-
+		  this._model = new PraktikantenVerwaltung_Modell();
+		  this._control = new PraktikantenVerwaltung_Control();
+		  
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
@@ -765,7 +775,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			textField_VornameAnsprWoch1.setColumns(10);
 			
 			comboBox_NameAnsprWoch1 = new JComboBox();
-			comboBox_NameAnsprWoch1.setEditable(false);
+			comboBox_NameAnsprWoch1.setEditable(true);
 			
 			button_editAnspr1 = new JButton("");
 			
@@ -891,7 +901,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			textField_VornameAnsprWoch2.setColumns(10);
 			
 			comboBox_NameAnsprWoch2 = new JComboBox();
-			comboBox_NameAnsprWoch2.setEditable(false);
+			comboBox_NameAnsprWoch2.setEditable(true);
 			
 			button_editAnspr2 = new JButton("");
 			GroupLayout gl_panel_12 = new GroupLayout(panel_12);
@@ -1016,7 +1026,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			textField_VornameAnsprWoch3.setColumns(10);
 			
 			comboBox_NameAnsprWoch3 = new JComboBox();
-			comboBox_NameAnsprWoch3.setEditable(false);
+			comboBox_NameAnsprWoch3.setEditable(true);
 			
 			button_editAnspr3 = new JButton("");
 			GroupLayout gl_panel_11 = new GroupLayout(panel_11);
@@ -1238,6 +1248,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			);
 			panel.setLayout(gl_panel);
 			panel_Steckbrief.setLayout(gl_panel_Steckbrief);
+			
+			this.setPraktSpeichernListener(new PraktSpeichernListener());
+			button_editAnspr1.addActionListener(this);
+		    button_editAnspr2.addActionListener(this);
+		    button_editAnspr3.addActionListener(this);
+		    button_woche1.addActionListener(this);
+		    button_woche2.addActionListener(this);
+		    button_woche3.addActionListener(this);
 	}
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
@@ -1347,4 +1365,225 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 	public void setPraktId(String id){
 		textField_id.setText(id);
 	}
+	/**
+	 * setzt das Praktikanten Info/Konsolenfeld
+	 * @param inf
+	 */
+	public void setInfoPrakt(String inf){
+		this.textArea_konsole.setText(inf);
+	}
+	public void setInfoAnspr(String inf){
+//		this.textArea_InfoAnspr.setText(inf);
+	}
+	/**
+	    * Innere Klasse für den Praktikanten Speichern Listener
+	    * Prüft ob Praktikanten Id vorhanden und ob die Ansprechpartner IDS vorhanden sind
+	    * ruft danach Methode zum schreiben des SQL Befehls auf
+	    * Übergibt dann dem Model den SQL Befehl zur Ausführung
+	    * @author Barathum
+	    *
+	    */
+	   class PraktSpeichernListener implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+            ArrayList<String> datensatz = getInhaltPrakt(); 
+            ArrayList<ArrayList<String>> datensatzAnspr = getInhaltAnspr();
+            int updateOrInsert = 0;
+            int updateOrInsertAnspr1 = 0;
+            int updateOrInsertAnspr2 = 0;
+            int updateOrInsertAnspr3 = 0;
+//            _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+            if (getEditAnspr1()==true) {
+         	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+         		   updateOrInsertAnspr1 = 2;
+					} else {
+							updateOrInsertAnspr1 = 1;
+					}
+            }
+            if (getEditAnspr2()==true) {
+         	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
+         		   updateOrInsertAnspr2 = 2;
+					} else {
+							updateOrInsertAnspr2 = 1;
+					}
+            }
+            if (getEditAnspr3()==true) {
+         	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
+	            		   updateOrInsertAnspr3 = 2;
+					} else {
+							updateOrInsertAnspr3 = 1;
+					}
+            }
+            if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
+					updateOrInsert = 1;
+				}
+            
+            String sql;
+            sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
+            _model.insertUpdateDeleteTable(sql);
+//            System.out.println(datensatzAnspr.get(0).get(0));
+            if (getEditAnspr1()==true) {
+         	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
+         		   datensatz.set(27, neueAnsprID);
+					}
+            }
+            sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
+            _model.insertUpdateDeleteTable(sql);
+            if (getEditAnspr2()==true) {
+         	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
+         		   datensatz.set(28, neueAnsprID);
+					}
+            }
+            sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
+            _model.insertUpdateDeleteTable(sql);
+            if (getEditAnspr3()==true) {
+         	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
+         		   datensatz.set(29, neueAnsprID);
+					}
+            }
+            
+            sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
+            _model.insertUpdateDeleteTable(sql);
+            
+            setPraktId(neuePraktID);
+            
+            System.out.println();
+            /**
+             * autocomplete beim speichern
+             */
+//            comboBox_autocomplete();
+            /**
+             * Ausgewählten Ansprechpartner beibehalten
+             */
+//            String name1 = datensatzAnspr.get(0).get(1);
+//            String name2 = datensatzAnspr.get(1).get(1);
+//            String name3 = datensatzAnspr.get(2).get(1);
+//            _view.setNameAnspr1(name1);
+//            _view.setNameAnspr2(name2);
+//            _view.setNameAnspr3(name3);
+//            String id1 = datensatzAnspr.get(0).get(0);
+//            String id2 = datensatzAnspr.get(1).get(0);
+//            String id3 = datensatzAnspr.get(2).get(0);
+//            _view.setAnspr1Id(id1);
+//            _view.setAnspr2Id(id2);
+//            _view.setAnspr3Id(id3);
+            
+//            HoechstePraktID = getHoechstePraktID();
+        } 
+	   }
+	   private String schreibeEintragPraktsql(int i, ArrayList<String> liste){
+			String sql;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			String zeit = sdf.format(time);
+			if (i == 0) {
+				String info = "Daten geupdatet am " + zeit;
+				setInfoPrakt(info);
+				liste.set(30, info);
+				sql = "UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
+						"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
+						"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
+						"', GNN = '" + liste.get(14) + "', GVN = '" + liste.get(15) + "', SCHULE = '" + liste.get(16) + "', SCHULFORM = '" + liste.get(17) + "', PARTNERS = '" + liste.get(18) +
+						"', ANMERKSCHULE = '" + liste.get(19) + "', MIKI = '" + liste.get(20) + "', GRAD = '" + liste.get(21) + "', ANMERKPERSON = '" + liste.get(22) + "', STARTDATUM = '" + liste.get(23) +
+						"', ENDDATUM = '" + liste.get(24) + "', STATUS = '" + liste.get(25) + "', ANMERKPRAKT = '" + liste.get(26) + "', ANSPR1 = '" + liste.get(27) + "', ANSPR2 = '" + liste.get(28) +
+						"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +
+						"' WHERE ID = '" + liste.get(0) + "';";
+//				System.out.println("update");
+			}else if (i == 4) {
+				sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
+			}else{
+				HoechstePraktID = _control.getHoechstePraktID();
+				HoechstePraktID++;
+				neuePraktID = "SP" + HoechstePraktID.toString();
+				
+				String info = "Daten gespeichert am " + zeit;
+				setInfoPrakt(info);
+				liste.set(30, info);
+				sql = "INSERT INTO PRAKTIKANTEN " +
+		                   "VALUES ('" + neuePraktID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','"+ liste.get(8) +"','"+ liste.get(9) +"','"+ liste.get(10) +"','"+ liste.get(11) +"','"+ liste.get(12)
+		                   +"','"+ liste.get(13) +"','"+ liste.get(14) +"','"+ liste.get(15) +"','"+ liste.get(16) +"','"+ liste.get(17) +"','"+ liste.get(18) +"','"+ liste.get(19)
+		                   +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
+		                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"');";
+//				System.out.println("insert");
+			}
+			return sql;
+		}
+		private String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
+			String sql;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			String zeit = sdf.format(time);
+			if (i == 1) {
+				String info = "Daten geupdatet am " + zeit;
+				setInfoAnspr(info);
+				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
+						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + "' WHERE ID = '" + liste.get(0) + "';";
+//				System.out.println("update");
+			} else if (i == 2) {
+				HoechsteAnsprID = _control.getHoechsteAnsprID();
+				HoechsteAnsprID++;
+				neueAnsprID = HoechsteAnsprID.toString();
+				String info = "Daten gespeichert am " + zeit;
+				setInfoAnspr(info);
+				sql = "INSERT INTO ANSPRECHPARTNER " +
+						"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info + "');";
+//				System.out.println("insert");
+//				System.out.println(liste.get(1));
+			}else if ( i== 4) {
+				sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+			} else {
+				sql = "";
+			}
+			return sql;
+		}
+		@Override
+		public void actionPerformed(ActionEvent evt) {
+			Object src = evt.getSource();
+			 CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+			   if (src == button_woche1) {
+					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
+				} else if (src == button_woche2) {
+					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");	
+				} else if (src == button_woche3) {
+					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
+				} else if (src == button_editAnspr1){
+					comboBox_NameAnsprWoch1.setEditable(true);
+					textField_VornameAnsprWoch1.setEditable(true);
+					textField_TelAnsprWoch1.setEditable(true);
+					textField_MailAnsprWoch1.setEditable(true);
+					textField_AbteilAnsprWoch1.setEditable(true);
+					textField_RaumAnsprWoch1.setEditable(true);
+					textArea_EinsatzortAnsprWoche1.setEditable(true);
+					Ansprbearb1gedrueckt = true;
+					button_editAnspr1.setEnabled(false);
+				} else if (src == button_editAnspr2){
+					comboBox_NameAnsprWoch2.setEditable(true);
+					textField_VornameAnsprWoch2.setEditable(true);
+					textField_TelAnsprWoch2.setEditable(true);
+					textField_MailAnsprWoch2.setEditable(true);
+					textField_AbteilAnsprWoch2.setEditable(true);
+					textField_RaumAnsprWoch2.setEditable(true);
+					textArea_EinsatzortAnsprWoche2.setEditable(true);
+					Ansprbearb2gedrueckt = true;
+					button_editAnspr2.setEnabled(false);
+				} else if (src == button_editAnspr3){
+					comboBox_NameAnsprWoch3.setEditable(true);
+					textField_VornameAnsprWoch3.setEditable(true);
+					textField_TelAnsprWoch3.setEditable(true);
+					textField_MailAnsprWoch3.setEditable(true);
+					textField_AbteilAnsprWoch3.setEditable(true);
+					textField_RaumAnsprWoch3.setEditable(true);
+					textArea_EinsatzortAnsprWoche3.setEditable(true);
+					Ansprbearb3gedrueckt = true;
+					button_editAnspr3.setEnabled(false);
+				} else if (src == comboBox_miki) {
+					if (comboBox_miki.getSelectedItem() == "Nein") {
+						comboBox_grad.setSelectedItem("-");
+						comboBox_grad.setEnabled(false);
+					}else{
+						comboBox_grad.setEnabled(true);
+					}
+				}
+		}
 }

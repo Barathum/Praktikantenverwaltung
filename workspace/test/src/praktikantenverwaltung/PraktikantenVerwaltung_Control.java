@@ -33,14 +33,14 @@ public class PraktikantenVerwaltung_Control {
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_ViewOrginal(); 
-		this._viewprakt = new PraktikantenVerwaltung_ViewPrakt();
+//		this._viewprakt = new PraktikantenVerwaltung_ViewPrakt();
 		this._viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt();
 		this._viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr();
 		this._viewansprbearb = new PraktikantenVerwaltung_ViewAnspr();
 		this._viewStart = new PraktikantenVerwaltung_ViewStart();
 //		_model.createTables();
-		NeuerEintrag();
-		NeuerEintrag();
+//		NeuerEintrag();
+//		NeuerEintrag();
 		addListener();
 	}
 	/**
@@ -53,7 +53,7 @@ public class PraktikantenVerwaltung_Control {
 	 * gibt die Aktuell höchste Praktikanten ID aus der Datenbank zurück
 	 * @return
 	 */
-	private Integer getHoechstePraktID(){
+	public Integer getHoechstePraktID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM PRAKTIKANTEN;");
 //		System.out.println(daten);
@@ -72,7 +72,7 @@ public class PraktikantenVerwaltung_Control {
 	 * Gibt die höchste Ansprechpartner Id aus der Datenbank zurück
 	 * @return
 	 */
-	private Integer getHoechsteAnsprID(){
+	public Integer getHoechsteAnsprID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM ANSPRECHPARTNER;");
 //		System.out.println(daten);
@@ -91,7 +91,7 @@ public class PraktikantenVerwaltung_Control {
 	 * fügt die Listener dem View hinzu
 	 */
 	   private void addListener(){ 
-		            this._view.setPraktSpeichernListener(new PraktSpeichernListener());
+//		            this._view.setPraktSpeichernListener(new PraktSpeichernListener());
 		            this._view.setAnsprSpeichernListener(new AnsprSpeichernListener());
 		            this._view.setAnsprLoeschenListener(new AnsprLoeschenListener());
 		            this._view.setPraktLoeschenListener(new PraktLoeschenListener());
@@ -113,104 +113,11 @@ public class PraktikantenVerwaltung_Control {
 	   class NeuerPraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
-                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
+//                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
                 _viewprakt.setVisible(true);
             } 
 	   }
-	   /**
-	    * Innere Klasse für den Praktikanten Speichern Listener
-	    * Prüft ob Praktikanten Id vorhanden und ob die Ansprechpartner IDS vorhanden sind
-	    * ruft danach Methode zum schreiben des SQL Befehls auf
-	    * Übergibt dann dem Model den SQL Befehl zur Ausführung
-	    * @author Barathum
-	    *
-	    */
-	   class PraktSpeichernListener implements ActionListener{ 
-		   public void actionPerformed(ActionEvent e) { 
-               ArrayList<String> datensatz = _viewprakt.getInhaltPrakt(); 
-               ArrayList<ArrayList<String>> datensatzAnspr = _viewprakt.getInhaltAnspr();
-               int updateOrInsert = 0;
-               int updateOrInsertAnspr1 = 0;
-               int updateOrInsertAnspr2 = 0;
-               int updateOrInsertAnspr3 = 0;
-//               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
-               if (_viewprakt.getEditAnspr1()==true) {
-            	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
-            		   updateOrInsertAnspr1 = 2;
-					} else {
-							updateOrInsertAnspr1 = 1;
-					}
-               }
-               if (_viewprakt.getEditAnspr2()==true) {
-            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
-            		   updateOrInsertAnspr2 = 2;
-					} else {
-							updateOrInsertAnspr2 = 1;
-					}
-               }
-               if (_viewprakt.getEditAnspr3()==true) {
-            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
-	            		   updateOrInsertAnspr3 = 2;
-					} else {
-							updateOrInsertAnspr3 = 1;
-					}
-               }
-               if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
-					updateOrInsert = 1;
-				}
-               
-               String sql;
-               sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
-               _model.insertUpdateDeleteTable(sql);
-//               System.out.println(datensatzAnspr.get(0).get(0));
-               if (_viewprakt.getEditAnspr1()==true) {
-            	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
-            		   datensatz.set(27, neueAnsprID);
-					}
-               }
-               sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
-               _model.insertUpdateDeleteTable(sql);
-               if (_viewprakt.getEditAnspr2()==true) {
-            	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
-            		   datensatz.set(28, neueAnsprID);
-					}
-               }
-               sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
-               _model.insertUpdateDeleteTable(sql);
-               if (_viewprakt.getEditAnspr3()==true) {
-            	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
-            		   datensatz.set(29, neueAnsprID);
-					}
-               }
-               
-               sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
-               _model.insertUpdateDeleteTable(sql);
-               
-               _viewprakt.setPraktId(neuePraktID);
-               
-               /**
-                * autocomplete beim speichern
-                */
-               comboBox_autocomplete();
-               /**
-                * Ausgewählten Ansprechpartner beibehalten
-                */
-               String name1 = datensatzAnspr.get(0).get(1);
-               String name2 = datensatzAnspr.get(1).get(1);
-               String name3 = datensatzAnspr.get(2).get(1);
-               _view.setNameAnspr1(name1);
-               _view.setNameAnspr2(name2);
-               _view.setNameAnspr3(name3);
-               String id1 = datensatzAnspr.get(0).get(0);
-               String id2 = datensatzAnspr.get(1).get(0);
-               String id3 = datensatzAnspr.get(2).get(0);
-               _view.setAnspr1Id(id1);
-               _view.setAnspr2Id(id2);
-               _view.setAnspr3Id(id3);
-               
-//               HoechstePraktID = getHoechstePraktID();
-           } 
-	   }
+	   
 	   /**
 	    * Innere Klasse für den Praktikanten Löschen Listener
 	    * @author Barathum
@@ -705,7 +612,7 @@ public class PraktikantenVerwaltung_Control {
 		String zeit = sdf.format(time);
 		if (i == 0) {
 			String info = "Daten geupdatet am " + zeit;
-			_view.setInfoPrakt(info);
+			_viewprakt.setInfoPrakt(info);
 			liste.set(30, info);
 			sql = "UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
 					"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
@@ -724,7 +631,7 @@ public class PraktikantenVerwaltung_Control {
 			neuePraktID = "SP" + HoechstePraktID.toString();
 			
 			String info = "Daten gespeichert am " + zeit;
-			_view.setInfoPrakt(info);
+			_viewprakt.setInfoPrakt(info);
 			liste.set(30, info);
 			sql = "INSERT INTO PRAKTIKANTEN " +
 	                   "VALUES ('" + neuePraktID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 

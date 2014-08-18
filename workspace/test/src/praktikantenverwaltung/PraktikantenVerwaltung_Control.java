@@ -113,6 +113,7 @@ public class PraktikantenVerwaltung_Control {
 	   class NeuerPraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
+                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
                 _viewprakt.setVisible(true);
             } 
 	   }
@@ -126,28 +127,28 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   class PraktSpeichernListener implements ActionListener{ 
 		   public void actionPerformed(ActionEvent e) { 
-               ArrayList<String> datensatz = _view.getInhaltPrakt(); 
-               ArrayList<ArrayList<String>> datensatzAnspr = _view.getInhaltAnspr();
+               ArrayList<String> datensatz = _viewprakt.getInhaltPrakt(); 
+               ArrayList<ArrayList<String>> datensatzAnspr = _viewprakt.getInhaltAnspr();
                int updateOrInsert = 0;
                int updateOrInsertAnspr1 = 0;
                int updateOrInsertAnspr2 = 0;
                int updateOrInsertAnspr3 = 0;
-               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
-               if (_view.getEditAnspr1()==true) {
+//               _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+               if (_viewprakt.getEditAnspr1()==true) {
             	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
             		   updateOrInsertAnspr1 = 2;
 					} else {
 							updateOrInsertAnspr1 = 1;
 					}
                }
-               if (_view.getEditAnspr2()==true) {
+               if (_viewprakt.getEditAnspr2()==true) {
             	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
             		   updateOrInsertAnspr2 = 2;
 					} else {
 							updateOrInsertAnspr2 = 1;
 					}
                }
-               if (_view.getEditAnspr3()==true) {
+               if (_viewprakt.getEditAnspr3()==true) {
             	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
 	            		   updateOrInsertAnspr3 = 2;
 					} else {
@@ -162,21 +163,21 @@ public class PraktikantenVerwaltung_Control {
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
                _model.insertUpdateDeleteTable(sql);
 //               System.out.println(datensatzAnspr.get(0).get(0));
-               if (_view.getEditAnspr1()==true) {
+               if (_viewprakt.getEditAnspr1()==true) {
             	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
             		   datensatz.set(27, neueAnsprID);
 					}
                }
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
                _model.insertUpdateDeleteTable(sql);
-               if (_view.getEditAnspr1()==true) {
+               if (_viewprakt.getEditAnspr2()==true) {
             	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
             		   datensatz.set(28, neueAnsprID);
 					}
                }
                sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
                _model.insertUpdateDeleteTable(sql);
-               if (_view.getEditAnspr1()==true) {
+               if (_viewprakt.getEditAnspr3()==true) {
             	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
             		   datensatz.set(29, neueAnsprID);
 					}
@@ -185,7 +186,7 @@ public class PraktikantenVerwaltung_Control {
                sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
                _model.insertUpdateDeleteTable(sql);
                
-               _view.setPraktId(neuePraktID);
+               _viewprakt.setPraktId(neuePraktID);
                
                /**
                 * autocomplete beim speichern

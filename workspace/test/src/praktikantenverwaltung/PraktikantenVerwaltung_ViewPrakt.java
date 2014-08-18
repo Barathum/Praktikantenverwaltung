@@ -5,9 +5,11 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -1236,5 +1238,113 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame {
 			);
 			panel.setLayout(gl_panel);
 			panel_Steckbrief.setLayout(gl_panel_Steckbrief);
+	}
+	public void setPraktSpeichernListener(ActionListener l){ 
+        this.btnSpeichern.addActionListener(l); 
+	}
+	public ArrayList<String> getInhaltPrakt(){
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		ArrayList<String> liste = new ArrayList<String>();
+			liste.add((String) textField_id.getText());
+			liste.add((String) comboBox_anrede.getSelectedItem());
+			liste.add((String) textField_nn.getText());
+			liste.add((String) textField_vn.getText());
+			liste.add((String) sdfToDate.format(datePicker_gb.getDate()));
+			liste.add((String) comboBox_geburtsort.getSelectedItem());
+			liste.add((String) comboBox_str.getSelectedItem());
+			liste.add((String) textField_plz.getText());
+			liste.add((String) txtDeutschland.getText());
+			liste.add((String) textField_tele.getText());
+			liste.add((String) textField_mail.getText());
+			liste.add((String) textField_mobil.getText());
+			liste.add((String) textField_haus.getText());
+			liste.add((String) comboBox_wohn.getSelectedItem());
+			liste.add((String) textField_gnn.getText());
+			liste.add((String) textField_gvn.getText());
+			liste.add((String) comboBox_schule.getSelectedItem());
+			liste.add((String) comboBox_schulform.getSelectedItem());
+			liste.add((String) comboBox_partners.getSelectedItem());
+			liste.add((String) textArea_anmerkschule.getText());
+			liste.add((String) comboBox_miki.getSelectedItem());
+			liste.add((String) comboBox_grad.getSelectedItem());
+			liste.add((String) textArea_anmerkperson.getText());
+			liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()));
+			liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()));
+			liste.add((String) comboBox_status.getSelectedItem());
+			liste.add((String) textArea_anmerkprakt.getText());
+			liste.add((String) idAnspr1.toString());
+			liste.add((String) idAnspr2.toString());
+			liste.add((String) idAnspr3.toString());
+			liste.add((String) textArea_konsole.getText());
+			liste.add((String) sdfToDate.format(System.currentTimeMillis()));
+		return liste;
+	}
+	/**
+	 * Gibt die Inhalte der Ansprechpartner zurück
+	 * @return
+	 */
+	public ArrayList<ArrayList<String>> getInhaltAnspr(){
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
+			ArrayList<String> eintrag = new ArrayList<String>();
+			eintrag.add((String) idAnspr1.toString());
+			eintrag.add((String) comboBox_NameAnsprWoch1.getSelectedItem());
+			eintrag.add((String) textField_VornameAnsprWoch1.getText());
+			eintrag.add((String) textField_TelAnsprWoch1.getText());
+			eintrag.add((String) textField_MailAnsprWoch1.getText());
+			eintrag.add((String) textField_AbteilAnsprWoch1.getText());
+			eintrag.add((String) textField_RaumAnsprWoch1.getText());
+			eintrag.add((String) textArea_EinsatzortAnsprWoche1.getText());
+			liste.add(eintrag);
+			eintrag = new ArrayList<String>();
+			eintrag.add((String) idAnspr2.toString());
+			eintrag.add((String) comboBox_NameAnsprWoch2.getSelectedItem());
+			eintrag.add((String) textField_VornameAnsprWoch2.getText());
+			eintrag.add((String) textField_TelAnsprWoch2.getText());
+			eintrag.add((String) textField_MailAnsprWoch2.getText());
+			eintrag.add((String) textField_AbteilAnsprWoch2.getText());
+			eintrag.add((String) textField_RaumAnsprWoch2.getText());
+			eintrag.add((String) textArea_EinsatzortAnsprWoche2.getText());
+			liste.add(eintrag);
+			eintrag = new ArrayList<String>();
+			eintrag.add((String) idAnspr3.toString());
+			eintrag.add((String) comboBox_NameAnsprWoch3.getSelectedItem());
+			eintrag.add((String) textField_VornameAnsprWoch3.getText());
+			eintrag.add((String) textField_TelAnsprWoch3.getText());
+			eintrag.add((String) textField_MailAnsprWoch3.getText());
+			eintrag.add((String) textField_AbteilAnsprWoch3.getText());
+			eintrag.add((String) textField_RaumAnsprWoch3.getText());
+			eintrag.add((String) textArea_EinsatzortAnsprWoche3.getText());
+			liste.add(eintrag);
+//			System.out.println(liste);
+		return liste;
+	}
+	/**
+	 * Wurde Ansprechpartner1 bearbeitet
+	 * @return
+	 */
+	public boolean getEditAnspr1(){
+		return Ansprbearb1gedrueckt;
+	}
+	/**
+	 * Wurde Ansprechpartner2 bearbeitet
+	 * @return
+	 */
+	public boolean getEditAnspr2(){
+		return Ansprbearb2gedrueckt;
+	}
+	/**
+	 * Wurde Ansprechpartner3 bearbeitet
+	 * @return
+	 */
+	public boolean getEditAnspr3(){
+		return Ansprbearb3gedrueckt;
+	}
+	/**
+	 * Setzt das Feld Praktikanten ID auf den Wert von id
+	 * @param id
+	 */
+	public void setPraktId(String id){
+		textField_id.setText(id);
 	}
 }

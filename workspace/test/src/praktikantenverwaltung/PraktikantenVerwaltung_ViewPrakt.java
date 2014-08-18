@@ -39,6 +39,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
+import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
 	/**
@@ -111,7 +112,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextArea textArea_EinsatzortAnsprWoche2;
 	private JTextField textField_TelAnsprWoch3;
 	private JTextArea textArea_EinsatzortAnsprWoche3;
-	private JTextArea textArea_anmerkprakt;
 	private JTextArea textArea_anmerkperson;
 	private JComboBox comboBox_status;
 	private Integer idAnspr1 = new Integer(0);
@@ -138,6 +138,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private Integer HoechsteAnsprID = 100000;
 	private String neuePraktID = "";
 	private String neueAnsprID = "0";
+	private JXDatePicker datePicker_Antwortfrist;
+	private JTextArea textArea_anmerkprakt;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
@@ -580,10 +582,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JLabel lblWochen = new JLabel("Woche");
 			lblWochen.setFont(new Font("Tahoma", Font.BOLD, 12));
 			
-			JLabel lblAnmerkungenZumPraktikum = new JLabel("Anmerkungen zum Praktikum");
+			JLabel lblAnmerkungenZumPraktikum = new JLabel("    Anmerkungen zum Praktikum");
 			lblAnmerkungenZumPraktikum.setFont(new Font("Tahoma", Font.BOLD, 12));
-			
-			JScrollPane scrollPane_2 = new JScrollPane();
 			
 			JLabel lblEinsatzort = new JLabel("Einsatzort");
 			lblEinsatzort.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -609,6 +609,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JButton btnNachrichtErstellen = new JButton("Nachricht erstellen");
 			
 			panel_ansprechPartner = new JPanel();
+			
+			JPanel panel_1 = new JPanel();
+			panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			GroupLayout gl_panel_Steckbrief = new GroupLayout(panel_Steckbrief);
 			gl_panel_Steckbrief.setHorizontalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
@@ -648,92 +651,153 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 												.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)))
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addGap(32)
+												.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
 												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-													.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE)
-													.addComponent(lblDatenZumPraktikum)))
+													.addComponent(lblDatenZumPraktikum)
+													.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
+												.addGap(30))
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addGap(68)
+												.addGap(71)
 												.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))))
-								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
+								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addGap(4)
-										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 198, GroupLayout.PREFERRED_SIZE)
-											.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 374, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addGap(18)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 											.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
 										.addGap(18)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE))))))
+											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)))
+									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+										.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
+										.addGap(112))
+									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+										.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
+										.addGap(2)))))
 						.addContainerGap(53, Short.MAX_VALUE))
 			);
 			gl_panel_Steckbrief.setVerticalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 						.addContainerGap()
-						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblNewLabel)
-							.addComponent(lblKontaktdaten)
-							.addComponent(lblSchule, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
-							.addComponent(panel_5, 0, 0, Short.MAX_VALUE)
-							.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
-						.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
-								.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-									.addComponent(lblMitarbeiterkind_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-								.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
-										.addComponent(lblAnmerkungenZurPerson, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblDatenZumPraktikum, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
-										.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
-										.addComponent(scrollPane_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))))
-							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 108, GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addPreferredGap(ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
-										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
-											.addComponent(lblEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblWochen, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addGap(18)
-										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
-											.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-											.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))))
+								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
+									.addComponent(lblNewLabel)
+									.addComponent(lblKontaktdaten)
+									.addComponent(lblSchule, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(panel_ansprechPartner, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
-								.addContainerGap())
-							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-								.addGap(77)
-								.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(panel_5, 0, 0, Short.MAX_VALUE)
+									.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
+								.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
+										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+											.addComponent(lblMitarbeiterkind_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(panel_6, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+											.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
+												.addComponent(lblAnmerkungenZurPerson, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblDatenZumPraktikum, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
+												.addComponent(scrollPane_1, GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+												.addComponent(panel_7, GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))))
+									.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
+											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+												.addPreferredGap(ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
+													.addComponent(lblEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+													.addComponent(lblWochen, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
+											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+												.addGap(18)
+												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
+													.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+													.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))))
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-									.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
-								.addGap(26))))
+										.addComponent(panel_ansprechPartner, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
+										.addContainerGap())
+									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+										.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
+											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+												.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.RELATED)
+												.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
+										.addGap(26))))
+							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+								.addGap(196))))
 			);
+			
+			JScrollPane scrollPane_2 = new JScrollPane();
+			
+			datePicker_Antwortfrist = new JXDatePicker();
+			datePicker_Antwortfrist.setDate(Calendar.getInstance().getTime());
+			datePicker_Antwortfrist.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
+			datePicker_Antwortfrist.getEditor().setFormatterFactory(factory);
+			
+			JCheckBox chckbxDatenVollst = new JCheckBox("");
+			
+			JLabel lblAntwortBis = new JLabel("Antwort bis:");
+			
+			JLabel lblAnmerkung = new JLabel("Anmerkungen:");
+			
+			JLabel lblUnterlagenVollstndig = new JLabel("Unterlagen vollst\u00E4ndig:");
+			GroupLayout gl_panel_1 = new GroupLayout(panel_1);
+			gl_panel_1.setHorizontalGroup(
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_1.createSequentialGroup()
+								.addComponent(scrollPane_2, GroupLayout.PREFERRED_SIZE, 339, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
+							.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel_1.createSequentialGroup()
+									.addComponent(lblAnmerkung, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
+									.addContainerGap(193, Short.MAX_VALUE))
+								.addGroup(gl_panel_1.createSequentialGroup()
+									.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblAntwortBis, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblUnterlagenVollstndig))
+									.addPreferredGap(ComponentPlacement.RELATED, 59, Short.MAX_VALUE)
+									.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+										.addComponent(chckbxDatenVollst)
+										.addComponent(datePicker_Antwortfrist, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+									.addGap(57)))))
+			);
+			gl_panel_1.setVerticalGroup(
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addGap(6)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.TRAILING)
+							.addComponent(chckbxDatenVollst)
+							.addComponent(lblUnterlagenVollstndig))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.BASELINE)
+							.addComponent(datePicker_Antwortfrist, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblAntwortBis))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(lblAnmerkung)
+						.addGap(7)
+						.addComponent(scrollPane_2, GroupLayout.DEFAULT_SIZE, 81, Short.MAX_VALUE)
+						.addContainerGap())
+			);
+			
+			textArea_anmerkprakt = new JTextArea();
+			scrollPane_2.setViewportView(textArea_anmerkprakt);
+			panel_1.setLayout(gl_panel_1);
 			panel_ansprechPartner.setLayout(new CardLayout(0, 0));
 			
 			panel_AnsprWoche1 = new JPanel();
@@ -1118,10 +1182,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			textArea_konsole.setEnabled(false);
 			textArea_konsole.setEditable(false);
 			scrollPane_5.setViewportView(textArea_konsole);
-			
-			textArea_anmerkprakt = new JTextArea();
-			textArea_anmerkprakt.setLineWrap(true);
-			scrollPane_2.setViewportView(textArea_anmerkprakt);
 			
 			textArea_anmerkperson = new JTextArea();
 			textArea_anmerkperson.setLineWrap(true);

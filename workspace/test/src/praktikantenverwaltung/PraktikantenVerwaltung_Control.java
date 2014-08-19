@@ -33,14 +33,7 @@ public class PraktikantenVerwaltung_Control {
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
 		this._view = new PraktikantenVerwaltung_ViewOrginal(); 
-//		this._viewprakt = new PraktikantenVerwaltung_ViewPrakt();
-		this._viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt();
-		this._viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr();
-//		this._viewanspr = new PraktikantenVerwaltung_ViewAnspr();
 		this._viewStart = new PraktikantenVerwaltung_ViewStart();
-//		_model.createTables();
-//		NeuerEintrag();
-//		NeuerEintrag();
 		addListener();
 	}
 	/**
@@ -110,21 +103,41 @@ public class PraktikantenVerwaltung_Control {
 		            this._view.setPraktInfoListener(new PraktInfoListener());
 		            this._viewStart.setNeuerPraktListener(new NeuerPraktListener());
 		            this._viewStart.setNeuerAnsprListener(new NeuerAnsprListener());
+		            this._viewStart.setTabellePraktListener(new TabellePraktListener());
+		            this._viewStart.setTabelleAnsprListener(new TabelleAnsprListener());
 	   } 
 	   class NeuerPraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
-//                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
                 _viewprakt.setVisible(true);
             } 
 	   }
 	   class NeuerAnsprListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
         	   _viewanspr = new PraktikantenVerwaltung_ViewAnspr();
-//                _viewprakt.setPraktSpeichernListener(new PraktSpeichernListener());
         	   _viewanspr.setVisible(true);
             } 
 	   }
+	   class TabellePraktListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) {
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+       			daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
+       			
+        	   _viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt(daten);
+        	   _viewprakttabelle.setVisible(true);
+            } 
+	   }
+	   
+	   class TabelleAnsprListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+        	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+        	   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER ORDER BY NN;");
+      			
+        	   _viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr(daten);
+        	   _viewansprtabelle.setVisible(true);
+            } 
+	   }
+	   
 	   
 	   /**
 	    * Innere Klasse für den Praktikanten Löschen Listener
@@ -350,6 +363,14 @@ public class PraktikantenVerwaltung_Control {
                 _view.showAllePrakt();
             } 
 	   }
+		public Object[][] ArrayListtoArray(ArrayList<ArrayList<String>> daten){
+			Object[][] Array = new String[daten.size()][];
+				for (int i = 0; i < daten.size(); i++) {
+				    ArrayList<String> row = daten.get(i);
+				    Array[i] = row.toArray(new String[row.size()]);
+				}
+				return Array;
+		}
 	   /**
 	    * Innere Klasse für den Suche Ansprechpartner Listener
 	    * holt Sich Sucheingabe aus View

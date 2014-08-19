@@ -8,6 +8,7 @@ import java.awt.Font;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
@@ -44,9 +45,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	 */
 	private JPanel contentPane;
 	private JPanel mainPanel;
-	private JTable table_suche;
+	private JTable table_prakt;
 	private JScrollPane scrollPane_Suchliste;
-	private String[] spaltennamenprak = {"ID",
+	private String[] spaltennamenprak = {
             "Nachname",
             "Vorname",
             "Status",
@@ -58,10 +59,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	private JButton btn_praktbearbeiten;
 	private JButton btn_praktloeschen;
 	private JButton btn_praktNachrichtSchreiben;
+	private PraktikantenVerwaltung_Modell _model;
+	private PraktikantenVerwaltung_Control _control;
 	
-	public PraktikantenVerwaltung_ViewtabellePrakt(){
+	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
+		this._model = new PraktikantenVerwaltung_Modell();
+		this._control = new PraktikantenVerwaltung_Control();
+		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(5, 5, 1280, 720);
 		
 		
@@ -108,6 +114,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel_10.setLayout(gl_panel_10);
+		
+		table_prakt = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
+		table_prakt.setSelectionMode(0);
+		table_prakt.setAutoCreateRowSorter(true);
+		scrollPane_Suchliste.setViewportView(table_prakt);
 	}
+	private void setDatenPrakt(Object[][] daten){
+		this.datenprak = daten;
+	}
+	
 
 }

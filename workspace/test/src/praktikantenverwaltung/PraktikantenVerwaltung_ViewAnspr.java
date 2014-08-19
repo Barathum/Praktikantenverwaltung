@@ -5,6 +5,9 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +41,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
+import praktikantenverwaltung.PraktikantenVerwaltung_ViewPrakt.PraktSpeichernListener;
+
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
@@ -62,6 +67,12 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private JButton button_SpeichernAnspr;
 	private JXDatePicker datePicker_blockierenVon;
 	private JXDatePicker datePicker_blockierenBis;
+	private int updateorinsert;
+	private Integer HoechsteAnsprID = 100000;
+	private String neueAnsprID = "0";
+	private JCheckBox chckbxEtechnik;
+	private JCheckBox chckbxKaufm;
+	private JCheckBox chckbxInf;
 
 	/**
 	 * Create the frame.
@@ -69,6 +80,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	public PraktikantenVerwaltung_ViewAnspr() {
 		this._model = new PraktikantenVerwaltung_Modell();
 		this._control = new PraktikantenVerwaltung_Control();
+		updateorinsert = 2;
 		viewKontrukt();
 		
 	}
@@ -80,7 +92,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	}
 	private void viewKontrukt(){
 		setResizable(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(5, 5, 958, 556);
 		
 		
@@ -156,11 +168,11 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		
 		JLabel lblFachrichtung = new JLabel("Fachrichtung:");
 		
-		JCheckBox chckbxEtechnik = new JCheckBox("E-Technik");
+		chckbxEtechnik = new JCheckBox("E-Technik");
 		
-		JCheckBox chckbxKaufm = new JCheckBox("Kaufm\u00E4nnisch");
+		chckbxKaufm = new JCheckBox("Kaufm\u00E4nnisch");
 		
-		JCheckBox chckbxInf = new JCheckBox("Informatik");
+		chckbxInf = new JCheckBox("Informatik");
 
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
@@ -324,8 +336,89 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		textArea_AnmerkOrtBearb = new JTextArea();
 		scrollPane_3.setViewportView(textArea_AnmerkOrtBearb);
 		panel_ansprbearb.setLayout(gl_panel_ansprbearb);
+		
+		this.setAnsprSpeichernListener(new AnsprSpeichernListener());
+		
 	}
 	public void setInfoAnspr(String inf){
 		this.textArea_InfoAnspr.setText(inf);
 	}
+	/**
+	 * Setzt einen Listener auf den Speicher Button in der Ansprechpartner erstellen Ansicht
+	 * @param l Listener der übergeben wird
+	 */
+	public void setAnsprSpeichernListener(ActionListener l){
+		this.button_SpeichernAnspr.addActionListener(l);
+	}
+	   class AnsprSpeichernListener implements ActionListener{ 
+		   
+
+		public void actionPerformed(ActionEvent e) { 
+			   ArrayList<String> datensatzAnspr = getInhaltAnspr();
+               String sql;
+               sql = schreibeEintragAnsprsql(updateorinsert, datensatzAnspr);
+               _model.insertUpdateDeleteTable(sql);
+           }  
+	   }
+	   private String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
+			String sql;
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			String zeit = sdf.format(time);
+			if (i == 1) {
+				String info = "Daten geupdatet am " + zeit;
+				setInfoAnspr(info);
+				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
+						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + 
+						 "', BLOCKIERENVON = '" + liste.get(8) + "', BLOCKIERENBIS = '" + liste.get(9) + "', ETECH = '" + liste.get(10) + "', KAUFM = '" + liste.get(11) + "', INF = '" + liste.get(12) +"' WHERE ID = '" + liste.get(0) + "';";
+//				System.out.println("update");
+			} else if (i == 2) {
+				HoechsteAnsprID = _control.getHoechsteAnsprID();
+				HoechsteAnsprID++;
+				neueAnsprID = HoechsteAnsprID.toString();
+				String info = "Daten gespeichert am " + zeit;
+				setInfoAnspr(info);
+				sql = "INSERT INTO ANSPRECHPARTNER " +
+						"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "','" + liste.get(12) +"');";
+//				System.out.println(liste.get(8));
+//				System.out.println(liste.get(1));
+			}else if ( i== 4) {
+				sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+			} else {
+				sql = "";
+			}
+			return sql;
+		}
+	   private ArrayList<String> getInhaltAnspr(){
+		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+			ArrayList<String> liste = new ArrayList<String>();
+			liste.add((String) idAnsprBearb.toString());
+			liste.add((String) textField_NameAnsprBearb.getText());
+			liste.add((String) textField_VornameAnsprBearb.getText());
+			liste.add((String) textField_TelAnsprBearb.getText());
+			liste.add((String) textField_MailAnsprBearb.getText());
+			liste.add((String) textField_AbteilAnsprBearb.getText());
+			liste.add((String) textField_RaumAnsprBearb.getText());
+			liste.add((String) textArea_AnmerkOrtBearb.getText());
+			liste.add((String) textArea_InfoAnspr.getText());
+			if (sdfToDate.format(datePicker_blockierenVon.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenVon.getDate()).trim());}else{liste.add("");}
+			if (sdfToDate.format(datePicker_blockierenBis.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenBis.getDate()).trim());}else{liste.add("");}
+			if (chckbxEtechnik.isSelected()) {
+				liste.add("1");
+			}else {
+				liste.add("0");
+			}
+			if (chckbxKaufm.isSelected()) {
+				liste.add("1");
+			}else {
+				liste.add("0");
+			}
+			if (chckbxInf.isSelected()) {
+				liste.add("1");
+			}else {
+				liste.add("0");
+			}
+		return liste;
+		}
 }

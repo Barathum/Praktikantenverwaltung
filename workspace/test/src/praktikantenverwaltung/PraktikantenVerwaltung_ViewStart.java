@@ -87,5 +87,11 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	public void setNeuerAnsprListener(ActionListener l){ 
         this.menuNeuerAnsprechpartner.addActionListener(l); 
 	}
+	public void setTabellePraktListener(ActionListener l){ 
+        this.menuAllePraktikanten.addActionListener(l); 
+	}
+	public void setTabelleAnsprListener(ActionListener l){ 
+        this.menuAlleAnsprechpartner.addActionListener(l); 
+	}
 
 }

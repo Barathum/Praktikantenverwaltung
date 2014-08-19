@@ -149,12 +149,18 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  viewKontrukt();
 		  comboBox_autocomplete();
 	}
+	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrageintrag){
+		  this._model = new PraktikantenVerwaltung_Modell();
+		  this._control = new PraktikantenVerwaltung_Control();
+		  viewKontrukt();
+		  comboBox_autocomplete();
+	}
 		  private void viewKontrukt(){
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
 			setResizable(true);
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(5, 5, 1280, 720);
 			
 			

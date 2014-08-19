@@ -81,7 +81,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private void viewKontrukt(){
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(5, 5, 1280, 720);
+		setBounds(5, 5, 958, 556);
 		
 		
 		mainPanel = new JPanel();
@@ -158,9 +158,9 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		
 		JCheckBox chckbxEtechnik = new JCheckBox("E-Technik");
 		
-		JCheckBox chckbxKaufm = new JCheckBox("Kaufm.");
+		JCheckBox chckbxKaufm = new JCheckBox("Kaufm\u00E4nnisch");
 		
-		JCheckBox chckbxInf = new JCheckBox("Inf.");
+		JCheckBox chckbxInf = new JCheckBox("Informatik");
 
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
@@ -184,23 +184,22 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 								.addComponent(textField_TelAnsprBearb)
 								.addComponent(textField_VornameAnsprBearb)
 								.addComponent(textField_NameAnsprBearb, GroupLayout.PREFERRED_SIZE, 293, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING)
-							.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-								.addComponent(lblFachrichtung, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-								.addGap(18)
-								.addComponent(chckbxEtechnik)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(chckbxKaufm)
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(chckbxInf))
-							.addGroup(Alignment.LEADING, gl_panel_2.createSequentialGroup()
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
-									.addComponent(lblAnsprechpartnerBlockierenBis, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblAnsprechpartnerBlockierenVon, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
-								.addGap(35)
-								.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-									.addComponent(datePicker_blockierenBis, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
-									.addComponent(datePicker_blockierenVon, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)))))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addComponent(lblFachrichtung, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+							.addGap(111)
+							.addComponent(chckbxEtechnik)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(chckbxKaufm)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(chckbxInf))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(lblAnsprechpartnerBlockierenBis, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblAnsprechpartnerBlockierenVon, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE))
+							.addGap(35)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+								.addComponent(datePicker_blockierenBis, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+								.addComponent(datePicker_blockierenVon, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(51, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
@@ -238,12 +237,16 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblAnsprechpartnerBlockierenBis)
 						.addComponent(datePicker_blockierenBis, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
-					.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblFachrichtung)
-						.addComponent(chckbxEtechnik)
-						.addComponent(chckbxKaufm)
-						.addComponent(chckbxInf))
+					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(18)
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblFachrichtung)
+								.addComponent(chckbxKaufm)
+								.addComponent(chckbxInf)))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(17)
+							.addComponent(chckbxEtechnik)))
 					.addContainerGap(22, Short.MAX_VALUE))
 		);
 		panel_2.setLayout(gl_panel_2);
@@ -265,48 +268,51 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		gl_panel_ansprbearb.setHorizontalGroup(
 			gl_panel_ansprbearb.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
+					.addGap(45)
+					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 538, GroupLayout.PREFERRED_SIZE)
+					.addGap(32)
 					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-							.addGap(142)
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 538, GroupLayout.PREFERRED_SIZE)
-							.addGap(32)
-							.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
-								.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))
-						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-							.addGap(373)
-							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-								.addComponent(lblInfo)
-								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(256, Short.MAX_VALUE))
+						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
+						.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE))
+					.addContainerGap(31, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, gl_panel_ansprbearb.createSequentialGroup()
+					.addGap(261)
+					.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+					.addGap(33)
+					.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(194, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, gl_panel_ansprbearb.createSequentialGroup()
+					.addGap(441)
+					.addComponent(lblInfo, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(457, Short.MAX_VALUE))
 				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-					.addContainerGap(560, Short.MAX_VALUE)
+					.addContainerGap(395, Short.MAX_VALUE)
 					.addComponent(lblBearbeiteAnsprechpartner, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-					.addGap(488))
+					.addGap(331))
 		);
 		gl_panel_ansprbearb.setVerticalGroup(
 			gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-					.addGap(114)
+					.addGap(35)
 					.addComponent(lblBearbeiteAnsprechpartner)
-					.addGap(69)
+					.addGap(47)
 					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
 							.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(scrollPane_3)
-							.addGap(107))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
+						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE))
+					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)))
-					.addComponent(lblInfo)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.TRAILING)
-						.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-						.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(92, Short.MAX_VALUE))
+							.addGap(21)
+							.addComponent(lblInfo)
+							.addGap(8)
+							.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
+							.addContainerGap())
+						.addGroup(Alignment.TRAILING, gl_panel_ansprbearb.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+							.addGap(45))))
 		);
 		
 		textArea_InfoAnspr = new JTextArea();

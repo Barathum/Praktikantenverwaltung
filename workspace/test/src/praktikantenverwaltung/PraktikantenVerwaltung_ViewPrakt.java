@@ -39,6 +39,7 @@ import javax.swing.text.DefaultFormatterFactory;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
+
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
@@ -145,7 +146,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
 		  this._control = new PraktikantenVerwaltung_Control();
-		  
+		  viewKontrukt();
+		  comboBox_autocomplete();
+	}
+		  private void viewKontrukt(){
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
@@ -354,7 +358,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			JLabel lblAnmerkungen = new JLabel("Anmerkungen:");
 			
-			String comboBoxListe_partners[] = {"Ja", "Nein"};
+			String comboBoxListe_partners[] = {"Nein" , "Ja"};
 			comboBox_partners = new JComboBox(comboBoxListe_partners);
 			
 			JScrollPane scrollPane = new JScrollPane();
@@ -506,7 +510,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			JLabel lblStatus = new JLabel("Status:");
 			
-			String comboBoxListe_state[] = {"leer", "Eingangsbestätigung", "Zusage", "Selbstabsage", "Absage", "anwesend", "abgeschlossen"};
+			String comboBoxListe_state[] = {"leer", "Eingangsbestätigung", "Bewerbung unvollständig" ,  "Zusage", "Selbstabsage", "Absage", "anwesend", "abgeschlossen"};
 			comboBox_status = new JComboBox(comboBoxListe_state);
 			GroupLayout gl_panel_7 = new GroupLayout(panel_7);
 			gl_panel_7.setHorizontalGroup(
@@ -1311,6 +1315,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			panel_Steckbrief.setLayout(gl_panel_Steckbrief);
 			
 			this.setPraktSpeichernListener(new PraktSpeichernListener());
+			this.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
+			this.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
+			this.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
 			button_editAnspr1.addActionListener(this);
 		    button_editAnspr2.addActionListener(this);
 		    button_editAnspr3.addActionListener(this);
@@ -1321,47 +1328,68 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
 	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 1 
+	 * @param l Listener der übergeben wird
+	 */
+	public void setAnsprAusfuellListener1(ActionListener l){
+		this.comboBox_NameAnsprWoch1.addActionListener(l);
+	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 2
+	 * @param l Listener der übergeben wird
+	 */
+	public void setAnsprAusfuellListener2(ActionListener l){
+		this.comboBox_NameAnsprWoch2.addActionListener(l);
+	}
+	/**
+	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 3 
+	 * @param l Listener der übergeben wird
+	 */
+	public void setAnsprAusfuellListener3(ActionListener l){
+		this.comboBox_NameAnsprWoch3.addActionListener(l);
+	}
 	public ArrayList<String> getInhaltPrakt(){
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) textField_id.getText());
-			liste.add((String) comboBox_anrede.getSelectedItem());
-			liste.add((String) textField_nn.getText());
-			liste.add((String) textField_vn.getText());
-			liste.add((String) sdfToDate.format(datePicker_gb.getDate()));
-			liste.add((String) comboBox_geburtsort.getSelectedItem());
-			liste.add((String) comboBox_str.getSelectedItem());
-			liste.add((String) textField_plz.getText());
-			liste.add((String) txtDeutschland.getText());
-			liste.add((String) textField_tele.getText());
-			liste.add((String) textField_mail.getText());
-			liste.add((String) textField_mobil.getText());
-			liste.add((String) textField_haus.getText());
-			liste.add((String) comboBox_wohn.getSelectedItem());
-			liste.add((String) textField_gnn.getText());
-			liste.add((String) textField_gvn.getText());
-			liste.add((String) comboBox_schule.getSelectedItem());
-			liste.add((String) comboBox_schulform.getSelectedItem());
-			liste.add((String) comboBox_partners.getSelectedItem());
-			liste.add((String) textArea_anmerkschule.getText());
-			liste.add((String) comboBox_miki.getSelectedItem());
-			liste.add((String) comboBox_grad.getSelectedItem());
-			liste.add((String) textArea_anmerkperson.getText());
-			liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()));
-			liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()));
-			liste.add((String) comboBox_status.getSelectedItem());
-			liste.add((String) textArea_anmerkprakt.getText());
+			if (comboBox_anrede.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_anrede.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textField_nn.getText().trim().length() > 0){liste.add((String) textField_nn.getText().trim());}else{liste.add("");}
+			if (textField_vn.getText().trim().length() > 0){liste.add((String) textField_vn.getText().trim());}else{liste.add("");}
+			if (sdfToDate.format(datePicker_gb.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_gb.getDate()).trim());}else{liste.add("");}
+			if (comboBox_geburtsort.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_geburtsort.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (comboBox_str.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_str.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textField_plz.getText().trim().length() > 0){liste.add((String) textField_plz.getText().trim());}else{liste.add("");}
+			if (txtDeutschland.getText().trim().length() > 0){liste.add((String) txtDeutschland.getText().trim());}else{liste.add("");}
+			if (textField_tele.getText().trim().length() > 0){liste.add((String) textField_tele.getText().trim());}else{liste.add("");}
+			if (textField_mail.getText().trim().length() > 0){liste.add((String) textField_mail.getText().trim());}else{liste.add("");}
+			if (textField_mobil.getText().trim().length() > 0){liste.add((String) textField_mobil.getText().trim());}else{liste.add("");}
+			if (textField_haus.getText().trim().length() > 0){liste.add((String) textField_haus.getText().trim());}else{liste.add("");}
+			if (comboBox_wohn.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_wohn.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textField_gnn.getText().trim().length() > 0){liste.add((String) textField_gnn.getText().trim());}else{liste.add("");}
+			if (textField_gvn.getText().trim().length() > 0){liste.add((String) textField_gvn.getText().trim());}else{liste.add("");}
+			if (comboBox_schule.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_schule.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (comboBox_schulform.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_schulform.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (comboBox_partners.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_partners.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textArea_anmerkschule.getText().trim().length() > 0){liste.add((String) textArea_anmerkschule.getText().trim());}else{liste.add("");}
+			if (comboBox_miki.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_miki.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (comboBox_grad.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_grad.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textArea_anmerkperson.getText().trim().length() > 0){liste.add((String) textArea_anmerkperson.getText().trim());}else{liste.add("");}
+			if (sdfToDate.format(datePicker_startdatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()).trim());}else{liste.add("");}
+			if (sdfToDate.format(datePicker_enddatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()).trim());}else{liste.add("");}
+			if (comboBox_status.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_status.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textArea_anmerkprakt.getText().trim().length() > 0){liste.add((String) textArea_anmerkprakt.getText().trim());}else{liste.add("");}
 			liste.add((String) idAnspr1.toString());
 			liste.add((String) idAnspr2.toString());
 			liste.add((String) idAnspr3.toString());
-			liste.add((String) textArea_konsole.getText());
+			liste.add((String) textArea_konsole.getText().trim());
 			liste.add((String) sdfToDate.format(System.currentTimeMillis()));
 			if (chckbxDatenVollst.isSelected()) {
 				liste.add("1");
 			}else {
 				liste.add("0");
 			}
-			liste.add((String) sdfToDate.format(datePicker_Antwortfrist.getDate()));
+			if (sdfToDate.format(datePicker_Antwortfrist.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_Antwortfrist.getDate()).trim());}else{liste.add("");}
 		return liste;
 	}
 	/**
@@ -1458,6 +1486,113 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 //		this.textArea_InfoAnspr.setText(inf);
 	}
 	/**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
+	   class AnsprAusfuellListener1 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			 Anspr1Ausfuellen(); 
+         }  
+	   }
+	   public void Anspr1Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+ 	   id = getAnspr1ID();
+// 	   System.out.println(name);
+			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+//			System.out.println(daten);
+			setInhaltAnspr1(daten);
+	   }
+	   /**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
+	   class AnsprAusfuellListener2 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   Anspr2Ausfuellen();
+         }  
+	   }
+	   public void Anspr2Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+ 	   id = getAnspr2ID();
+			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+			setInhaltAnspr2(daten);
+	   }
+	   /**
+	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
+	    * @author Barathum
+	    *
+	    */
+	   class AnsprAusfuellListener3 implements ActionListener{ 
+		   public void actionPerformed(ActionEvent e) { 
+			   Anspr3Ausfuellen();
+         }  
+	   }
+	   public void Anspr3Ausfuellen(){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   Integer id = new Integer(0);
+ 	   id = getAnspr3ID();
+			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+			setInhaltAnspr3(daten);
+	   }
+		/**
+		 * Setzt den Inhalt der Ansprechpartner1 Felder entsprechend der Liste
+		 * @param liste
+		 */
+		public void setInhaltAnspr1(ArrayList<ArrayList<String>> liste){
+			try {
+				idAnspr1 = Integer.parseInt(liste.get(0).get(0));
+				comboBox_NameAnsprWoch1.setSelectedItem(liste.get(0).get(1));
+				textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
+				textField_TelAnsprWoch1.setText(liste.get(0).get(3));
+				textField_MailAnsprWoch1.setText(liste.get(0).get(4));
+				textField_AbteilAnsprWoch1.setText(liste.get(0).get(5));
+				textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
+				textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
+			} catch (Exception e) {
+				idAnspr1 = 0;
+			}
+		}
+		/**
+		 * Setzt den Inhalt der Ansprechpartner2 Felder entsprechend der Liste
+		 * @param liste
+		 */
+		public void setInhaltAnspr2(ArrayList<ArrayList<String>> liste){
+			try {
+				idAnspr2 = Integer.parseInt(liste.get(0).get(0));
+				comboBox_NameAnsprWoch2.setSelectedItem(liste.get(0).get(1));
+				textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
+				textField_TelAnsprWoch2.setText(liste.get(0).get(3));
+				textField_MailAnsprWoch2.setText(liste.get(0).get(4));
+				textField_AbteilAnsprWoch2.setText(liste.get(0).get(5));
+				textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
+				textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
+			} catch (Exception e) {
+				idAnspr2 = 0;
+			}
+		}
+		/**
+		 * Setzt den Inhalt der Ansprechpartner3 Felder entsprechend der Liste
+		 * @param liste
+		 */
+		public void setInhaltAnspr3(ArrayList<ArrayList<String>> liste){
+			try {
+				idAnspr3 = Integer.parseInt(liste.get(0).get(0));
+				comboBox_NameAnsprWoch3.setSelectedItem(liste.get(0).get(1));
+				textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
+				textField_TelAnsprWoch3.setText(liste.get(0).get(3));
+				textField_MailAnsprWoch3.setText(liste.get(0).get(4));
+				textField_AbteilAnsprWoch3.setText(liste.get(0).get(5));
+				textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
+				textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
+			} catch (Exception e) {
+				idAnspr3 = 0;
+			}
+		}
+	/**
 	    * Innere Klasse für den Praktikanten Speichern Listener
 	    * Prüft ob Praktikanten Id vorhanden und ob die Ansprechpartner IDS vorhanden sind
 	    * ruft danach Methode zum schreiben des SQL Befehls auf
@@ -1476,16 +1611,16 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 //            _model.connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
             if (getEditAnspr1()==true) {
          	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
-         		   updateOrInsertAnspr1 = 2;
+         		   		updateOrInsertAnspr1 = 2;
 					} else {
-							updateOrInsertAnspr1 = 1;
+						updateOrInsertAnspr1 = 1;
 					}
             }
             if (getEditAnspr2()==true) {
          	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
-         		   updateOrInsertAnspr2 = 2;
+         		   		updateOrInsertAnspr2 = 2;
 					} else {
-							updateOrInsertAnspr2 = 1;
+						updateOrInsertAnspr2 = 1;
 					}
             }
             if (getEditAnspr3()==true) {
@@ -1506,6 +1641,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             if (getEditAnspr1()==true) {
          	   if (datensatzAnspr.get(0).get(0).equals("0") || datensatzAnspr.get(0).get(0) == null) {
          		   datensatz.set(27, neueAnsprID);
+         		   setAnspr1Id(neueAnsprID);
 					}
             }
             sql = schreibeEintragAnsprsql(updateOrInsertAnspr2, datensatzAnspr.get(1));
@@ -1513,6 +1649,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             if (getEditAnspr2()==true) {
          	   if (datensatzAnspr.get(1).get(0).equals("0") || datensatzAnspr.get(1).get(0) == null) {
          		   datensatz.set(28, neueAnsprID);
+         		  setAnspr2Id(neueAnsprID);
 					}
             }
             sql = schreibeEintragAnsprsql(updateOrInsertAnspr3, datensatzAnspr.get(2));
@@ -1520,6 +1657,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             if (getEditAnspr3()==true) {
          	   if (datensatzAnspr.get(2).get(0).equals("0") || datensatzAnspr.get(2).get(0) == null) {
          		   datensatz.set(29, neueAnsprID);
+         		  setAnspr3Id(neueAnsprID);
 					}
             }
             
@@ -1528,11 +1666,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             
             setPraktId(neuePraktID);
             
-            System.out.println();
             /**
              * autocomplete beim speichern
              */
-//            comboBox_autocomplete();
+            comboBox_autocomplete();
             /**
              * Ausgewählten Ansprechpartner beibehalten
              */
@@ -1552,6 +1689,220 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 //            HoechstePraktID = getHoechstePraktID();
         } 
 	   }
+		public Integer getAnspr1ID(){
+			return this.idAnspr1;
+		}
+		public Integer getAnspr2ID(){
+			return this.idAnspr2;
+		}
+		public Integer getAnspr3ID(){
+			return this.idAnspr3;
+		}
+	   /**
+		 * Setzt die ID von Ansprechpartner 1
+		 */
+		public void setAnspr1Id(String id){
+			idAnspr1 = Integer.parseInt(id);
+		}
+		/**
+		 * Setzt die ID von Ansprechpartner 2
+		 */
+		public void setAnspr2Id(String id){
+			idAnspr2 = Integer.parseInt(id);
+		}
+		/**
+		 * Setzt die ID von Ansprechpartner 3
+		 */
+		public void setAnspr3Id(String id){
+			idAnspr3 = Integer.parseInt(id);
+		}
+		 private void comboBox_autocomplete(){
+			   /**
+			    * Wohnort
+			    */
+	       	   ArrayList<ArrayList<String>> daten_comboBoxItemsWohnort = new ArrayList<ArrayList<String>>();
+	    	   daten_comboBoxItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' AND ORT <> '' GROUP BY ORT");
+	    	   Object[][] Array = new String[daten_comboBoxItemsWohnort.size()][];
+	  			for (int i = 0; i < daten_comboBoxItemsWohnort.size(); i++) {
+	  			    ArrayList<String> row = daten_comboBoxItemsWohnort.get(i);
+	  			    Array[i] = row.toArray(new String[row.size()]);
+	  			}
+	  			Vector V1 = new Vector<String>();
+	  			for (int i = 0; i < Array.length; i++) {
+					V1.add(Array[i][0]);
+				}
+//	  			System.out.println(V1);
+	    	   setComboBoxItems_wohn(V1);
+	    	   
+	    	   /**
+	    	    * Straße
+	    	    */
+	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsStr= new ArrayList<ArrayList<String>>();
+	    	   daten_comboBoxItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' AND STR <> '' GROUP BY STR");
+	    	   Array = new String[daten_comboBoxItemsStr.size()][];
+	  			for (int i = 0; i < daten_comboBoxItemsStr.size(); i++) {
+	  			    ArrayList<String> row = daten_comboBoxItemsStr.get(i);
+	  			    Array[i] = row.toArray(new String[row.size()]);
+	  			}
+	  			V1 = new Vector<String>();
+	  			for (int i = 0; i < Array.length; i++) {
+					V1.add(Array[i][0]);
+				}
+//	  			System.out.println(V1);
+	    	   setComboBoxItems_str(V1);
+	    	   
+	    	   /**
+	    	    * Geburtsort
+	    	    */
+	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsGeburtsort= new ArrayList<ArrayList<String>>();
+	    	   daten_comboBoxItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' AND GO <> '' GROUP BY GO");
+	    	   Array = new String[daten_comboBoxItemsGeburtsort.size()][];
+	  			for (int i = 0; i < daten_comboBoxItemsGeburtsort.size(); i++) {
+	  			    ArrayList<String> row = daten_comboBoxItemsGeburtsort.get(i);
+	  			    Array[i] = row.toArray(new String[row.size()]);
+	  			}
+	  			V1 = new Vector<String>();
+	  			for (int i = 0; i < Array.length; i++) {
+					V1.add(Array[i][0]);
+				}
+//	  			System.out.println(V1);
+	    	   setComboBoxItems_geburtsort(V1);
+	    	   
+	    	   /**
+	    	    * Schule
+	    	    */
+	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchule= new ArrayList<ArrayList<String>>();
+	    	   daten_comboBoxItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' AND SCHULE <> '' GROUP BY SCHULE");
+	    	   Array = new String[daten_comboBoxItemsSchule.size()][];
+	  			for (int i = 0; i < daten_comboBoxItemsSchule.size(); i++) {
+	  			    ArrayList<String> row = daten_comboBoxItemsSchule.get(i);
+	  			    Array[i] = row.toArray(new String[row.size()]);
+	  			}
+	  			V1 = new Vector<String>();
+	  			for (int i = 0; i < Array.length; i++) {
+					V1.add(Array[i][0]);
+				}
+//	  			System.out.println(V1);
+	    	   setComboBoxItems_schule(V1);
+	    	   
+	    	   /**
+	    	    * Schulform
+	    	    */
+	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchulform= new ArrayList<ArrayList<String>>();
+	    	   daten_comboBoxItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' AND SCHULFORM <> '' GROUP BY SCHULFORM");
+	    	   Array = new String[daten_comboBoxItemsSchulform.size()][];
+	  			for (int i = 0; i < daten_comboBoxItemsSchulform.size(); i++) {
+	  			    ArrayList<String> row = daten_comboBoxItemsSchulform.get(i);
+	  			    Array[i] = row.toArray(new String[row.size()]);
+	  			}
+	  			V1 = new Vector<String>();
+	  			for (int i = 0; i < Array.length; i++) {
+					V1.add(Array[i][0]);
+				}
+	  			setComboBoxItems_schulform(V1);
+	  			
+	  			/**
+	  			 * Nachname Ansprechpartner
+	  			 */
+	  			ArrayList<ArrayList<String>> daten_comboBoxItemsNameAnspr= new ArrayList<ArrayList<String>>();
+	  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' AND NN <> ''");
+	     	   Array = new String[daten_comboBoxItemsNameAnspr.size()][];
+	   			for (int i = 0; i < daten_comboBoxItemsNameAnspr.size(); i++) {
+	   			    ArrayList<String> row = daten_comboBoxItemsNameAnspr.get(i);
+	   			    Array[i] = row.toArray(new String[row.size()]);
+	   			}
+	   			V1 = new Vector<String>();
+	   			for (int i = 0; i < Array.length; i++) {
+	 				V1.add(Array[i][0]);
+	 			}
+//	  			System.out.println(V1);
+	    	   setComboBoxItems_AnsprNN(V1);
+	    	   
+		   }
+		 /**
+			 * Setzt den Inhalt der ComboBox Wohnort
+			 * @param v
+			 */
+			private void setComboBoxItems_wohn(Vector v){
+				comboBox_wohn.removeAllItems();
+				comboBox_wohn.addItem(""); // leeres Item 
+				for (int i = 0; i < v.size(); i++) {
+				    comboBox_wohn.addItem(v.get(i));
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_wohn);
+			}
+			/**
+			 * Setzt den Inhalt der ComboBox Straße
+			 * @param v
+			 */
+			private void setComboBoxItems_str(Vector v){
+				comboBox_str.removeAllItems();
+				comboBox_str.addItem("");
+				for (int i = 0; i < v.size(); i++) {
+				    comboBox_str.addItem(v.get(i));
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_str);
+			}
+			/**
+			 * Setzt den Inhalt der ComboBox Geburtsort
+			 * @param v
+			 */
+			private void setComboBoxItems_geburtsort(Vector v){
+				comboBox_geburtsort.removeAllItems();
+				comboBox_geburtsort.addItem("");
+				for (int i = 0; i < v.size(); i++) {
+				    comboBox_geburtsort.addItem(v.get(i));
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_geburtsort);
+			}
+			/**
+			 * Setzt den Inhalt der ComboBox Schule
+			 * @param v
+			 */
+			private void setComboBoxItems_schule(Vector v){
+				comboBox_schule.removeAllItems();
+				comboBox_schule.addItem("");
+				for (int i = 0; i < v.size(); i++) {
+				    comboBox_schule.addItem(v.get(i));
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_schule);
+			}
+			/**
+			 * Setzt den Inhalt der ComboBox Schulform
+			 * @param v
+			 */
+			private void setComboBoxItems_schulform(Vector v){
+				comboBox_schulform.removeAllItems();
+				comboBox_schulform.addItem("");
+				for (int i = 0; i < v.size(); i++) {
+					comboBox_schulform.addItem(v.get(i));
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_schulform);
+			}
+			/**
+			 * Setzt den Inhalt der ComboBoxen der Ansprechpartner Nachnamen
+			 * @param v
+			 */
+			private void setComboBoxItems_AnsprNN(Vector v){
+				comboBox_NameAnsprWoch1.removeAllItems();
+				comboBox_NameAnsprWoch2.removeAllItems();
+				comboBox_NameAnsprWoch3.removeAllItems();
+				comboBox_NameAnsprWoch1.addItem("");
+				comboBox_NameAnsprWoch2.addItem("");
+				comboBox_NameAnsprWoch3.addItem("");
+				for (int i = 0; i < v.size(); i++) {
+					comboBox_NameAnsprWoch1.addItem(v.get(i));
+					comboBox_NameAnsprWoch2.addItem(v.get(i));
+					comboBox_NameAnsprWoch3.addItem(v.get(i));
+//					System.out.println(i);
+				}
+				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch1);
+				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch2);
+				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch3);
+//				comboBox_NameAnsprWoch1.setEditable(false);
+//				comboBox_NameAnsprWoch2.setEditable(false);
+//				comboBox_NameAnsprWoch3.setEditable(false);
+			}
 	   private String schreibeEintragPraktsql(int i, ArrayList<String> liste){
 			String sql;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");

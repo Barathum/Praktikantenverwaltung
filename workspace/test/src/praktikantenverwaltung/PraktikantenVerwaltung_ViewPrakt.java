@@ -1496,13 +1496,24 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
          }  
 	   }
 	   public void Anspr1Ausfuellen(){
+		   if (getEditAnspr1()==false) {
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 		   Integer id = new Integer(0);
- 	   id = getAnspr1ID();
-// 	   System.out.println(name);
-			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
-//			System.out.println(daten);
+		   datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY NN;");
+		   if (getNameAnspr1().get(0) == "") {
 			setInhaltAnspr1(daten);
+		} else {
+			 try {
+				   setAnspr1Id(datenid.get(0).get(0));
+			} catch (Exception e) {
+					setAnspr1Id("0");
+			}
+			   id = getAnspr1ID();
+				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+				setInhaltAnspr1(daten);
+		}
+		}
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -1515,11 +1526,24 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
          }  
 	   }
 	   public void Anspr2Ausfuellen(){
+		   if (getEditAnspr2()==false) {
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 		   Integer id = new Integer(0);
- 	   id = getAnspr2ID();
-			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+		   datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY NN;");
+		   if (getNameAnspr2().get(0) == "") {
 			setInhaltAnspr2(daten);
+		} else {
+			 try {
+				   setAnspr2Id(datenid.get(0).get(0));
+			} catch (Exception e) {
+					setAnspr2Id("0");
+			}
+			   id = getAnspr2ID();
+				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+				setInhaltAnspr2(daten);
+		}
+		}
 	   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -1532,12 +1556,50 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
          }  
 	   }
 	   public void Anspr3Ausfuellen(){
+		   if (getEditAnspr3()==false) {
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 		   Integer id = new Integer(0);
- 	   id = getAnspr3ID();
-			daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+		   datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY NN;");
+		   if (getNameAnspr3().get(0) == "") {
 			setInhaltAnspr3(daten);
+		} else {
+			 try {
+				   setAnspr3Id(datenid.get(0).get(0));
+			} catch (Exception e) {
+					setAnspr3Id("0");
+			}
+			   id = getAnspr3ID();
+				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+				setInhaltAnspr3(daten);
+		}
+		}
 	   }
+	   
+	   
+		public ArrayList<String>  getNameAnspr1(){
+			ArrayList<String>  s = new ArrayList<String> ();
+			s.add((String) this.comboBox_NameAnsprWoch1.getSelectedItem());
+			return s;
+		}
+		/**
+		 * gibt die Eingabe zurück die in der ComboBox NachnameAnsprechpartner 2 gemacht wurde
+		 * @return
+		 */
+		public ArrayList<String>  getNameAnspr2(){
+			ArrayList<String>  s = new ArrayList<String> ();
+			s.add((String) this.comboBox_NameAnsprWoch2.getSelectedItem());
+			return s;
+		}
+		/**
+		 * gibt die Eingabe zurück die in der ComboBox NachnameAnsprechpartner 3 gemacht wurde
+		 * @return
+		 */
+		public ArrayList<String>  getNameAnspr3(){
+			ArrayList<String>  s = new ArrayList<String> ();
+			s.add((String) this.comboBox_NameAnsprWoch3.getSelectedItem());
+			return s;
+		}
 		/**
 		 * Setzt den Inhalt der Ansprechpartner1 Felder entsprechend der Liste
 		 * @param liste
@@ -1553,7 +1615,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
 				textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
 			} catch (Exception e) {
-				idAnspr1 = 0;
+				setAnspr1Id("0");
+				comboBox_NameAnsprWoch1.setSelectedItem("");
+				textField_VornameAnsprWoch1.setText("");
+				textField_TelAnsprWoch1.setText("");
+				textField_MailAnsprWoch1.setText("");
+				textField_AbteilAnsprWoch1.setText("");
+				textField_RaumAnsprWoch1.setText("");
+				textArea_EinsatzortAnsprWoche1.setText("");
 			}
 		}
 		/**
@@ -1571,7 +1640,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
 				textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
 			} catch (Exception e) {
-				idAnspr2 = 0;
+				setAnspr2Id("0");
+				comboBox_NameAnsprWoch2.setSelectedItem("");
+				textField_VornameAnsprWoch2.setText("");
+				textField_TelAnsprWoch2.setText("");
+				textField_MailAnsprWoch2.setText("");
+				textField_AbteilAnsprWoch2.setText("");
+				textField_RaumAnsprWoch2.setText("");
+				textArea_EinsatzortAnsprWoche2.setText("");
 			}
 		}
 		/**
@@ -1589,7 +1665,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
 				textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
 			} catch (Exception e) {
-				idAnspr3 = 0;
+				setAnspr3Id("0");
+				comboBox_NameAnsprWoch3.setSelectedItem("");
+				textField_VornameAnsprWoch3.setText("");
+				textField_TelAnsprWoch3.setText("");
+				textField_MailAnsprWoch3.setText("");
+				textField_AbteilAnsprWoch3.setText("");
+				textField_RaumAnsprWoch3.setText("");
+				textArea_EinsatzortAnsprWoche3.setText("");
 			}
 		}
 	/**
@@ -1673,12 +1756,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             /**
              * Ausgewählten Ansprechpartner beibehalten
              */
-//            String name1 = datensatzAnspr.get(0).get(1);
-//            String name2 = datensatzAnspr.get(1).get(1);
-//            String name3 = datensatzAnspr.get(2).get(1);
-//            _view.setNameAnspr1(name1);
-//            _view.setNameAnspr2(name2);
-//            _view.setNameAnspr3(name3);
+            String name1 = datensatzAnspr.get(0).get(1);
+            String name2 = datensatzAnspr.get(1).get(1);
+            String name3 = datensatzAnspr.get(2).get(1);
+            comboBox_NameAnsprWoch1.setSelectedItem(name1);
+            comboBox_NameAnsprWoch2.setSelectedItem(name2);
+            comboBox_NameAnsprWoch3.setSelectedItem(name3);
 //            String id1 = datensatzAnspr.get(0).get(0);
 //            String id2 = datensatzAnspr.get(1).get(0);
 //            String id3 = datensatzAnspr.get(2).get(0);
@@ -1805,7 +1888,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	  			 * Nachname Ansprechpartner
 	  			 */
 	  			ArrayList<ArrayList<String>> daten_comboBoxItemsNameAnspr= new ArrayList<ArrayList<String>>();
-	  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' AND NN <> ''");
+	  			daten_comboBoxItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' AND NN <> '' ORDER BY NN");
 	     	   Array = new String[daten_comboBoxItemsNameAnspr.size()][];
 	   			for (int i = 0; i < daten_comboBoxItemsNameAnspr.size(); i++) {
 	   			    ArrayList<String> row = daten_comboBoxItemsNameAnspr.get(i);
@@ -1899,6 +1982,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch1);
 				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch2);
 				AutoCompleteDecorator.decorate(this.comboBox_NameAnsprWoch3);
+//				comboBox_NameAnsprWoch1.setSelectedIndex(0);
+//				comboBox_NameAnsprWoch2.setSelectedIndex(0);
+//				comboBox_NameAnsprWoch3.setSelectedIndex(0);
 //				comboBox_NameAnsprWoch1.setEditable(false);
 //				comboBox_NameAnsprWoch2.setEditable(false);
 //				comboBox_NameAnsprWoch3.setEditable(false);

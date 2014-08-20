@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -31,6 +33,8 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.text.DefaultFormatterFactory;
 
@@ -178,12 +182,95 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		);
 		panel_10.setLayout(gl_panel_10);
 		
+		this.setTabelleFilterListener(new TabelleFilterListener());
+		this.setLoeschenListener(new PraktLoeschenListener());
+		updateTablePrakt();
+	}
+	private void setDatenPrakt(Object[][] daten){
+		this.datenprak = daten;
+	}
+
+	public void updateTablePrakt(){
 		table_prakt = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
 		table_prakt.setSelectionMode(0);
 		table_prakt.setAutoCreateRowSorter(true);
 		scrollPane_Suchliste.setViewportView(table_prakt);
 	}
-	private void setDatenPrakt(Object[][] daten){
-		this.datenprak = daten;
+	private void setLoeschenListener(ActionListener l){
+		this.btn_praktloeschen.addActionListener(l);
+	}
+	private void setTabelleFilterListener(DocumentListener l){
+	        this.textFieldNNPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldVNPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldStatusPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldStartPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldEndPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldAnmerkPrakt.getDocument().addDocumentListener(l);
+	        this.textFieldEditPrakt.getDocument().addDocumentListener(l);
+	        
+	}
+	class PraktLoeschenListener implements ActionListener{ 
+	    public void actionPerformed(ActionEvent e) { 
+	 	   JTable table = getTable();
+	        int markierteReiheNR =  table.getSelectedRow();
+	        ArrayList<String> liste = new ArrayList<String>();
+	        String nn = (String) table.getValueAt(markierteReiheNR, 0);
+	        String vn = (String) table.getValueAt(markierteReiheNR, 1);
+	        String status = (String) table.getValueAt(markierteReiheNR, 2);
+	        liste.add(nn);
+	        liste.add(vn);
+	        liste.add(status);
+	        String sql;
+	        sql = loescheEintragPrakt(liste);
+	        _model.insertUpdateDeleteTable(sql);
+	        filterPrakt();
+	     } 
+	   }
+	private JTable getTable(){
+		return table_prakt;
+	}
+	private String loescheEintragPrakt(ArrayList<String> liste){
+		String sql;
+		sql = "DELETE from PRAKTIKANTEN where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND STATUS ='" + liste.get(2) + "';";
+		return sql;
+	}
+	class TabelleFilterListener implements DocumentListener{ 
+	
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			filterPrakt();
+		}
+	
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			filterPrakt();
+		}
+	
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			filterPrakt();
+		}
+	}
+	
+	public void filterPrakt() { 
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<String> datenTextfields = new ArrayList<String>();
+		   datenTextfields = getInhaltSuchFelders();
+		   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+		   		+ "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND STARTDATUM LIKE '%" + datenTextfields.get(3) + "%' AND ENDDATUM LIKE '%" + datenTextfields.get(4) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' AND EDIT LIKE '%" + datenTextfields.get(6)
+		   		+ "%' ORDER BY NN;");
+		   setDatenPrakt(_control.ArrayListtoArray(daten));
+		   updateTablePrakt();
+	}
+	private ArrayList<String> getInhaltSuchFelders(){
+		ArrayList<String> daten = new ArrayList<String>();
+		  daten.add(this.textFieldNNPrakt.getText());
+		  daten.add(this.textFieldVNPrakt.getText());
+		  daten.add(this.textFieldStatusPrakt.getText());
+		  daten.add(this.textFieldStartPrakt.getText());
+		  daten.add(this.textFieldEndPrakt.getText());
+		  daten.add(this.textFieldAnmerkPrakt.getText());
+		  daten.add(this.textFieldEditPrakt.getText());
+	      return daten;
 	}
 }

@@ -161,7 +161,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		 */
 			setResizable(true);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			setBounds(5, 5, 1280, 720);
+			setBounds(20, 20, 1280, 720);
 			
 			
 			mainPanel = new JPanel();

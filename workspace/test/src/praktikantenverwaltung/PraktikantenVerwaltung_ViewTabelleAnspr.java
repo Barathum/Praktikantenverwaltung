@@ -92,7 +92,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		setDatenAnspr(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(5, 5, 1280, 720);
+		setBounds(20, 20, 1280, 720);
 		
 		
 		mainPanel = new JPanel();

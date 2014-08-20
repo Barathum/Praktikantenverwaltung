@@ -94,7 +94,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private void viewKontrukt(){
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(5, 5, 958, 556);
+		setBounds(20, 20, 958, 556);
 		
 		
 		mainPanel = new JPanel();

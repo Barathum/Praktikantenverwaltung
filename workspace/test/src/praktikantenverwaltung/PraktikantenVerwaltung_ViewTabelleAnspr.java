@@ -48,6 +48,7 @@ import praktikantenverwaltung.PraktikantenVerwaltung_ViewPrakt.PraktSpeichernLis
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
 	
@@ -82,6 +83,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	private JTextField textField_tabelleBlockVon;
 	private JTextField textField_tabelleBlockBis;
 	private JButton button_aktualisieren;
+	private JCheckBox chckbxEtechnik;
+	private JCheckBox chckbxInformatik;
+	private JCheckBox chckbxKaufmnnisch;
 
 	/**
 	 * Create the frame.
@@ -150,9 +154,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 			.addGap(1)
 		 			.addComponent(textField_tabelleBlockVon, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
 		 			.addGap(1)
-		 			.addComponent(textField_tabelleBlockBis, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+		 			.addComponent(textField_tabelleBlockBis, GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
 		 			.addGap(1)
-		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
 		 			.addGap(3))
 		 );
 		 gl_panel.setVerticalGroup(
@@ -168,7 +172,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 		.addComponent(textField_tabelleBlockBis, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 		 		.addGroup(gl_panel.createSequentialGroup()
 		 			.addGap(1)
-		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
 		 			.addGap(1))
 		 );
 		 panel.setLayout(gl_panel);
@@ -183,6 +187,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 buttonAnsprBearb = new JButton("Bearbeiten");
 		 
 		 buttonAnsprLoesch = new JButton("L\u00F6schen");
+		 
+		 chckbxEtechnik = new JCheckBox("E-Technik");
+		 
+		 chckbxInformatik = new JCheckBox("Informatik");
+		 
+		 chckbxKaufmnnisch = new JCheckBox("Kaufm\u00E4nnisch");
+		 
 		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
 		 gl_panel_9.setHorizontalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -191,7 +202,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 			.addComponent(buttonAnsprBearb)
 		 			.addGap(18)
 		 			.addComponent(buttonAnsprLoesch, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-		 			.addContainerGap(1056, Short.MAX_VALUE))
+		 			.addGap(73)
+		 			.addComponent(chckbxEtechnik, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+		 			.addPreferredGap(ComponentPlacement.RELATED)
+		 			.addComponent(chckbxInformatik, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+		 			.addPreferredGap(ComponentPlacement.RELATED)
+		 			.addComponent(chckbxKaufmnnisch, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
+		 			.addGap(712))
 		 );
 		 gl_panel_9.setVerticalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -199,12 +216,16 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 			.addGap(9)
 		 			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
 		 				.addComponent(buttonAnsprBearb)
-		 				.addComponent(buttonAnsprLoesch))
+		 				.addComponent(buttonAnsprLoesch)
+		 				.addComponent(chckbxEtechnik)
+		 				.addComponent(chckbxInformatik)
+		 				.addComponent(chckbxKaufmnnisch))
 		 			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		 );
 		 panel_9.setLayout(gl_panel_9);
 		 
 			this.setTabelleFilterListener(new TabelleFilterListener());
+			this.setTabelleFilterListenerCheckBox(new TabelleFilterListener());
 			this.setLoeschenListener(new AnsprLoeschenListener());
 			this.setBearbeitenListener(new AnsprBearbeitenListener());
 			button_aktualisieren.addActionListener(this);
@@ -234,6 +255,11 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	        this.textField_tabelleRaum.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockVon.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockBis.getDocument().addDocumentListener(l);
+	}
+	private void setTabelleFilterListenerCheckBox(ActionListener l){
+		this.chckbxEtechnik.addActionListener(l);
+		this.chckbxInformatik.addActionListener(l);
+		this.chckbxKaufmnnisch.addActionListener(l);
 	}
 	class AnsprLoeschenListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) { 
@@ -293,7 +319,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		sql = "SELECT * from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
 		return sql;
 	}
-	class TabelleFilterListener implements DocumentListener{ 
+	class TabelleFilterListener implements DocumentListener, ActionListener{ 
 
 		@Override
 		public void changedUpdate(DocumentEvent e) {
@@ -309,6 +335,11 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		public void removeUpdate(DocumentEvent e) {
 			filter();
 		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			filter();
+		}
 	}
 	public void filter() { 
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -316,7 +347,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   datenTextfields = getInhaltSuchFelders();
 		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
 		   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
-		   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' ORDER BY NN;");
+		   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
 		   setDatenAnspr(_control.ArrayListtoArray(daten));
 		   updateTable();
 	}
@@ -330,6 +361,21 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		daten.add(this.textField_tabelleRaum.getText());
 		daten.add(this.textField_tabelleBlockVon.getText());
 		daten.add(this.textField_tabelleBlockBis.getText());
+		if (chckbxEtechnik.isSelected()) {
+			daten.add("1");
+		}else {
+			daten.add("");
+		}
+		if (chckbxKaufmnnisch.isSelected()) {
+			daten.add("1");
+		}else {
+			daten.add("");
+		}
+		if (chckbxInformatik.isSelected()) {
+			daten.add("1");
+		}else {
+			daten.add("");
+		}
 	    return daten;
 	}
 	public void actionPerformed(ActionEvent evt) {

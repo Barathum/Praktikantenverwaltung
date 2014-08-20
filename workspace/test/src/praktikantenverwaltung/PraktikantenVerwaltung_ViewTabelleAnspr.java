@@ -5,6 +5,7 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,6 +40,8 @@ import javax.swing.text.DefaultFormatterFactory;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
+
+import com.sun.net.httpserver.Filter;
 
 import praktikantenverwaltung.PraktikantenVerwaltung_ViewPrakt.PraktSpeichernListener;
 
@@ -193,6 +196,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 panel_9.setLayout(gl_panel_9);
 		 
 			this.setTabelleFilterListener(new TabelleFilterListener());
+			this.setLoeschenListener(new AnsprLoeschenListener());
 			updateTable();
 	}
 	public void setDatenAnspr(Object[][] daten){
@@ -204,6 +208,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		table_anspr.setAutoCreateRowSorter(true);
 		scrollPane_SuchlisteAnspr.setViewportView(table_anspr);
 	}
+	private void setLoeschenListener(ActionListener l){
+		this.buttonAnsprLoesch.addActionListener(l);
+	}
 	private void setTabelleFilterListener(DocumentListener l){
 	        this.textField_tabelleNN.getDocument().addDocumentListener(l);
 	        this.textField_tabelleVN.getDocument().addDocumentListener(l);
@@ -213,6 +220,31 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 	        this.textField_tabelleRaum.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockVon.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockBis.getDocument().addDocumentListener(l);
+	}
+	class AnsprLoeschenListener implements ActionListener{ 
+        public void actionPerformed(ActionEvent e) { 
+     	   JTable table = getTable();
+            int markierteReiheNR =  table.getSelectedRow();
+            ArrayList<String> liste = new ArrayList<String>();
+            String nn = (String) table.getValueAt(markierteReiheNR, 0);
+            String vn = (String) table.getValueAt(markierteReiheNR, 1);
+            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+            liste.add(nn);
+            liste.add(vn);
+            liste.add(tele);
+            String sql;
+            sql = loescheEintragAnspr(liste);
+            _model.insertUpdateDeleteTable(sql);
+            filter();
+         } 
+	   }
+	private JTable getTable(){
+		return table_anspr;
+	}
+	private String loescheEintragAnspr(ArrayList<String> liste){
+		String sql;
+		sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+		return sql;
 	}
 	class TabelleFilterListener implements DocumentListener{ 
 
@@ -230,17 +262,17 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		public void removeUpdate(DocumentEvent e) {
 			filter();
 		}
-		public void filter() { 
-			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			   ArrayList<String> datenTextfields = new ArrayList<String>();
-			   datenTextfields = getInhaltSuchFelders();
-			   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-			   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
-			   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' ORDER BY NN;");
-			   setDatenAnspr(_control.ArrayListtoArray(daten));
-			   updateTable();
-			} 
-	}  
+	}
+	public void filter() { 
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<String> datenTextfields = new ArrayList<String>();
+		   datenTextfields = getInhaltSuchFelders();
+		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+		   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
+		   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' ORDER BY NN;");
+		   setDatenAnspr(_control.ArrayListtoArray(daten));
+		   updateTable();
+	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();
 		  daten.add(this.textField_tabelleNN.getText());

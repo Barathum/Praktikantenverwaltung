@@ -87,8 +87,9 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	public PraktikantenVerwaltung_ViewAnspr(ArrayList<ArrayList<String>> Ansprechpartnereintrag) {
 		this._model = new PraktikantenVerwaltung_Modell();
 		this._control = new PraktikantenVerwaltung_Control();
+		updateorinsert = 1;
 		viewKontrukt();
-		
+		setInhaltAnsprBearb(Ansprechpartnereintrag);
 	}
 	private void viewKontrukt(){
 		setResizable(true);
@@ -351,8 +352,6 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		this.button_SpeichernAnspr.addActionListener(l);
 	}
 	   class AnsprSpeichernListener implements ActionListener{ 
-		   
-
 		public void actionPerformed(ActionEvent e) { 
 			   ArrayList<String> datensatzAnspr = getInhaltAnspr();
                String sql;
@@ -370,21 +369,18 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 				setInfoAnspr(info);
 				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
 						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + 
-						 "', BLOCKIERENVON = '" + liste.get(8) + "', BLOCKIERENBIS = '" + liste.get(9) + "', ETECH = '" + liste.get(10) + "', KAUFM = '" + liste.get(11) + "', INF = '" + liste.get(12) +"' WHERE ID = '" + liste.get(0) + "';";
-//				System.out.println("update");
+						 "', BLOCKIERENVON = '" + liste.get(9) + "', BLOCKIERENBIS = '" + liste.get(10) + "', ETECH = '" + liste.get(11) + "', KAUFM = '" + liste.get(12) + "', INF = '" + liste.get(13) +"' WHERE ID = '" + liste.get(0) + "';";
+			
 			} else if (i == 2) {
 				HoechsteAnsprID = _control.getHoechsteAnsprID();
 				HoechsteAnsprID++;
 				neueAnsprID = HoechsteAnsprID.toString();
+				updateorinsert = 1;
 				String info = "Daten gespeichert am " + zeit;
 				setInfoAnspr(info);
 				sql = "INSERT INTO ANSPRECHPARTNER " +
 						"VALUES ('" + neueAnsprID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
-		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "','" + liste.get(12) +"');";
-//				System.out.println(liste.get(8));
-//				System.out.println(liste.get(1));
-			}else if ( i== 4) {
-				sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + info +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "','" + liste.get(13) +"');";
 			} else {
 				sql = "";
 			}
@@ -393,7 +389,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	   private ArrayList<String> getInhaltAnspr(){
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			ArrayList<String> liste = new ArrayList<String>();
-			liste.add((String) idAnsprBearb.toString());
+			liste.add((String) neueAnsprID.toString());
 			liste.add((String) textField_NameAnsprBearb.getText());
 			liste.add((String) textField_VornameAnsprBearb.getText());
 			liste.add((String) textField_TelAnsprBearb.getText());
@@ -420,5 +416,42 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 				liste.add("0");
 			}
 		return liste;
+		}
+	   private void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten){
+		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+			neueAnsprID = daten.get(0).get(0);
+			textField_NameAnsprBearb.setText(daten.get(0).get(1));
+			textField_VornameAnsprBearb.setText(daten.get(0).get(2));
+			textField_TelAnsprBearb.setText(daten.get(0).get(3));
+			textField_MailAnsprBearb.setText(daten.get(0).get(4));
+			textField_AbteilAnsprBearb.setText(daten.get(0).get(5));
+			textField_RaumAnsprBearb.setText(daten.get(0).get(6));
+			textArea_AnmerkOrtBearb.setText(daten.get(0).get(7));
+			textArea_InfoAnspr.setText(daten.get(0).get(8));
+			try {
+				datePicker_blockierenVon.setDate(sdfToDate.parse(daten.get(0).get(9)));
+			} catch (ParseException e) {
+				datePicker_blockierenVon.setDate(new Date());
+			}
+			try {
+				datePicker_blockierenBis.setDate(sdfToDate.parse(daten.get(0).get(10)));
+			} catch (ParseException e) {
+				datePicker_blockierenBis.setDate(new Date());
+			}
+			if (daten.get(0).get(11).equals("1")) {
+				chckbxEtechnik.setSelected(true);
+			}else {
+				chckbxEtechnik.setSelected(false);
+			}
+			if (daten.get(0).get(12).equals("1")) {
+				chckbxKaufm.setSelected(true);
+			}else {
+				chckbxKaufm.setSelected(false);
+			}
+			if (daten.get(0).get(13).equals("1")) {
+				chckbxInf.setSelected(true);
+			}else {
+				chckbxInf.setSelected(false);
+			}
 		}
 }

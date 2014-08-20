@@ -197,6 +197,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 
 			this.setTabelleFilterListener(new TabelleFilterListener());
 			this.setLoeschenListener(new AnsprLoeschenListener());
+			this.setBearbeitenListener(new AnsprBearbeitenListener());
 			updateTable();
 	}
 	public void setDatenAnspr(Object[][] daten){
@@ -210,6 +211,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 	}
 	private void setLoeschenListener(ActionListener l){
 		this.buttonAnsprLoesch.addActionListener(l);
+	}
+	private void setBearbeitenListener(ActionListener l){
+		this.buttonAnsprBearb.addActionListener(l);
 	}
 	private void setTabelleFilterListener(DocumentListener l){
 	        this.textField_tabelleNN.getDocument().addDocumentListener(l);
@@ -238,12 +242,36 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
             filter();
          } 
 	   }
+	class AnsprBearbeitenListener implements ActionListener{ 
+        public void actionPerformed(ActionEvent e) { 
+     	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+     	   JTable table = getTable();
+            int markierteReiheNR =  table.getSelectedRow();
+            ArrayList<String> liste = new ArrayList<String>();
+            String nn = (String) table.getValueAt(markierteReiheNR, 0);
+            String vn = (String) table.getValueAt(markierteReiheNR, 1);
+            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+            liste.add(nn);
+            liste.add(vn);
+            liste.add(tele);
+            String sql;
+            sql = getEintragAnspr(liste);
+            daten = _model.getData(sql);
+            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+      	   _viewanspr.setVisible(true);
+         } 
+	   }
 	private JTable getTable(){
 		return table_anspr;
 	}
 	private String loescheEintragAnspr(ArrayList<String> liste){
 		String sql;
 		sql = "DELETE from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+		return sql;
+	}
+	public String getEintragAnspr(ArrayList<String> liste){
+		String sql;
+		sql = "SELECT * from ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
 		return sql;
 	}
 	class TabelleFilterListener implements DocumentListener{ 
@@ -275,14 +303,14 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();
-		  daten.add(this.textField_tabelleNN.getText());
-		  daten.add(this.textField_tabelleVN.getText());
-		  daten.add(this.textField_tabelleTele.getText());
-		  daten.add(this.textField_tabelleMail.getText());
-		  daten.add(this.textField_tabelleAbt.getText());
-		  daten.add(this.textField_tabelleRaum.getText());
-		  daten.add(this.textField_tabelleBlockVon.getText());
-		  daten.add(this.textField_tabelleBlockBis.getText());
-	      return daten;
+		daten.add(this.textField_tabelleNN.getText());
+		daten.add(this.textField_tabelleVN.getText());
+		daten.add(this.textField_tabelleTele.getText());
+		daten.add(this.textField_tabelleMail.getText());
+		daten.add(this.textField_tabelleAbt.getText());
+		daten.add(this.textField_tabelleRaum.getText());
+		daten.add(this.textField_tabelleBlockVon.getText());
+		daten.add(this.textField_tabelleBlockBis.getText());
+	    return daten;
 	}
 }

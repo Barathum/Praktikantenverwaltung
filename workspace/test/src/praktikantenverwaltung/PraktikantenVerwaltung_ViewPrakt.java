@@ -124,9 +124,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JButton button_editAnspr2;
 	private JButton button_editAnspr1;
 	private JButton button_editAnspr3;
-	private boolean Ansprbearb1gedrueckt = false;
-	private boolean Ansprbearb2gedrueckt = false;
-	private boolean Ansprbearb3gedrueckt = false;
+	private boolean ansprbearb1gedrueckt = false;
+	private boolean ansprbearb2gedrueckt = false;
+	private boolean ansprbearb3gedrueckt = false;
 	private JButton btn_sucheprak;
 	private JButton btn_sucheansp;
 	private JComboBox comboBox_kriteriumprak;
@@ -135,8 +135,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JButton buttonAnsprBearb;
 	private JButton buttonAnsprLoesch;
 	private JButton buttonAnsprInfo;
-	private Integer HoechstePraktID = 100000;
-	private Integer HoechsteAnsprID = 100000;
+	private Integer hoechstePraktID = 100000;
+	private Integer hoechsteAnsprID = 100000;
 	private String neuePraktID = "";
 	private String neueAnsprID = "0";
 	private JXDatePicker datePicker_Antwortfrist;
@@ -1458,21 +1458,21 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	 * @return
 	 */
 	public boolean getEditAnspr1(){
-		return Ansprbearb1gedrueckt;
+		return ansprbearb1gedrueckt;
 	}
 	/**
 	 * Wurde Ansprechpartner2 bearbeitet
 	 * @return
 	 */
 	public boolean getEditAnspr2(){
-		return Ansprbearb2gedrueckt;
+		return ansprbearb2gedrueckt;
 	}
 	/**
 	 * Wurde Ansprechpartner3 bearbeitet
 	 * @return
 	 */
 	public boolean getEditAnspr3(){
-		return Ansprbearb3gedrueckt;
+		return ansprbearb3gedrueckt;
 	}
 	/**
 	 * Setzt das Feld Praktikanten ID auf den Wert von id
@@ -2016,9 +2016,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}else if (i == 4) {
 				sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
 			}else{
-				HoechstePraktID = _control.getHoechstePraktID();
-				HoechstePraktID++;
-				neuePraktID = "SP" + HoechstePraktID.toString();
+				hoechstePraktID = _control.getHoechstePraktID();
+				hoechstePraktID++;
+				neuePraktID = "SP" + hoechstePraktID.toString();
 				
 				String info = "Daten gespeichert am " + zeit;
 				setInfoPrakt(info);
@@ -2046,9 +2046,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						 "', BLOCKIERENVON = '" + liste.get(8) + "', BLOCKIERENBIS = '" + liste.get(9) + "', ETECH = '" + liste.get(10) + "', KAUFM = '" + liste.get(11) + "', INF = '" + liste.get(12) +"' WHERE ID = '" + liste.get(0) + "';";
 //				System.out.println("update");
 			} else if (i == 2) {
-				HoechsteAnsprID = _control.getHoechsteAnsprID();
-				HoechsteAnsprID++;
-				neueAnsprID = HoechsteAnsprID.toString();
+				hoechsteAnsprID = _control.getHoechsteAnsprID();
+				hoechsteAnsprID++;
+				neueAnsprID = hoechsteAnsprID.toString();
 				String info = "Daten gespeichert am " + zeit;
 				setInfoAnspr(info);
 				sql = "INSERT INTO ANSPRECHPARTNER " +
@@ -2081,7 +2081,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textField_AbteilAnsprWoch1.setEditable(true);
 					textField_RaumAnsprWoch1.setEditable(true);
 					textArea_EinsatzortAnsprWoche1.setEditable(true);
-					Ansprbearb1gedrueckt = true;
+					ansprbearb1gedrueckt = true;
 					button_editAnspr1.setEnabled(false);
 				} else if (src == button_editAnspr2){
 					comboBox_NameAnsprWoch2.setEditable(true);
@@ -2091,7 +2091,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textField_AbteilAnsprWoch2.setEditable(true);
 					textField_RaumAnsprWoch2.setEditable(true);
 					textArea_EinsatzortAnsprWoche2.setEditable(true);
-					Ansprbearb2gedrueckt = true;
+					ansprbearb2gedrueckt = true;
 					button_editAnspr2.setEnabled(false);
 				} else if (src == button_editAnspr3){
 					comboBox_NameAnsprWoch3.setEditable(true);
@@ -2101,7 +2101,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textField_AbteilAnsprWoch3.setEditable(true);
 					textField_RaumAnsprWoch3.setEditable(true);
 					textArea_EinsatzortAnsprWoche3.setEditable(true);
-					Ansprbearb3gedrueckt = true;
+					ansprbearb3gedrueckt = true;
 					button_editAnspr3.setEnabled(false);
 				} else if (src == comboBox_miki) {
 					if (comboBox_miki.getSelectedItem() == "Nein") {

@@ -23,8 +23,8 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewAnspr _viewanspr;
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
-	private Integer HoechstePraktID = 100000;
-	private Integer HoechsteAnsprID = 100000;
+	private Integer hoechstePraktID = 100000;
+	private Integer hoechsteAnsprID = 100000;
 	private String neuePraktID = "";
 	private String neueAnsprID = "0";
 	/**
@@ -55,7 +55,7 @@ public class PraktikantenVerwaltung_Control {
 			ID = daten.get(daten.size()-1).get(0).substring(2);
 //			System.out.println("try");
 		} catch (Exception e) {
-			ID = HoechstePraktID.toString();
+			ID = hoechstePraktID.toString();
 //			System.out.println("catch");
 		}
 //		System.out.println(ID);
@@ -74,7 +74,7 @@ public class PraktikantenVerwaltung_Control {
 			ID = daten.get(daten.size()-1).get(0);
 //			System.out.println("try");
 		} catch (Exception e) {
-			ID = HoechsteAnsprID.toString();
+			ID = hoechsteAnsprID.toString();
 //			System.out.println("catch");
 		}
 //		System.out.println(ID);
@@ -655,9 +655,9 @@ public class PraktikantenVerwaltung_Control {
 		}else if (i == 4) {
 			sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
 		}else{
-			HoechstePraktID = getHoechstePraktID();
-			HoechstePraktID++;
-			neuePraktID = "SP" + HoechstePraktID.toString();
+			hoechstePraktID = getHoechstePraktID();
+			hoechstePraktID++;
+			neuePraktID = "SP" + hoechstePraktID.toString();
 			
 			String info = "Daten gespeichert am " + zeit;
 			_viewprakt.setInfoPrakt(info);
@@ -695,9 +695,9 @@ public class PraktikantenVerwaltung_Control {
 					"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + "' WHERE ID = '" + liste.get(0) + "';";
 //			System.out.println("update");
 		} else if (i == 2) {
-			HoechsteAnsprID = getHoechsteAnsprID();
-			HoechsteAnsprID++;
-			neueAnsprID = HoechsteAnsprID.toString();
+			hoechsteAnsprID = getHoechsteAnsprID();
+			hoechsteAnsprID++;
+			neueAnsprID = hoechsteAnsprID.toString();
 			String info = "Daten gespeichert am " + zeit;
 			_view.setInfoAnspr(info);
 			sql = "INSERT INTO ANSPRECHPARTNER " +

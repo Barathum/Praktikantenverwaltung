@@ -61,6 +61,14 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	private JButton btn_praktNachrichtSchreiben;
 	private PraktikantenVerwaltung_Modell _model;
 	private PraktikantenVerwaltung_Control _control;
+	private JPanel panel;
+	private JTextField textFieldNNPrakt;
+	private JTextField textFieldVNPrakt;
+	private JTextField textFieldStatusPrakt;
+	private JTextField textFieldStartPrakt;
+	private JTextField textFieldEndPrakt;
+	private JTextField textFieldAnmerkPrakt;
+	private JTextField textFieldEditPrakt;
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
 		this._model = new PraktikantenVerwaltung_Modell();
@@ -78,6 +86,61 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		JPanel panel_tabllenPrakt = new JPanel();
 		mainPanel.add(panel_tabllenPrakt, "card_4");
 		panel_tabllenPrakt.setLayout(new BorderLayout(0, 0));
+		
+		panel = new JPanel();
+		panel_tabllenPrakt.add(panel, BorderLayout.NORTH);
+		
+		textFieldNNPrakt = new JTextField();
+		textFieldNNPrakt.setColumns(10);
+		
+		textFieldVNPrakt = new JTextField();
+		textFieldVNPrakt.setColumns(10);
+		
+		textFieldStatusPrakt = new JTextField();
+		textFieldStatusPrakt.setColumns(10);
+		
+		textFieldStartPrakt = new JTextField();
+		textFieldStartPrakt.setColumns(10);
+		
+		textFieldEndPrakt = new JTextField();
+		textFieldEndPrakt.setColumns(10);
+		
+		textFieldAnmerkPrakt = new JTextField();
+		textFieldAnmerkPrakt.setColumns(10);
+		
+		textFieldEditPrakt = new JTextField();
+		textFieldEditPrakt.setColumns(10);
+		GroupLayout gl_panel = new GroupLayout(panel);
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addComponent(textFieldNNPrakt, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldVNPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldStatusPrakt, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldStartPrakt, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldEndPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldAnmerkPrakt, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
+					.addGap(1)
+					.addComponent(textFieldEditPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap(14, Short.MAX_VALUE))
+		);
+		gl_panel.setVerticalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+					.addComponent(textFieldNNPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+					.addComponent(textFieldVNPrakt, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+				.addComponent(textFieldStatusPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addComponent(textFieldStartPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addComponent(textFieldEndPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addComponent(textFieldAnmerkPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addComponent(textFieldEditPrakt, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+		);
+		panel.setLayout(gl_panel);
 		
 		scrollPane_Suchliste = new JScrollPane();
 		panel_tabllenPrakt.add(scrollPane_Suchliste);
@@ -123,6 +186,4 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	private void setDatenPrakt(Object[][] daten){
 		this.datenprak = daten;
 	}
-	
-
 }

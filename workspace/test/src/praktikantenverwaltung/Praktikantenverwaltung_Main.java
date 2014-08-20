@@ -11,3 +11,8 @@ public class Praktikantenverwaltung_Main {
          controller.showView(); 
     } 
 }
+//FIXME Kommentare Sinnvoll
+//FIXME INterfaces
+//FIXME Codeaufr‰umen
+//FIXME Groﬂ/Kleinschreibung beachten
+//FIXME @returns

@@ -49,7 +49,7 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
+public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
 	
 	/**
 	 * erstellen der Fields
@@ -81,6 +81,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 	private JTextField textField_tabelleRaum;
 	private JTextField textField_tabelleBlockVon;
 	private JTextField textField_tabelleBlockBis;
+	private JButton button_aktualisieren;
 
 	/**
 	 * Create the frame.
@@ -129,6 +130,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 
 		 textField_tabelleBlockBis = new JTextField();
 		 textField_tabelleBlockBis.setColumns(10);
+		 
+		 button_aktualisieren = new JButton("");
 		 GroupLayout gl_panel = new GroupLayout(panel);
 		 gl_panel.setHorizontalGroup(
 		 	gl_panel.createParallelGroup(Alignment.LEADING)
@@ -145,13 +148,15 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 			.addGap(1)
 		 			.addComponent(textField_tabelleRaum, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
 		 			.addGap(1)
-		 			.addComponent(textField_tabelleBlockVon, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
+		 			.addComponent(textField_tabelleBlockVon, GroupLayout.DEFAULT_SIZE, 154, Short.MAX_VALUE)
 		 			.addGap(1)
-		 			.addComponent(textField_tabelleBlockBis, GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-		 			.addGap(20))
+		 			.addComponent(textField_tabelleBlockBis, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE)
+		 			.addGap(1)
+		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+		 			.addGap(3))
 		 );
 		 gl_panel.setVerticalGroup(
-		 	gl_panel.createParallelGroup(Alignment.TRAILING)
+		 	gl_panel.createParallelGroup(Alignment.LEADING)
 		 		.addComponent(textField_tabelleNN, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 		 		.addComponent(textField_tabelleVN, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 		 		.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
@@ -161,6 +166,10 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		 			.addComponent(textField_tabelleRaum, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
 		 		.addComponent(textField_tabelleBlockVon, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 		 		.addComponent(textField_tabelleBlockBis, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+		 		.addGroup(gl_panel.createSequentialGroup()
+		 			.addGap(1)
+		 			.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 19, Short.MAX_VALUE)
+		 			.addGap(1))
 		 );
 		 panel.setLayout(gl_panel);
 		 
@@ -198,6 +207,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 			this.setTabelleFilterListener(new TabelleFilterListener());
 			this.setLoeschenListener(new AnsprLoeschenListener());
 			this.setBearbeitenListener(new AnsprBearbeitenListener());
+			button_aktualisieren.addActionListener(this);
 			updateTable();
 	}
 	public void setDatenAnspr(Object[][] daten){
@@ -321,5 +331,11 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame {
 		daten.add(this.textField_tabelleBlockVon.getText());
 		daten.add(this.textField_tabelleBlockBis.getText());
 	    return daten;
+	}
+	public void actionPerformed(ActionEvent evt) {
+		Object src = evt.getSource();
+		   if (src == button_aktualisieren) {
+			   filter();
+			}
 	}
 }

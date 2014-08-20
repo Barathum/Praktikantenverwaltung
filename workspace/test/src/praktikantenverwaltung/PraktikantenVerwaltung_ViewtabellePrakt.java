@@ -42,7 +42,7 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
-public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
+public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements ActionListener{
 
 	/**
 	 * erstellen der Fields
@@ -73,6 +73,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 	private JTextField textFieldEndPrakt;
 	private JTextField textFieldAnmerkPrakt;
 	private JTextField textFieldEditPrakt;
+	private JButton button_aktualisieren;
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
 		this._model = new PraktikantenVerwaltung_Modell();
@@ -114,35 +115,43 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		
 		textFieldEditPrakt = new JTextField();
 		textFieldEditPrakt.setColumns(10);
+		
+		button_aktualisieren = new JButton("");
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addComponent(textFieldNNPrakt, GroupLayout.PREFERRED_SIZE, 179, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldNNPrakt, GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldVNPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldVNPrakt, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldStatusPrakt, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldStatusPrakt, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldStartPrakt, GroupLayout.PREFERRED_SIZE, 177, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldStartPrakt, GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldEndPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldEndPrakt, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldAnmerkPrakt, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE)
+					.addComponent(textFieldAnmerkPrakt, GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
 					.addGap(1)
-					.addComponent(textFieldEditPrakt, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(14, Short.MAX_VALUE))
+					.addComponent(textFieldEditPrakt, GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+					.addGap(1)
+					.addComponent(button_aktualisieren, GroupLayout.PREFERRED_SIZE, 34, Short.MAX_VALUE)
+					.addGap(3))
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 					.addComponent(textFieldNNPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-					.addComponent(textFieldVNPrakt, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE))
+					.addComponent(textFieldVNPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
 				.addComponent(textFieldStatusPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 				.addComponent(textFieldStartPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 				.addComponent(textFieldEndPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
 				.addComponent(textFieldAnmerkPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-				.addComponent(textFieldEditPrakt, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addComponent(textFieldEditPrakt, GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGap(1)
+					.addComponent(button_aktualisieren, GroupLayout.DEFAULT_SIZE, 30, Short.MAX_VALUE)
+					.addGap(1))
 		);
 		panel.setLayout(gl_panel);
 		
@@ -184,6 +193,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		
 		this.setTabelleFilterListener(new TabelleFilterListener());
 		this.setLoeschenListener(new PraktLoeschenListener());
+		button_aktualisieren.addActionListener(this);
 		updateTablePrakt();
 	}
 	private void setDatenPrakt(Object[][] daten){
@@ -245,7 +255,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		public void insertUpdate(DocumentEvent e) {
 			filterPrakt();
 		}
-	
+
 		@Override
 		public void removeUpdate(DocumentEvent e) {
 			filterPrakt();
@@ -272,5 +282,11 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame {
 		  daten.add(this.textFieldAnmerkPrakt.getText());
 		  daten.add(this.textFieldEditPrakt.getText());
 	      return daten;
+	}
+	public void actionPerformed(ActionEvent evt) {
+		Object src = evt.getSource();
+		   if (src == button_aktualisieren) {
+			   filterPrakt();
+			}
 	}
 }

@@ -142,20 +142,24 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JXDatePicker datePicker_Antwortfrist;
 	private JTextArea textArea_anmerkprakt;
 	private JCheckBox chckbxDatenVollst;
+	private int updateOrInsert;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
 		  this._control = new PraktikantenVerwaltung_Control();
+		  updateOrInsert = 1;
 		  viewKontrukt();
 		  comboBox_autocomplete();
 	}
 	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrageintrag){
 		  this._model = new PraktikantenVerwaltung_Modell();
 		  this._control = new PraktikantenVerwaltung_Control();
+		  updateOrInsert = 2;
 		  viewKontrukt();
 		  comboBox_autocomplete();
+		  setInhaltPrakt(Praktikanteneintrageintrag);
 	}
-		  private void viewKontrukt(){
+	private void viewKontrukt(){
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
@@ -1229,8 +1233,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	        try {
 				datestart = sdfToDate.parse("01.01.1995");
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				datestart = new Date();
 			}
 
 			datePicker_gb.setDate(datestart);
@@ -1516,7 +1519,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					setAnspr1Id("0");
 			}
 			   id = getAnspr1ID();
-				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+				daten = getAnsprDaten(id.toString());
 				setInhaltAnspr1(daten);
 		}
 		}
@@ -1546,7 +1549,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					setAnspr2Id("0");
 			}
 			   id = getAnspr2ID();
-				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+				daten = getAnsprDaten(id.toString());
 				setInhaltAnspr2(daten);
 		}
 		}
@@ -1576,10 +1579,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					setAnspr3Id("0");
 			}
 			   id = getAnspr3ID();
-				daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+			   daten = getAnsprDaten(id.toString());
 				setInhaltAnspr3(daten);
 		}
 		}
+	   }
+	   public ArrayList<ArrayList<String>> getAnsprDaten(String id){
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+		   return daten;
 	   }
 	   
 	   
@@ -1690,10 +1698,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    *
 	    */
 	   class PraktSpeichernListener implements ActionListener{ 
-		   public void actionPerformed(ActionEvent e) { 
+
+		public void actionPerformed(ActionEvent e) { 
             ArrayList<String> datensatz = getInhaltPrakt(); 
             ArrayList<ArrayList<String>> datensatzAnspr = getInhaltAnspr();
-            int updateOrInsert = 0;
             int updateOrInsertAnspr1 = 0;
             int updateOrInsertAnspr2 = 0;
             int updateOrInsertAnspr3 = 0;
@@ -1719,10 +1727,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 							updateOrInsertAnspr3 = 1;
 					}
             }
-            if (datensatz.get(0).equals("") || datensatz.get(0) == null) {
-					updateOrInsert = 1;
-				}
-            
             String sql;
             sql = schreibeEintragAnsprsql(updateOrInsertAnspr1, datensatzAnspr.get(0));
             _model.insertUpdateDeleteTable(sql);
@@ -2062,6 +2066,63 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				sql = "";
 			}
 			return sql;
+		}
+		public void setInhaltPrakt(ArrayList<ArrayList<String>> daten){
+			SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+			textField_id.setText(daten.get(0).get(0));
+			comboBox_anrede.setSelectedItem(daten.get(0).get(1));
+			textField_nn.setText(daten.get(0).get(2));
+			textField_vn.setText(daten.get(0).get(3));
+			try {
+				datePicker_gb.setDate(sdfToDate.parse(daten.get(0).get(4)));
+			} catch (ParseException e) {
+				datePicker_gb.setDate(new Date());
+			}
+			comboBox_geburtsort.setSelectedItem(daten.get(0).get(5));
+			comboBox_str.setSelectedItem(daten.get(0).get(6));
+			textField_plz.setText(daten.get(0).get(7));
+			txtDeutschland.setText(daten.get(0).get(8));
+			textField_tele.setText(daten.get(0).get(9));
+			textField_mail.setText(daten.get(0).get(10));
+			textField_mobil.setText(daten.get(0).get(11));
+			textField_haus.setText(daten.get(0).get(12));
+			comboBox_wohn.setSelectedItem(daten.get(0).get(13));
+			textField_gnn.setText(daten.get(0).get(14));
+			textField_gvn.setText(daten.get(0).get(15));
+			comboBox_schule.setSelectedItem(daten.get(0).get(16));
+			comboBox_schulform.setSelectedItem(daten.get(0).get(17));
+			comboBox_partners.setSelectedItem(daten.get(0).get(18));
+			textArea_anmerkschule.setText(daten.get(0).get(19));
+			comboBox_miki.setSelectedItem(daten.get(0).get(20));
+			comboBox_grad.setSelectedItem(daten.get(0).get(21));
+			textArea_anmerkperson.setText(daten.get(0).get(22));
+			try {
+				datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
+			} catch (ParseException e) {
+				datePicker_startdatum.setDate(new Date());
+			}
+			try {
+				datePicker_enddatum.setDate(sdfToDate.parse(daten.get(0).get(24)));
+			} catch (ParseException e) {
+				datePicker_enddatum.setDate(new Date());
+			}
+			comboBox_status.setSelectedItem(daten.get(0).get(25));
+			textArea_anmerkprakt.setText(daten.get(0).get(26));
+			setInhaltAnspr1(getAnsprDaten(daten.get(0).get(27)));
+			setInhaltAnspr2(getAnsprDaten(daten.get(0).get(28)));
+			setInhaltAnspr3(getAnsprDaten(daten.get(0).get(29)));
+			textArea_konsole.setText(daten.get(0).get(30));
+			if (daten.get(0).get(32).equals("1")) {
+				chckbxDatenVollst.setSelected(true);
+			}else {
+				chckbxDatenVollst.setSelected(false);
+			}
+			try {
+				datePicker_Antwortfrist.setDate(sdfToDate.parse(daten.get(0).get(33)));
+			} catch (ParseException e) {
+				datePicker_Antwortfrist.setDate(new Date());
+			}
+
 		}
 		@Override
 		public void actionPerformed(ActionEvent evt) {

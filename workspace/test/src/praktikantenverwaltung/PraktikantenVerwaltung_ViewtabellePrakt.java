@@ -247,17 +247,22 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
             ArrayList<String> liste = new ArrayList<String>();
             String nn = (String) table.getValueAt(markierteReiheNR, 0);
             String vn = (String) table.getValueAt(markierteReiheNR, 1);
-            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+            String status = (String) table.getValueAt(markierteReiheNR, 2);
             liste.add(nn);
             liste.add(vn);
-            liste.add(tele);
+            liste.add(status);
             String sql;
-//            sql = getEintragAnspr(liste);
-//            daten = _model.getData(sql);
+            sql = getEintragPrakt(liste);
+            daten = _model.getData(sql);
             PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
       	   _viewprakt.setVisible(true);
          } 
 	   }
+	public String getEintragPrakt(ArrayList<String> liste){
+		String sql;
+		sql = "SELECT * from PRAKTIKANTEN where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND STATUS ='" + liste.get(2) + "';";
+		return sql;
+	}
 	private JTable getTable(){
 		return table_prakt;
 	}

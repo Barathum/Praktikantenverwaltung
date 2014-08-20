@@ -42,6 +42,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
+import praktikantenverwaltung.PraktikantenVerwaltung_ViewTabelleAnspr.AnsprBearbeitenListener;
+
 public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements ActionListener{
 
 	/**
@@ -193,6 +195,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		
 		this.setTabelleFilterListener(new TabelleFilterListener());
 		this.setLoeschenListener(new PraktLoeschenListener());
+		this.setBearbeitenListener(new PraktBearbeitenListener());
 		button_aktualisieren.addActionListener(this);
 		updateTablePrakt();
 	}
@@ -236,6 +239,25 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	        filterPrakt();
 	     } 
 	   }
+	class PraktBearbeitenListener implements ActionListener{ 
+        public void actionPerformed(ActionEvent e) { 
+     	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+     	   JTable table = getTable();
+            int markierteReiheNR =  table.getSelectedRow();
+            ArrayList<String> liste = new ArrayList<String>();
+            String nn = (String) table.getValueAt(markierteReiheNR, 0);
+            String vn = (String) table.getValueAt(markierteReiheNR, 1);
+            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+            liste.add(nn);
+            liste.add(vn);
+            liste.add(tele);
+            String sql;
+//            sql = getEintragAnspr(liste);
+//            daten = _model.getData(sql);
+            PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+      	   _viewprakt.setVisible(true);
+         } 
+	   }
 	private JTable getTable(){
 		return table_prakt;
 	}
@@ -243,6 +265,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		String sql;
 		sql = "DELETE from PRAKTIKANTEN where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND STATUS ='" + liste.get(2) + "';";
 		return sql;
+	}
+	private void setBearbeitenListener(ActionListener l){
+		this.btn_praktbearbeiten.addActionListener(l);
 	}
 	class TabelleFilterListener implements DocumentListener{ 
 	

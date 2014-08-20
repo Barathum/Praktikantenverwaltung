@@ -390,13 +390,13 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) neueAnsprID.toString());
-			liste.add((String) textField_NameAnsprBearb.getText());
-			liste.add((String) textField_VornameAnsprBearb.getText());
-			liste.add((String) textField_TelAnsprBearb.getText());
-			liste.add((String) textField_MailAnsprBearb.getText());
-			liste.add((String) textField_AbteilAnsprBearb.getText());
-			liste.add((String) textField_RaumAnsprBearb.getText());
-			liste.add((String) textArea_AnmerkOrtBearb.getText());
+			if (textField_NameAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_NameAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textField_VornameAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_VornameAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textField_TelAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_TelAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textField_MailAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_MailAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textField_AbteilAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_AbteilAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textField_RaumAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_RaumAnsprBearb.getText().trim());}else{liste.add("");}
+			if (textArea_AnmerkOrtBearb.getText().trim().length() > 0){liste.add((String) textArea_AnmerkOrtBearb.getText().trim());}else{liste.add("");}
 			liste.add((String) textArea_InfoAnspr.getText());
 			if (sdfToDate.format(datePicker_blockierenVon.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenVon.getDate()).trim());}else{liste.add("");}
 			if (sdfToDate.format(datePicker_blockierenBis.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenBis.getDate()).trim());}else{liste.add("");}

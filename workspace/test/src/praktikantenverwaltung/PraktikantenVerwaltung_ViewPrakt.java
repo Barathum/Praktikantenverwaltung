@@ -1410,13 +1410,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
 			ArrayList<String> eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr1.toString());
-			eintrag.add((String) comboBox_NameAnsprWoch1.getSelectedItem());
-			eintrag.add((String) textField_VornameAnsprWoch1.getText());
-			eintrag.add((String) textField_TelAnsprWoch1.getText());
-			eintrag.add((String) textField_MailAnsprWoch1.getText());
-			eintrag.add((String) textField_AbteilAnsprWoch1.getText());
-			eintrag.add((String) textField_RaumAnsprWoch1.getText());
-			eintrag.add((String) textArea_EinsatzortAnsprWoche1.getText());
+			if (comboBox_NameAnsprWoch1.getSelectedItem().toString().trim().length() > 0){eintrag.add((String) comboBox_NameAnsprWoch1.getSelectedItem().toString().trim());}else{eintrag.add("");}
+			if (textField_VornameAnsprWoch1.getText().trim().length() > 0){eintrag.add((String) textField_VornameAnsprWoch1.getText().trim());}else{eintrag.add("");}
+			if (textField_TelAnsprWoch1.getText().trim().length() > 0){eintrag.add((String) textField_TelAnsprWoch1.getText().trim());}else{eintrag.add("");}
+			if (textField_MailAnsprWoch1.getText().trim().length() > 0){eintrag.add((String) textField_MailAnsprWoch1.getText().trim());}else{eintrag.add("");}
+			if (textField_AbteilAnsprWoch1.getText().trim().length() > 0){eintrag.add((String) textField_AbteilAnsprWoch1.getText().trim());}else{eintrag.add("");}
+			if (textField_RaumAnsprWoch1.getText().trim().length() > 0){eintrag.add((String) textField_RaumAnsprWoch1.getText().trim());}else{eintrag.add("");}
+			if (textArea_EinsatzortAnsprWoche1.getText().trim().length() > 0){eintrag.add((String) textArea_EinsatzortAnsprWoche1.getText().trim());}else{eintrag.add("");}
 			eintrag.add("");
 			eintrag.add("");
 			eintrag.add("");
@@ -1425,13 +1425,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			liste.add(eintrag);
 			eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr2.toString());
-			eintrag.add((String) comboBox_NameAnsprWoch2.getSelectedItem());
-			eintrag.add((String) textField_VornameAnsprWoch2.getText());
-			eintrag.add((String) textField_TelAnsprWoch2.getText());
-			eintrag.add((String) textField_MailAnsprWoch2.getText());
-			eintrag.add((String) textField_AbteilAnsprWoch2.getText());
-			eintrag.add((String) textField_RaumAnsprWoch2.getText());
-			eintrag.add((String) textArea_EinsatzortAnsprWoche2.getText());
+			if (comboBox_NameAnsprWoch2.getSelectedItem().toString().trim().length() > 0){eintrag.add((String) comboBox_NameAnsprWoch2.getSelectedItem().toString().trim());}else{eintrag.add("");}
+			if (textField_VornameAnsprWoch2.getText().trim().length() > 0){eintrag.add((String) textField_VornameAnsprWoch2.getText().trim());}else{eintrag.add("");}
+			if (textField_TelAnsprWoch2.getText().trim().length() > 0){eintrag.add((String) textField_TelAnsprWoch2.getText().trim());}else{eintrag.add("");}
+			if (textField_MailAnsprWoch2.getText().trim().length() > 0){eintrag.add((String) textField_MailAnsprWoch2.getText().trim());}else{eintrag.add("");}
+			if (textField_AbteilAnsprWoch2.getText().trim().length() > 0){eintrag.add((String) textField_AbteilAnsprWoch2.getText().trim());}else{eintrag.add("");}
+			if (textField_RaumAnsprWoch2.getText().trim().length() > 0){eintrag.add((String) textField_RaumAnsprWoch2.getText().trim());}else{eintrag.add("");}
+			if (textArea_EinsatzortAnsprWoche2.getText().trim().length() > 0){eintrag.add((String) textArea_EinsatzortAnsprWoche2.getText().trim());}else{eintrag.add("");}
 			eintrag.add("");
 			eintrag.add("");
 			eintrag.add("");
@@ -1440,13 +1440,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			liste.add(eintrag);
 			eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr3.toString());
-			eintrag.add((String) comboBox_NameAnsprWoch3.getSelectedItem());
-			eintrag.add((String) textField_VornameAnsprWoch3.getText());
-			eintrag.add((String) textField_TelAnsprWoch3.getText());
-			eintrag.add((String) textField_MailAnsprWoch3.getText());
-			eintrag.add((String) textField_AbteilAnsprWoch3.getText());
-			eintrag.add((String) textField_RaumAnsprWoch3.getText());
-			eintrag.add((String) textArea_EinsatzortAnsprWoche3.getText());
+			if (comboBox_NameAnsprWoch3.getSelectedItem().toString().trim().length() > 0){eintrag.add((String) comboBox_NameAnsprWoch3.getSelectedItem().toString().trim());}else{eintrag.add("");}
+			if (textField_VornameAnsprWoch3.getText().trim().length() > 0){eintrag.add((String) textField_VornameAnsprWoch3.getText().trim());}else{eintrag.add("");}
+			if (textField_TelAnsprWoch3.getText().trim().length() > 0){eintrag.add((String) textField_TelAnsprWoch3.getText().trim());}else{eintrag.add("");}
+			if (textField_MailAnsprWoch3.getText().trim().length() > 0){eintrag.add((String) textField_MailAnsprWoch3.getText().trim());}else{eintrag.add("");}
+			if (textField_AbteilAnsprWoch3.getText().trim().length() > 0){eintrag.add((String) textField_AbteilAnsprWoch3.getText().trim());}else{eintrag.add("");}
+			if (textField_RaumAnsprWoch3.getText().trim().length() > 0){eintrag.add((String) textField_RaumAnsprWoch3.getText().trim());}else{eintrag.add("");}
+			if (textArea_EinsatzortAnsprWoche3.getText().trim().length() > 0){eintrag.add((String) textArea_EinsatzortAnsprWoche3.getText().trim());}else{eintrag.add("");}
 			eintrag.add("");
 			eintrag.add("");
 			eintrag.add("");

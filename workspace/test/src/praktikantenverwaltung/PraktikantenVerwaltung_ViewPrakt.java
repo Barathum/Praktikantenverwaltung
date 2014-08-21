@@ -147,17 +147,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
 		  this._control = new PraktikantenVerwaltung_Control();
-		  updateOrInsert = 1;
-		  viewKontrukt();
-		  comboBox_autocomplete();
-	}
-	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrageintrag){
-		  this._model = new PraktikantenVerwaltung_Modell();
-		  this._control = new PraktikantenVerwaltung_Control();
 		  updateOrInsert = 2;
 		  viewKontrukt();
 		  comboBox_autocomplete();
-		  setInhaltPrakt(Praktikanteneintrageintrag);
+	}
+	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrag){
+		  this._model = new PraktikantenVerwaltung_Modell();
+		  this._control = new PraktikantenVerwaltung_Control();
+		  updateOrInsert = 1;
+		  viewKontrukt();
+		  comboBox_autocomplete();
+		  setInhaltPrakt(Praktikanteneintrag);
 	}
 	private void viewKontrukt(){
 		/**
@@ -2004,10 +2004,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
-			if (i == 0) {
+			if (i == 1) {
 				String info = "Daten geupdatet am " + zeit;
 				setInfoPrakt(info);
 				liste.set(30, info);
+				neuePraktID = liste.get(0);
 				sql = "UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
 						"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
 						"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
@@ -2019,7 +2020,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 //				System.out.println("update");
 			}else if (i == 4) {
 				sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
-			}else{
+			}else if (i == 2){
 				hoechstePraktID = _control.getHoechstePraktID();
 				hoechstePraktID++;
 				neuePraktID = "SP" + hoechstePraktID.toString();
@@ -2034,6 +2035,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		                   +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
 		                   +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"','"+ liste.get(32) +"','"+ liste.get(33) +"');";
 //				System.out.println("insert");
+			} else{
+				sql = "";
 			}
 			return sql;
 		}

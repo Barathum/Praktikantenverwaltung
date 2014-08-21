@@ -14,9 +14,11 @@ import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.wml.ContentAccessor;
 import org.docx4j.wml.Text;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class doctest {
 	private static WordprocessingMLPackage getTemplate(String name) throws Docx4JException, FileNotFoundException {
-		WordprocessingMLPackage template = WordprocessingMLPackage.load(new java.io.File(name));
+		WordprocessingMLPackage template = WordprocessingMLPackage.load(new FileInputStream(new File(name)));
 		return template;
 	}
 	private static List<Object> getAllElementFromObject(Object obj, Class<?> toSearch) {
@@ -39,8 +41,11 @@ public class doctest {
  
 		for (Object text : texts) {
 			Text textElement = (Text) text;
-			if (textElement.getValue().equals(placeholder)) {
-				textElement.setValue(name);
+			String textElementString = textElement.getValue();
+			if (textElement.getValue().contains(placeholder)) {
+				textElementString = textElementString.replace(placeholder, name);
+				textElement.setValue(textElementString);
+				System.out.println(textElement.getValue());
 			}
 		}
 	}
@@ -50,10 +55,25 @@ public class doctest {
 	}
 	
 	public static void main(String[] args) {
-        String placeholder = "SJ_EX1";
-        String toAdd = "Hi";
+		ArrayList<String> placeholders = new ArrayList<String>();
+		String placeholderanrede = "<<Anrede>>";
+		String placeholdernn = "<<Nachname>>";
+		String placeholdervn = "<<Vorname>>";
+//		placeholders.add(">><<");
+		placeholders.add(placeholderanrede);
+		placeholders.add(placeholdernn);
+		placeholders.add(placeholdervn);
+		
+		ArrayList<String> toAdds =  new ArrayList<String>();
+		String toAddanrede = "Herr";
+        String toAddnn = "Wiechers";
+        String toAddvn = "Fabian";
+//        toAdds.add("Test");
+        toAdds.add(toAddanrede);
+        toAdds.add(toAddnn);
+        toAdds.add(toAddvn);
         String template = "src/bla/template.docx";
-        String target = "test.docx";
+        String target = "Anschreiben.docx";
         WordprocessingMLPackage document = null;
         try {
 			document = getTemplate(template);
@@ -64,7 +84,9 @@ public class doctest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        replacePlaceholder(document, toAdd, placeholder);
+        for (int i = 0; i < placeholders.size(); i++) {
+        	 replacePlaceholder(document, toAdds.get(i), placeholders.get(i));
+		}
         try {
 			writeDocxToStream(document, target);
 		} catch (IOException e) {

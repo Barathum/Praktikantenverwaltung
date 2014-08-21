@@ -267,24 +267,26 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
             int markierteReiheNR =  table.getSelectedRow();
             ArrayList<String> liste = new ArrayList<String>();
-            String nn = (String) table.getValueAt(markierteReiheNR, 0);
-            String vn = (String) table.getValueAt(markierteReiheNR, 1);
-            String tele = (String) table.getValueAt(markierteReiheNR, 2);
-            liste.add(nn);
-            liste.add(vn);
-            liste.add(tele);
-            String sql;
-            sql = "SELECT ID FROM ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
-            daten = _model.getData(sql);
-            sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
-            _model.insertUpdateDeleteTable(sql);
-            sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
-            _model.insertUpdateDeleteTable(sql);
-            sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
-            _model.insertUpdateDeleteTable(sql);
-            sql = loescheEintragAnspr(liste);
-            _model.insertUpdateDeleteTable(sql);
-            filter();
+            if(markierteReiheNR >= 0){
+	            String nn = (String) table.getValueAt(markierteReiheNR, 0);
+	            String vn = (String) table.getValueAt(markierteReiheNR, 1);
+	            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+	            liste.add(nn);
+	            liste.add(vn);
+	            liste.add(tele);
+	            String sql;
+	            sql = "SELECT ID FROM ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
+	            daten = _model.getData(sql);
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
+	            _model.insertUpdateDeleteTable(sql);
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
+	            _model.insertUpdateDeleteTable(sql);
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
+	            _model.insertUpdateDeleteTable(sql);
+	            sql = loescheEintragAnspr(liste);
+	            _model.insertUpdateDeleteTable(sql);
+	            filter();
+            }
          } 
 	   }
 	class AnsprBearbeitenListener implements ActionListener{ 
@@ -293,17 +295,19 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
      	   JTable table = getTable();
             int markierteReiheNR =  table.getSelectedRow();
             ArrayList<String> liste = new ArrayList<String>();
-            String nn = (String) table.getValueAt(markierteReiheNR, 0);
-            String vn = (String) table.getValueAt(markierteReiheNR, 1);
-            String tele = (String) table.getValueAt(markierteReiheNR, 2);
-            liste.add(nn);
-            liste.add(vn);
-            liste.add(tele);
-            String sql;
-            sql = getEintragAnspr(liste);
-            daten = _model.getData(sql);
-            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
-      	   _viewanspr.setVisible(true);
+            if(markierteReiheNR >= 0){
+	            String nn = (String) table.getValueAt(markierteReiheNR, 0);
+	            String vn = (String) table.getValueAt(markierteReiheNR, 1);
+	            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+	            liste.add(nn);
+	            liste.add(vn);
+	            liste.add(tele);
+	            String sql;
+	            sql = getEintragAnspr(liste);
+	            daten = _model.getData(sql);
+	            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+	      	   _viewanspr.setVisible(true);
+            }
          } 
 	   }
 	private JTable getTable(){

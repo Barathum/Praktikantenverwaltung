@@ -227,16 +227,18 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	 	   JTable table = getTable();
 	        int markierteReiheNR =  table.getSelectedRow();
 	        ArrayList<String> liste = new ArrayList<String>();
-	        String nn = (String) table.getValueAt(markierteReiheNR, 0);
-	        String vn = (String) table.getValueAt(markierteReiheNR, 1);
-	        String status = (String) table.getValueAt(markierteReiheNR, 2);
-	        liste.add(nn);
-	        liste.add(vn);
-	        liste.add(status);
-	        String sql;
-	        sql = loescheEintragPrakt(liste);
-	        _model.insertUpdateDeleteTable(sql);
-	        filterPrakt();
+	        if(markierteReiheNR >= 0){
+		        String nn = (String) table.getValueAt(markierteReiheNR, 0);
+		        String vn = (String) table.getValueAt(markierteReiheNR, 1);
+		        String status = (String) table.getValueAt(markierteReiheNR, 2);
+		        liste.add(nn);
+		        liste.add(vn);
+		        liste.add(status);
+		        String sql;
+		        sql = loescheEintragPrakt(liste);
+		        _model.insertUpdateDeleteTable(sql);
+		        filterPrakt();
+	        }
 	     } 
 	   }
 	class PraktBearbeitenListener implements ActionListener{ 
@@ -245,17 +247,19 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
      	   JTable table = getTable();
             int markierteReiheNR =  table.getSelectedRow();
             ArrayList<String> liste = new ArrayList<String>();
-            String nn = (String) table.getValueAt(markierteReiheNR, 0);
-            String vn = (String) table.getValueAt(markierteReiheNR, 1);
-            String status = (String) table.getValueAt(markierteReiheNR, 2);
-            liste.add(nn);
-            liste.add(vn);
-            liste.add(status);
-            String sql;
-            sql = getEintragPrakt(liste);
-            daten = _model.getData(sql);
-            PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
-      	   _viewprakt.setVisible(true);
+            if(markierteReiheNR >= 0){
+            	String nn = (String) table.getValueAt(markierteReiheNR, 0);
+                String vn = (String) table.getValueAt(markierteReiheNR, 1);
+                String status = (String) table.getValueAt(markierteReiheNR, 2);
+                liste.add(nn);
+                liste.add(vn);
+                liste.add(status);
+                String sql;
+                sql = getEintragPrakt(liste);
+                daten = _model.getData(sql);
+                PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+          	   _viewprakt.setVisible(true);
+            }
          } 
 	   }
 	public String getEintragPrakt(ArrayList<String> liste){

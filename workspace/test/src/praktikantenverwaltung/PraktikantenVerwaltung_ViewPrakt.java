@@ -40,6 +40,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
+import praktikantenverwaltung.PraktikantenVerwaltung_Control.SchulformAusfuellListener;
+
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
@@ -509,12 +511,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			        } ;
 			DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter );
 			datePicker_startdatum = new JXDatePicker();
-			datePicker_startdatum.setDate(Calendar.getInstance().getTime());
+			datePicker_startdatum.setDate(null);
 			datePicker_startdatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 			datePicker_startdatum.getEditor().setFormatterFactory(factory);
 
 			datePicker_enddatum = new JXDatePicker();
-			datePicker_enddatum.setDate(Calendar.getInstance().getTime());
+			datePicker_enddatum.setDate(null);
 			datePicker_enddatum.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 			datePicker_enddatum.getEditor().setFormatterFactory(factory);
 			
@@ -758,7 +760,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JScrollPane scrollPane_2 = new JScrollPane();
 			
 			datePicker_Antwortfrist = new JXDatePicker();
-			datePicker_Antwortfrist.setDate(Calendar.getInstance().getTime());
+			datePicker_Antwortfrist.setDate(null);
 			datePicker_Antwortfrist.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 			datePicker_Antwortfrist.getEditor().setFormatterFactory(factory);
 			
@@ -1225,18 +1227,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			textField_vn.setColumns(10);
 			
 			datePicker_gb = new JXDatePicker();
-			datePicker_gb.setDate(Calendar.getInstance().getTime());
+			datePicker_gb.setDate(null);
 			datePicker_gb.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 			
-			SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
-			Date datestart = new Date();
-	        try {
-				datestart = sdfToDate.parse("01.01.1995");
-			} catch (ParseException e) {
-				datestart = new Date();
-			}
-
-			datePicker_gb.setDate(datestart);
 			datePicker_gb.getEditor().setFormatterFactory(factory);
 			
 			String comboBoxListe_anrede[] = {"Herr", "Frau"};
@@ -1327,12 +1320,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			this.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
 			this.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
 			this.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
+			this.setSchulformAusfuellListener(new SchulformAusfuellListener());
 			button_editAnspr1.addActionListener(this);
 		    button_editAnspr2.addActionListener(this);
 		    button_editAnspr3.addActionListener(this);
 		    button_woche1.addActionListener(this);
 		    button_woche2.addActionListener(this);
 		    button_woche3.addActionListener(this);
+		    comboBox_miki.addActionListener(this);
 	}
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
@@ -1358,6 +1353,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public void setAnsprAusfuellListener3(ActionListener l){
 		this.comboBox_NameAnsprWoch3.addActionListener(l);
 	}
+	public void setSchulformAusfuellListener(ActionListener l){
+		this.comboBox_schule.addActionListener(l);
+	}
 	public ArrayList<String> getInhaltPrakt(){
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
@@ -1365,7 +1363,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			if (comboBox_anrede.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_anrede.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (textField_nn.getText().trim().length() > 0){liste.add((String) textField_nn.getText().trim());}else{liste.add("");}
 			if (textField_vn.getText().trim().length() > 0){liste.add((String) textField_vn.getText().trim());}else{liste.add("");}
-			if (sdfToDate.format(datePicker_gb.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_gb.getDate()).trim());}else{liste.add("");}
+			try {
+				if (sdfToDate.format(datePicker_gb.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_gb.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
 			if (comboBox_geburtsort.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_geburtsort.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (comboBox_str.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_str.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (textField_plz.getText().trim().length() > 0){liste.add((String) textField_plz.getText().trim());}else{liste.add("");}
@@ -1384,8 +1386,16 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			if (comboBox_miki.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_miki.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (comboBox_grad.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_grad.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (textArea_anmerkperson.getText().trim().length() > 0){liste.add((String) textArea_anmerkperson.getText().trim());}else{liste.add("");}
-			if (sdfToDate.format(datePicker_startdatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()).trim());}else{liste.add("");}
-			if (sdfToDate.format(datePicker_enddatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()).trim());}else{liste.add("");}
+			try{
+				if (sdfToDate.format(datePicker_startdatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
+			try{
+				if (sdfToDate.format(datePicker_enddatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_enddatum.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
 			if (comboBox_status.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_status.getSelectedItem().toString().trim());}else{liste.add("");}
 			if (textArea_anmerkprakt.getText().trim().length() > 0){liste.add((String) textArea_anmerkprakt.getText().trim());}else{liste.add("");}
 			liste.add((String) idAnspr1.toString());
@@ -1398,8 +1408,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}else {
 				liste.add("0");
 			}
-			if (sdfToDate.format(datePicker_Antwortfrist.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_Antwortfrist.getDate()).trim());}else{liste.add("");}
-		return liste;
+			try{
+				if (sdfToDate.format(datePicker_Antwortfrist.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_Antwortfrist.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
+			return liste;
 	}
 	/**
 	 * Gibt die Inhalte der Ansprechpartner zurück
@@ -1613,6 +1627,27 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			ArrayList<String>  s = new ArrayList<String> ();
 			s.add((String) this.comboBox_NameAnsprWoch3.getSelectedItem());
 			return s;
+		}
+		class SchulformAusfuellListener implements ActionListener{ 
+			   public void actionPerformed(ActionEvent e) { 
+				   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+				   ArrayList<String> sname = new ArrayList<String>();
+	        	   sname = getNameSchule();
+	       			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
+	       			setInhaltSchulform(daten);
+	            }
+		   }
+		public ArrayList<String>  getNameSchule(){
+			ArrayList<String> s = new ArrayList<String>();
+			s.add((String) this.comboBox_schule.getSelectedItem());
+			return s;
+		}
+		public void setInhaltSchulform(ArrayList<ArrayList<String>> liste){
+			try {
+				comboBox_schulform.setSelectedItem(liste.get(liste.size() - 1).get(0));
+			} catch (Exception e) {
+				comboBox_schulform.setSelectedItem("");
+			}
 		}
 		/**
 		 * Setzt den Inhalt der Ansprechpartner1 Felder entsprechend der Liste
@@ -2079,7 +2114,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			try {
 				datePicker_gb.setDate(sdfToDate.parse(daten.get(0).get(4)));
 			} catch (ParseException e) {
-				datePicker_gb.setDate(new Date());
+				datePicker_gb.setDate(null);
 			}
 			comboBox_geburtsort.setSelectedItem(daten.get(0).get(5));
 			comboBox_str.setSelectedItem(daten.get(0).get(6));
@@ -2102,12 +2137,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			try {
 				datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
 			} catch (ParseException e) {
-				datePicker_startdatum.setDate(new Date());
+				datePicker_startdatum.setDate(null);
 			}
 			try {
 				datePicker_enddatum.setDate(sdfToDate.parse(daten.get(0).get(24)));
 			} catch (ParseException e) {
-				datePicker_enddatum.setDate(new Date());
+				datePicker_enddatum.setDate(null);
 			}
 			comboBox_status.setSelectedItem(daten.get(0).get(25));
 			textArea_anmerkprakt.setText(daten.get(0).get(26));
@@ -2123,7 +2158,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			try {
 				datePicker_Antwortfrist.setDate(sdfToDate.parse(daten.get(0).get(33)));
 			} catch (ParseException e) {
-				datePicker_Antwortfrist.setDate(new Date());
+				datePicker_Antwortfrist.setDate(null);
 			}
 
 		}
@@ -2167,6 +2202,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textArea_EinsatzortAnsprWoche3.setEditable(true);
 					ansprbearb3gedrueckt = true;
 					button_editAnspr3.setEnabled(false);
+				} else if (src == comboBox_miki) {
+					if (comboBox_miki.getSelectedItem() == "Nein") {
+						comboBox_grad.setSelectedItem("-");
+						comboBox_grad.setEnabled(false);
+					}else{
+						comboBox_grad.setEnabled(true);
+					}
 				} else if (src == comboBox_miki) {
 					if (comboBox_miki.getSelectedItem() == "Nein") {
 						comboBox_grad.setSelectedItem("-");

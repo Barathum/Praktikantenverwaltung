@@ -67,6 +67,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private JButton btn_praktNachrichtSchreiben;
 	private PraktikantenVerwaltung_Modell _model;
 	private PraktikantenVerwaltung_Control _control;
+	private PlatzhalterReplacerUndDokumentWriter _replacer;
 	private JPanel panel;
 	private JTextField textFieldNNPrakt;
 	private JTextField textFieldVNPrakt;
@@ -80,6 +81,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
 		this._model = new PraktikantenVerwaltung_Modell();
 		this._control = new PraktikantenVerwaltung_Control();
+		this._replacer = new PlatzhalterReplacerUndDokumentWriter();
 		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -196,6 +198,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		this.setTabelleFilterListener(new TabelleFilterListener());
 		this.setLoeschenListener(new PraktLoeschenListener());
 		this.setBearbeitenListener(new PraktBearbeitenListener());
+		this.setNachrichtSendenListener(new NachrichtSendenListener());
 		button_aktualisieren.addActionListener(this);
 		updateTablePrakt();
 	}
@@ -278,6 +281,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private void setBearbeitenListener(ActionListener l){
 		this.btn_praktbearbeiten.addActionListener(l);
 	}
+	private void setNachrichtSendenListener(ActionListener l){
+		this.btn_praktNachrichtSchreiben.addActionListener(l);
+	}
 	class TabelleFilterListener implements DocumentListener{ 
 	
 		@Override
@@ -305,6 +311,63 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		   		+ "%' ORDER BY NN;");
 		   setDatenPrakt(_control.ArrayListtoArray(daten));
 		   updateTablePrakt();
+	}
+	class NachrichtSendenListener implements ActionListener{ 
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+	     	   JTable table = getTable();
+	            int markierteReiheNR =  table.getSelectedRow();
+	            ArrayList<String> liste = new ArrayList<String>();
+	            ArrayList<String> platzhalter = new ArrayList<String>();
+	            platzhalter.add("<<ID>>");
+	            platzhalter.add("<<Anrede>>");
+	            platzhalter.add("<<Nachname>>");
+	            platzhalter.add("<<Vorname>>");
+	            platzhalter.add("<<Geburtsdatum>>");
+	            platzhalter.add("<<Geburtsort>>");
+	            platzhalter.add("<<Straße>>");
+	            platzhalter.add("<<PLZ>>");
+	            platzhalter.add("<<Land>>");
+	            platzhalter.add("<<Telefon>>");
+	            platzhalter.add("<<Mail>>");
+	            platzhalter.add("<<Mobil>>");
+	            platzhalter.add("<<Hausnummer>>");
+	            platzhalter.add("<<Ort>>");
+	            platzhalter.add("<<VertreterNachname>>");
+	            platzhalter.add("<<VertreterVorname>>");
+	            platzhalter.add("<<Schule>>");
+	            platzhalter.add("<<Schulform>>");
+	            platzhalter.add("<<Partnerschule>>");
+	            platzhalter.add("<<AnmerkungenSchule>>");
+	            platzhalter.add("<<Miki>>");
+	            platzhalter.add("<<Miki-Grad>>");
+	            platzhalter.add("<<AnmerkungenPerson>>");
+	            platzhalter.add("<<Startdatum>>");
+	            platzhalter.add("<<Enddatum>>");
+	            platzhalter.add("<<Status>>");
+	            platzhalter.add("<<AnmerkungenPraktikum>>");
+	            platzhalter.add("<<Anspr1>>");
+	            platzhalter.add("<<Anspr2>>");
+	            platzhalter.add("<<Anspr3>>");
+	            platzhalter.add("<<Info>>");
+	            platzhalter.add("<<Edit>>");
+	            platzhalter.add("<<Unterlagenvollst>>");
+	            platzhalter.add("<<AntwortBis>>");
+	            if(markierteReiheNR >= 0){
+	            	String nn = (String) table.getValueAt(markierteReiheNR, 0);
+	                String vn = (String) table.getValueAt(markierteReiheNR, 1);
+	                String status = (String) table.getValueAt(markierteReiheNR, 2);
+	                liste.add(nn);
+	                liste.add(vn);
+	                liste.add(status);
+	                String sql;
+	                sql = getEintragPrakt(liste);
+	                daten = _model.getData(sql);
+	                _replacer.schreibeNeuesWordDokumentVonTemplate("template.docx", daten.get(0).get(2) + daten.get(0).get(3) + "-Anschreiben.docx",
+	                		platzhalter, daten.get(0));
+	            }
+		}
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();

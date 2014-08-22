@@ -158,12 +158,12 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		        } ;
 		DefaultFormatterFactory factory = new DefaultFormatterFactory(formatter );
 		datePicker_blockierenVon = new JXDatePicker();
-		datePicker_blockierenVon.setDate(Calendar.getInstance().getTime());
+		datePicker_blockierenVon.setDate(null);
 		datePicker_blockierenVon.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 		datePicker_blockierenVon.getEditor().setFormatterFactory(factory);
 
 		datePicker_blockierenBis = new JXDatePicker();
-		datePicker_blockierenBis.setDate(Calendar.getInstance().getTime());
+		datePicker_blockierenBis.setDate(null);
 		datePicker_blockierenBis.setFormats(new SimpleDateFormat("dd.MM.yyyy"));
 		datePicker_blockierenBis.getEditor().setFormatterFactory(factory);
 		
@@ -398,8 +398,16 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			if (textField_RaumAnsprBearb.getText().trim().length() > 0){liste.add((String) textField_RaumAnsprBearb.getText().trim());}else{liste.add("");}
 			if (textArea_AnmerkOrtBearb.getText().trim().length() > 0){liste.add((String) textArea_AnmerkOrtBearb.getText().trim());}else{liste.add("");}
 			liste.add((String) textArea_InfoAnspr.getText());
-			if (sdfToDate.format(datePicker_blockierenVon.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenVon.getDate()).trim());}else{liste.add("");}
-			if (sdfToDate.format(datePicker_blockierenBis.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenBis.getDate()).trim());}else{liste.add("");}
+			try{
+				if (sdfToDate.format(datePicker_blockierenVon.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenVon.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
+			try{
+				if (sdfToDate.format(datePicker_blockierenBis.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_blockierenBis.getDate()).trim());}else{liste.add("");}
+			} catch (Exception e) {
+				liste.add("");
+			}
 			if (chckbxEtechnik.isSelected()) {
 				liste.add("1");
 			}else {
@@ -431,12 +439,12 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			try {
 				datePicker_blockierenVon.setDate(sdfToDate.parse(daten.get(0).get(9)));
 			} catch (ParseException e) {
-				datePicker_blockierenVon.setDate(new Date());
+				datePicker_blockierenVon.setDate(null);
 			}
 			try {
 				datePicker_blockierenBis.setDate(sdfToDate.parse(daten.get(0).get(10)));
 			} catch (ParseException e) {
-				datePicker_blockierenBis.setDate(new Date());
+				datePicker_blockierenBis.setDate(null);
 			}
 			if (daten.get(0).get(11).equals("1")) {
 				chckbxEtechnik.setSelected(true);

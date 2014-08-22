@@ -1791,6 +1791,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             
             sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
             _model.insertUpdateDeleteTable(sql);
+            updateOrInsert = 1;
             
             setPraktId(neuePraktID);
             

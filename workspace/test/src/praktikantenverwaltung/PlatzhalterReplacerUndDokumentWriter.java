@@ -41,11 +41,11 @@ public class PlatzhalterReplacerUndDokumentWriter {
 			for (Object text : texts) {
 				Text textElement = (Text) text;
 				String textElementString = textElement.getValue();
-				System.out.println(textElementString);
+//				System.out.println(textElementString);
 				if (textElement.getValue().contains(placeholder)) {
 					textElementString = textElementString.replace(placeholder, name);
 					textElement.setValue(textElementString);
-					System.out.println(textElement.getValue());
+//					System.out.println(textElement.getValue());
 				}
 			}
 		}

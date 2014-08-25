@@ -1,11 +1,13 @@
 package praktikantenverwaltung;
 
-import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
 
 
 class DefaultTableModel_PraktikantenVerwaltung extends AbstractTableModel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String[] spalten;
 	private Object[][] daten;
 	public DefaultTableModel_PraktikantenVerwaltung(String[] spaltennamen, Object[][] daten){
@@ -28,7 +30,7 @@ class DefaultTableModel_PraktikantenVerwaltung extends AbstractTableModel {
         return daten[row][col];
     }
 
-    public Class getColumnClass(int c) {
+    public Class<? extends Object> getColumnClass(int c) {
         return getValueAt(0, c).getClass();
     }
 
@@ -37,13 +39,7 @@ class DefaultTableModel_PraktikantenVerwaltung extends AbstractTableModel {
      * editable.
      */
     public boolean isCellEditable(int row, int col) {
-        //Note that the data/cell address is constant,
-        //no matter where the cell appears onscreen.
-        if (true) {
-            return false;
-        } else {
-            return true;
-        }
+        return false;
     }
 
     /*

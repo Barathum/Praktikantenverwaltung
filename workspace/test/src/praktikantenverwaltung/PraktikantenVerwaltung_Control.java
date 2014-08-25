@@ -3,11 +3,9 @@ package praktikantenverwaltung;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Vector;
 
 import javax.swing.JTable;
@@ -531,9 +529,9 @@ public class PraktikantenVerwaltung_Control {
   			    ArrayList<String> row = daten_comboBoxItemsWohnort.get(i);
   			    Array[i] = row.toArray(new String[row.size()]);
   			}
-  			Vector V1 = new Vector<String>();
+  			Vector<String> V1 = new Vector<String>();
   			for (int i = 0; i < Array.length; i++) {
-				V1.add(Array[i][0]);
+				V1.add((String) Array[i][0]);
 			}
 //  			System.out.println(V1);
     	   _view.setComboBoxItems_wohn(V1);
@@ -550,7 +548,7 @@ public class PraktikantenVerwaltung_Control {
   			}
   			V1 = new Vector<String>();
   			for (int i = 0; i < Array.length; i++) {
-				V1.add(Array[i][0]);
+				V1.add((String) Array[i][0]);
 			}
 //  			System.out.println(V1);
     	   _view.setComboBoxItems_str(V1);
@@ -567,7 +565,7 @@ public class PraktikantenVerwaltung_Control {
   			}
   			V1 = new Vector<String>();
   			for (int i = 0; i < Array.length; i++) {
-				V1.add(Array[i][0]);
+				V1.add((String) Array[i][0]);
 			}
 //  			System.out.println(V1);
     	   _view.setComboBoxItems_geburtsort(V1);
@@ -584,7 +582,7 @@ public class PraktikantenVerwaltung_Control {
   			}
   			V1 = new Vector<String>();
   			for (int i = 0; i < Array.length; i++) {
-				V1.add(Array[i][0]);
+				V1.add((String) Array[i][0]);
 			}
 //  			System.out.println(V1);
     	   _view.setComboBoxItems_schule(V1);
@@ -601,7 +599,7 @@ public class PraktikantenVerwaltung_Control {
   			}
   			V1 = new Vector<String>();
   			for (int i = 0; i < Array.length; i++) {
-				V1.add(Array[i][0]);
+				V1.add((String) Array[i][0]);
 			}
   			_view.setComboBoxItems_schulform(V1);
   			
@@ -617,7 +615,7 @@ public class PraktikantenVerwaltung_Control {
    			}
    			V1 = new Vector<String>();
    			for (int i = 0; i < Array.length; i++) {
- 				V1.add(Array[i][0]);
+ 				V1.add((String) Array[i][0]);
  			}
 //  			System.out.println(V1);
     	   _view.setComboBoxItems_AnsprNN(V1);

@@ -2,50 +2,20 @@ package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Color;
-import java.awt.EventQueue;
-import java.awt.Font;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
-import javax.swing.GroupLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
-import javax.swing.text.DefaultFormatterFactory;
-
-import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 public class PraktikantenVerwaltung_ViewStart extends JFrame {
 
+	
+	private static final long serialVersionUID = 1L;
 	/**
 	 * erstellen der Fields
 	 */
-	private JPanel contentPane;
 	private JPanel mainPanel;
 	JMenuItem menuNeuerPraktikant = new JMenuItem("Neuer Praktikant");
 	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Ansprechpartner");

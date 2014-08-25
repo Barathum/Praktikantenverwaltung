@@ -3,7 +3,6 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +11,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Vector;
 
@@ -22,16 +20,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.text.DefaultFormatterFactory;
@@ -40,17 +35,18 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
-import praktikantenverwaltung.PraktikantenVerwaltung_Control.SchulformAusfuellListener;
-
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * erstellen der Fields
 	 */
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
-	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JTextField textField_id;
 	private JTextField textField_nn;
@@ -64,14 +60,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextField textField_gvn;
 	private JXDatePicker datePicker_startdatum;
 	private JXDatePicker datePicker_enddatum;
-	private JTextField textField_suchbegriffprak;
-	private JTextField textField_suchbegriffansp;
-	private JTable table_suche;
-	private JScrollPane scrollPane_Suchliste;
-	private JScrollPane scrollPane_SuchlisteAnspr;
-	private JButton btn_praktNachrichtSchreiben;
 	private JComboBox comboBox_schule;
-	private Vector comboBoxItems_schule;
 	private JComboBox comboBox_wohn;
 	private JComboBox comboBox_schulform;
 	private JTextField txtDeutschland;
@@ -94,9 +83,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextField textField_VornameAnsprWoch1;
 	private JButton btnSpeichern;
 	private JTextArea textArea_konsole;
-	private JButton btn_praktbearbeiten;
-	private JButton btn_praktloeschen;
-	private JButton btn_praktinfo;
 	private JPanel panel_ansprechPartner;
 	private JPanel panel_AnsprWoche1;
 	private JPanel panel_AnsprWoche2;
@@ -121,7 +107,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private Integer idAnspr2 = new Integer(0);
 	private Integer idAnspr3 = new Integer(0);
 	private Integer idAnsprBearb = new Integer(0);
-	private String letzteAenderung;
 	private JComboBox comboBox_NameAnsprWoch3;
 	private JButton button_editAnspr2;
 	private JButton button_editAnspr1;
@@ -129,14 +114,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private boolean ansprbearb1gedrueckt = false;
 	private boolean ansprbearb2gedrueckt = false;
 	private boolean ansprbearb3gedrueckt = false;
-	private JButton btn_sucheprak;
-	private JButton btn_sucheansp;
-	private JComboBox comboBox_kriteriumprak;
-	private JComboBox comboBox_kriteriumansp;
-	private Vector comboBoxItems_wohn;
-	private JButton buttonAnsprBearb;
-	private JButton buttonAnsprLoesch;
-	private JButton buttonAnsprInfo;
 	private Integer hoechstePraktID = 100000;
 	private Integer hoechsteAnsprID = 100000;
 	private String neuePraktID = "";
@@ -1420,7 +1397,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	 * @return
 	 */
 	public ArrayList<ArrayList<String>> getInhaltAnspr(){
-		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+		new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
 			ArrayList<String> eintrag = new ArrayList<String>();
 			eintrag.add((String) idAnspr1.toString());
@@ -1635,7 +1612,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	        	   sname = getNameSchule();
 	       			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
 	       			setInhaltSchulform(daten);
-	            }
+	       			daten = _model.getData("SELECT PARTNERS FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND PARTNERS IS NOT NULL AND PARTNERS <> '' AND PARTNERS <> 'null';");
+	       			setInhaltPartners(daten);
+			   }
 		   }
 		public ArrayList<String>  getNameSchule(){
 			ArrayList<String> s = new ArrayList<String>();
@@ -1647,6 +1626,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				comboBox_schulform.setSelectedItem(liste.get(liste.size() - 1).get(0));
 			} catch (Exception e) {
 				comboBox_schulform.setSelectedItem("");
+			}
+		}
+		public void setInhaltPartners(ArrayList<ArrayList<String>> liste){
+			try{
+				comboBox_partners.setSelectedItem(liste.get(liste.size() - 1).get(0));
+			} catch (Exception e) {
+				comboBox_partners.setSelectedItem("Nein");
 			}
 		}
 		/**

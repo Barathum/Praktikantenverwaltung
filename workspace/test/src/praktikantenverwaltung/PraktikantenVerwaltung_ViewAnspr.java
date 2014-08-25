@@ -3,7 +3,6 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,46 +11,35 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Vector;
-
-import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.text.DefaultFormatterFactory;
 
 import org.jdesktop.swingx.JXDatePicker;
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
-
-import praktikantenverwaltung.PraktikantenVerwaltung_ViewPrakt.PraktSpeichernListener;
 
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * erstellen der Fields
 	 */
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
-	private JPanel contentPane;
 	private JPanel mainPanel;
 	private JTextField textField_RaumAnsprBearb;
 	private JTextField textField_AbteilAnsprBearb;
@@ -60,8 +48,6 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private JTextField textField_VornameAnsprBearb;
 	private JTextField textField_NameAnsprBearb;
 	private JTextArea textArea_InfoAnspr;
-	private Integer idAnsprBearb = new Integer(0);
-	private String letzteAenderung;
 	private JTextArea textArea_AnmerkOrtBearb;
 	private JLabel lblBearbeiteAnsprechpartner;
 	private JButton button_SpeichernAnspr;
@@ -149,8 +135,9 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		DatePickerFormatter formatter = new DatePickerFormatter(
 		// invers sequence for parsing to satisfy the year parsing rules
 		        new DateFormat[] {shortFormat, longFormat}) {
+					private static final long serialVersionUID = 1L;
 
-		            @Override
+					@Override
 		            public String valueToString(Object value) throws ParseException {
 		                if (value == null) return null;
 		                return getFormats()[1].format(value);

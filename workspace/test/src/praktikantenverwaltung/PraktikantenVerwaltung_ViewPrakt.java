@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -1305,7 +1308,66 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		    button_woche2.addActionListener(this);
 		    button_woche3.addActionListener(this);
 		    comboBox_miki.addActionListener(this);
+		    comboBox_anrede.addActionListener(enterAction);
+			textField_nn.addActionListener(enterAction);
+			textField_vn.addActionListener(enterAction);
+			datePicker_gb.addActionListener(enterAction);
+//			comboBox_geburtsort.addActionListener(enterAction);
+//			comboBox_str.addActionListener(enterAction);
+			textField_plz.addActionListener(enterAction);
+			txtDeutschland.addActionListener(enterAction);
+			textField_tele.addActionListener(enterAction);
+			textField_mail.addActionListener(enterAction);
+			textField_mobil.addActionListener(enterAction);
+			textField_haus.addActionListener(enterAction);
+//			comboBox_wohn.addActionListener(enterAction);
+			textField_gnn.addActionListener(enterAction);
+			textField_gvn.addActionListener(enterAction);
+//			comboBox_schule.addActionListener(enterAction);
+//			comboBox_schulform.addActionListener(enterAction);
+//			comboBox_partners.addActionListener(enterAction);
+//			textArea_anmerkschule.addActionListener(enterAction);
+//			comboBox_miki.addActionListener(enterAction);
+//			comboBox_grad.addActionListener(enterAction);
+//			textArea_anmerkperson.addActionListener(enterAction);
+			datePicker_startdatum.addActionListener(enterAction);
+			datePicker_enddatum.addActionListener(enterAction);
+//			comboBox_status.addActionListener(enterAction);
+			datePicker_Antwortfrist.addActionListener(enterAction);
+//			textArea_anmerkprakt.addActionListener(enterAction);
+//			textArea_konsole.addActionListener(enterAction);
+		    textField_VornameAnsprWoch1.addActionListener(enterAction);
+		    textField_TelAnsprWoch1.addActionListener(enterAction);
+		    textField_AbteilAnsprWoch1.addActionListener(enterAction);
+		    textField_MailAnsprWoch1.addActionListener(enterAction);
+		    textField_RaumAnsprWoch1.addActionListener(enterAction);
+		    textField_VornameAnsprWoch2.addActionListener(enterAction);
+		    textField_TelAnsprWoch2.addActionListener(enterAction);
+		    textField_AbteilAnsprWoch2.addActionListener(enterAction);
+		    textField_MailAnsprWoch2.addActionListener(enterAction);
+		    textField_RaumAnsprWoch2.addActionListener(enterAction);
+		    textField_VornameAnsprWoch3.addActionListener(enterAction);
+		    textField_TelAnsprWoch3.addActionListener(enterAction);
+		    textField_AbteilAnsprWoch3.addActionListener(enterAction);
+		    textField_MailAnsprWoch3.addActionListener(enterAction);
+		    textField_RaumAnsprWoch3.addActionListener(enterAction);
+		
 	}
+	Action enterAction = new AbstractAction()
+		{
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public void actionPerformed(ActionEvent e)
+		    {
+//		    	try {
+		    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+			        manager.getFocusOwner().transferFocus();
+//				} catch (Exception e2) {
+//					// TODO: handle exception
+//				}
+		    }
+		};
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
 	}

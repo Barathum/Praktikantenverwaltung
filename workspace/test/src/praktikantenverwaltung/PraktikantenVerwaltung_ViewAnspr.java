@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Timestamp;
@@ -12,6 +13,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -326,8 +330,31 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		panel_ansprbearb.setLayout(gl_panel_ansprbearb);
 		
 		this.setAnsprSpeichernListener(new AnsprSpeichernListener());
+		textField_NameAnsprBearb.addActionListener(enterAction);
+		textField_VornameAnsprBearb.addActionListener(enterAction);
+		textField_TelAnsprBearb.addActionListener(enterAction);
+		textField_MailAnsprBearb.addActionListener(enterAction);
+		textField_AbteilAnsprBearb.addActionListener(enterAction);
+		textField_RaumAnsprBearb.addActionListener(enterAction);
+		datePicker_blockierenVon.addActionListener(enterAction);
+		datePicker_blockierenBis.addActionListener(enterAction);
 		
 	}
+	Action enterAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+//	    	try {
+	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		        manager.getFocusOwner().transferFocus();
+//			} catch (Exception e2) {
+//				// TODO: handle exception
+//			}
+	    }
+	};
 	public void setInfoAnspr(String inf){
 		this.textArea_InfoAnspr.setText(inf);
 	}

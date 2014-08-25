@@ -2,9 +2,13 @@ package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -173,8 +177,30 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		this.setBearbeitenListener(new PraktBearbeitenListener());
 		this.setNachrichtSendenListener(new NachrichtSendenListener());
 		button_aktualisieren.addActionListener(this);
+		textFieldNNPrakt.addActionListener(enterAction);
+		textFieldVNPrakt.addActionListener(enterAction);
+		textFieldStatusPrakt.addActionListener(enterAction);
+		textFieldStartPrakt.addActionListener(enterAction);
+		textFieldEndPrakt.addActionListener(enterAction);
+		textFieldAnmerkPrakt.addActionListener(enterAction);
+		textFieldEditPrakt.addActionListener(enterAction);
 		updateTablePrakt();
 	}
+	Action enterAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+//	    	try {
+	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		        manager.getFocusOwner().transferFocus();
+//			} catch (Exception e2) {
+//				// TODO: handle exception
+//			}
+	    }
+	};
 	private void setDatenPrakt(Object[][] daten){
 		this.datenprak = daten;
 	}

@@ -2,7 +2,11 @@ package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.KeyboardFocusManager;
 import java.util.ArrayList;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,8 +19,10 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
@@ -195,8 +201,31 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 			this.setLoeschenListener(new AnsprLoeschenListener());
 			this.setBearbeitenListener(new AnsprBearbeitenListener());
 			button_aktualisieren.addActionListener(this);
+			textField_tabelleNN.addActionListener(enterAction);
+			textField_tabelleVN.addActionListener(enterAction);
+			textField_tabelleTele.addActionListener(enterAction);
+			textField_tabelleMail.addActionListener(enterAction);
+			textField_tabelleAbt.addActionListener(enterAction);
+			textField_tabelleRaum.addActionListener(enterAction);
+			textField_tabelleBlockVon.addActionListener(enterAction);
+			textField_tabelleBlockBis.addActionListener(enterAction);
 			updateTable();
 	}
+	Action enterAction = new AbstractAction()
+	{
+		private static final long serialVersionUID = 1L;
+
+		@Override
+	    public void actionPerformed(ActionEvent e)
+	    {
+//	    	try {
+	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		        manager.getFocusOwner().transferFocus();
+//			} catch (Exception e2) {
+//				// TODO: handle exception
+//			}
+	    }
+	};
 	public void setDatenAnspr(Object[][] daten){
 		this.datenansprech = daten;
 	}

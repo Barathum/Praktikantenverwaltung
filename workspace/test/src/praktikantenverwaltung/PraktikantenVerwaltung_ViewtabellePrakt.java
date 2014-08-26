@@ -63,7 +63,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private JTextField textFieldEditPrakt;
 	private JButton button_aktualisieren;
 	private Vector comboBoxNachrichtenItems = new Vector();
-	File f = new File("templates");
+	private File f = new File("templates");
+	private String tempFolder = new String("temp");
+	private String templateFolder = new String("templates");
 	private JComboBox comboBox_Nachrichtwahl;
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
@@ -355,69 +357,75 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	class NachrichtSendenListener implements ActionListener{ 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-	     	   JTable table = getTable();
-	            int markierteReiheNR =  table.getSelectedRow();
+			JTable table = getTable();
+			int[] markierteReiheNR =  table.getSelectedRows();
+			ArrayList<String> platzhalter = new ArrayList<String>();
+            platzhalter.add("<<ID>>");
+            platzhalter.add("<<Anrede>>");
+            platzhalter.add("<<Nachname>>");
+            platzhalter.add("<<Vorname>>");
+            platzhalter.add("<<Geburtsdatum>>");
+            platzhalter.add("<<Geburtsort>>");
+            platzhalter.add("<<Straße>>");
+            platzhalter.add("<<PLZ>>");
+            platzhalter.add("<<Land>>");
+            platzhalter.add("<<Telefon>>");
+            platzhalter.add("<<Mail>>");
+            platzhalter.add("<<Mobil>>");
+            platzhalter.add("<<Hausnummer>>");
+            platzhalter.add("<<Ort>>");
+            platzhalter.add("<<VertreterNachname>>");
+            platzhalter.add("<<VertreterVorname>>");
+            platzhalter.add("<<Schule>>");
+            platzhalter.add("<<Schulform>>");
+            platzhalter.add("<<Partnerschule>>");
+            platzhalter.add("<<AnmerkungenSchule>>");
+            platzhalter.add("<<Miki>>");
+            platzhalter.add("<<Miki-Grad>>");
+            platzhalter.add("<<AnmerkungenPerson>>");
+            platzhalter.add("<<Startdatum>>");
+            platzhalter.add("<<Enddatum>>");
+            platzhalter.add("<<Status>>");
+            platzhalter.add("<<AnmerkungenPraktikum>>");
+            platzhalter.add("<<Anspr1>>");
+            platzhalter.add("<<Anspr2>>");
+            platzhalter.add("<<Anspr3>>");
+            platzhalter.add("<<Info>>");
+            platzhalter.add("<<Edit>>");
+            platzhalter.add("<<Unterlagenvollst>>");
+            platzhalter.add("<<AntwortBis>>");
+            platzhalter.add("<<AnredePostfix>>");
+	        for (int i = 0; i < markierteReiheNR.length; i++) {
+				ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 	            ArrayList<String> liste = new ArrayList<String>();
-	            ArrayList<String> platzhalter = new ArrayList<String>();
-	            platzhalter.add("<<ID>>");
-	            platzhalter.add("<<Anrede>>");
-	            platzhalter.add("<<Nachname>>");
-	            platzhalter.add("<<Vorname>>");
-	            platzhalter.add("<<Geburtsdatum>>");
-	            platzhalter.add("<<Geburtsort>>");
-	            platzhalter.add("<<Straße>>");
-	            platzhalter.add("<<PLZ>>");
-	            platzhalter.add("<<Land>>");
-	            platzhalter.add("<<Telefon>>");
-	            platzhalter.add("<<Mail>>");
-	            platzhalter.add("<<Mobil>>");
-	            platzhalter.add("<<Hausnummer>>");
-	            platzhalter.add("<<Ort>>");
-	            platzhalter.add("<<VertreterNachname>>");
-	            platzhalter.add("<<VertreterVorname>>");
-	            platzhalter.add("<<Schule>>");
-	            platzhalter.add("<<Schulform>>");
-	            platzhalter.add("<<Partnerschule>>");
-	            platzhalter.add("<<AnmerkungenSchule>>");
-	            platzhalter.add("<<Miki>>");
-	            platzhalter.add("<<Miki-Grad>>");
-	            platzhalter.add("<<AnmerkungenPerson>>");
-	            platzhalter.add("<<Startdatum>>");
-	            platzhalter.add("<<Enddatum>>");
-	            platzhalter.add("<<Status>>");
-	            platzhalter.add("<<AnmerkungenPraktikum>>");
-	            platzhalter.add("<<Anspr1>>");
-	            platzhalter.add("<<Anspr2>>");
-	            platzhalter.add("<<Anspr3>>");
-	            platzhalter.add("<<Info>>");
-	            platzhalter.add("<<Edit>>");
-	            platzhalter.add("<<Unterlagenvollst>>");
-	            platzhalter.add("<<AntwortBis>>");
-	            platzhalter.add("<<AnredePostfix>>");
-	            if(markierteReiheNR >= 0){
-	            	String nn = (String) table.getValueAt(markierteReiheNR, 0);
-	                String vn = (String) table.getValueAt(markierteReiheNR, 1);
-	                String status = (String) table.getValueAt(markierteReiheNR, 2);
-	                liste.add(nn);
-	                liste.add(vn);
-	                liste.add(status);
-	                String sql;
-	                sql = getEintragPrakt(liste);
-	                daten = _model.getData(sql);
-	                /**
-	                 * Postfix für Anrede hinzufügen
-	                 * Wenn Herr dann r sonst nichts
-	                 */
-	                if (daten.get(0).get(1).equals("Herr")) {
-	                	daten.get(0).add("r");
-					} else {
-						daten.get(0).add("");
-					}
-	                _replacer.schreibeNeuesWordDokumentVonTemplate("template.docx", daten.get(0).get(2) + daten.get(0).get(3) + "-Anschreiben.docx",
-	                		platzhalter, daten.get(0));
-	            }
+	            String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
+	            String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
+	            String status = (String) table.getValueAt(markierteReiheNR[i], 2);
+	            liste.add(nn);
+	            liste.add(vn);
+	            liste.add(status);
+	            String sql;
+	            sql = getEintragPrakt(liste);
+	            daten = _model.getData(sql);
+	            /**
+	             * Postfix für Anrede hinzufügen
+	             * Wenn Herr dann r sonst nichts
+	             */
+	            if (daten.get(0).get(1).equals("Herr")) {
+	                daten.get(0).add("r");
+				} else {
+					daten.get(0).add("");
+				}
+	            	String nachricht = getNachrichtWahl();
+	            
+	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
+	            		   tempFolder + "/" + daten.get(0).get(2) + daten.get(0).get(3) + "-" + nachricht + ".docx",
+	            		   platzhalter, daten.get(0));
+	        }
 		}
+	}
+	private String getNachrichtWahl(){
+		return comboBox_Nachrichtwahl.getSelectedItem().toString();
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();

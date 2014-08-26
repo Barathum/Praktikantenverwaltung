@@ -7,7 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -22,6 +24,10 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.JComboBox;
+import javax.swing.LayoutStyle.ComponentPlacement;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
 public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements ActionListener{
 
@@ -56,6 +62,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private JTextField textFieldAnmerkPrakt;
 	private JTextField textFieldEditPrakt;
 	private JButton button_aktualisieren;
+	private Vector comboBoxNachrichtenItems = new Vector();
+	File f = new File("templates");
+	private JComboBox comboBox_Nachrichtwahl;
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
 		this._model = new PraktikantenVerwaltung_Modell();
@@ -150,6 +159,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		btn_praktloeschen = new JButton("L\u00F6schen");
 		
 		btn_praktNachrichtSchreiben = new JButton("Nachricht erstellen");
+		
+		comboBox_Nachrichtwahl = new JComboBox();
 		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
 		gl_panel_10.setHorizontalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
@@ -158,9 +169,11 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					.addComponent(btn_praktbearbeiten)
 					.addGap(18)
 					.addComponent(btn_praktloeschen, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addGap(47)
+					.addGap(52)
+					.addComponent(comboBox_Nachrichtwahl, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btn_praktNachrichtSchreiben)
-					.addContainerGap(888, Short.MAX_VALUE))
+					.addContainerGap(757, Short.MAX_VALUE))
 		);
 		gl_panel_10.setVerticalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
@@ -169,7 +182,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btn_praktbearbeiten)
 						.addComponent(btn_praktloeschen)
-						.addComponent(btn_praktNachrichtSchreiben))
+						.addComponent(btn_praktNachrichtSchreiben)
+						.addComponent(comboBox_Nachrichtwahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel_10.setLayout(gl_panel_10);
@@ -186,6 +200,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		textFieldEndPrakt.addActionListener(enterAction);
 		textFieldAnmerkPrakt.addActionListener(enterAction);
 		textFieldEditPrakt.addActionListener(enterAction);
+		getDocx(f);
+		setComboBoxItems_Nachricht(comboBoxNachrichtenItems);
 		updateTablePrakt();
 	}
 	Action enterAction = new AbstractAction()
@@ -419,5 +435,24 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		   if (src == button_aktualisieren) {
 			   filterPrakt();
 			}
+	}
+	public void getDocx(File f){
+		File[] files = f.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if(files[i].getName().endsWith( ".docx" ))
+				{
+					comboBoxNachrichtenItems.add(files[i].getName().substring(0, (files[i].getName().length()-5)));
+				}
+				
+			}
+		}
+	}
+	public void setComboBoxItems_Nachricht(Vector v){
+		comboBox_Nachrichtwahl.removeAllItems();
+		for (int i = 0; i < v.size(); i++) {
+			comboBox_Nachrichtwahl.addItem(v.get(i));
+		}
+		AutoCompleteDecorator.decorate(this.comboBox_Nachrichtwahl);
 	}
 }

@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -138,6 +139,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private ArrayList<String> gradList;
 	private ArrayList<String> anredeList;
 	private ArrayList<String> ansprList;
+	private Vector comboBoxNachrichtenItems = new Vector();
+	File f = new File("templates");
+	private JComboBox comboBox_NachrichtWahl;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
@@ -621,6 +625,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			JPanel panel_1 = new JPanel();
 			panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
+			
+			comboBox_NachrichtWahl = new JComboBox();
 			GroupLayout gl_panel_Steckbrief = new GroupLayout(panel_Steckbrief);
 			gl_panel_Steckbrief.setHorizontalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
@@ -673,7 +679,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-											.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 145, GroupLayout.PREFERRED_SIZE))
+											.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING, false)
+												.addComponent(comboBox_NachrichtWahl, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(btnNachrichtErstellen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
 										.addGap(18)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
@@ -701,7 +709,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 									.addComponent(panel_5, 0, 0, Short.MAX_VALUE)
 									.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
-								.addPreferredGap(ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+								.addPreferredGap(ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
 										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
@@ -722,7 +730,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addPreferredGap(ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
 												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.BASELINE)
 													.addComponent(lblEinsatzort, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 													.addComponent(lblWochen, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
@@ -739,6 +747,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 										.addPreferredGap(ComponentPlacement.UNRELATED)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+												.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addPreferredGap(ComponentPlacement.UNRELATED)
 												.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(ComponentPlacement.RELATED)
 												.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
@@ -1356,6 +1366,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		    textArea_EinsatzortAnsprWoche1.addKeyListener(textAreaEnter);
 		    textArea_EinsatzortAnsprWoche2.addKeyListener(textAreaEnter);
 		    textArea_EinsatzortAnsprWoche3.addKeyListener(textAreaEnter);
+		    getDocx(f);
+			setComboBoxItems_Nachricht(comboBoxNachrichtenItems);
 	}
 	KeyAdapter textAreaEnter = new KeyAdapter() {
         @Override
@@ -2312,5 +2324,24 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					ansprbearb3gedrueckt = true;
 					button_editAnspr3.setEnabled(false);
 				} 
+		}
+		public void getDocx(File f){
+			File[] files = f.listFiles();
+			if (files != null) {
+				for (int i = 0; i < files.length; i++) {
+					if(files[i].getName().endsWith( ".docx" ))
+					{
+						comboBoxNachrichtenItems.add(files[i].getName().substring(0, (files[i].getName().length()-5)));
+					}
+					
+				}
+			}
+		}
+		public void setComboBoxItems_Nachricht(Vector v){
+			comboBox_NachrichtWahl.removeAllItems();
+			for (int i = 0; i < v.size(); i++) {
+				comboBox_NachrichtWahl.addItem(v.get(i));
+			}
+			AutoCompleteDecorator.decorate(this.comboBox_NachrichtWahl);
 		}
 }

@@ -1705,7 +1705,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (Exception e) {
 				daten.add(new ArrayList<String>());
 			}
-			 setInhaltAnspr1(daten);
+			 setInhaltAnspr1(0 , daten);
 		}
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -1735,7 +1735,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (Exception e) {
 				daten.add(new ArrayList<String>());
 			}
-			 setInhaltAnspr2(daten);
+			 setInhaltAnspr2(0 , daten);
 		}
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder
@@ -1765,7 +1765,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (Exception e) {
 				daten.add(new ArrayList<String>());
 			}
-			 setInhaltAnspr3(daten);
+			 setInhaltAnspr3(0 , daten);
 		}
 	   public ArrayList<ArrayList<String>> getAnsprDaten(String id){
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -1879,69 +1879,135 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		 * Setzt den Inhalt der Ansprechpartner1 Felder entsprechend der Liste
 		 * @param liste
 		 */
-		public void setInhaltAnspr1(ArrayList<ArrayList<String>> liste){
-			try {
-				idAnspr1 = Integer.parseInt(liste.get(0).get(0));
-				textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
-				textField_TelAnsprWoch1.setText(liste.get(0).get(3));
-				textField_MailAnsprWoch1.setText(liste.get(0).get(4));
-				textField_AbteilAnsprWoch1.setText(liste.get(0).get(5));
-				textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
-				textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
-			} catch (Exception e) {
-				setAnspr1Id("0");
-				textField_VornameAnsprWoch1.setText("");
-				textField_TelAnsprWoch1.setText("");
-				textField_MailAnsprWoch1.setText("");
-				textField_AbteilAnsprWoch1.setText("");
-				textField_RaumAnsprWoch1.setText("");
-				textArea_EinsatzortAnsprWoche1.setText("");
+		public void setInhaltAnspr1(int i , ArrayList<ArrayList<String>> liste){
+			if (i>0) {
+				try {
+					idAnspr1 = Integer.parseInt(liste.get(0).get(0));
+					textfield_NameAnsprWoch1.setText(liste.get(0).get(1));
+					textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch1.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch1.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch1.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr1Id("0");
+					textfield_NameAnsprWoch1.setText("");
+					textField_VornameAnsprWoch1.setText("");
+					textField_TelAnsprWoch1.setText("");
+					textField_MailAnsprWoch1.setText("");
+					textField_AbteilAnsprWoch1.setText("");
+					textField_RaumAnsprWoch1.setText("");
+					textArea_EinsatzortAnsprWoche1.setText("");
+				}
+			}else {
+				try {
+					idAnspr1 = Integer.parseInt(liste.get(0).get(0));
+					textField_VornameAnsprWoch1.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch1.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch1.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch1.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch1.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche1.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr1Id("0");
+					textField_VornameAnsprWoch1.setText("");
+					textField_TelAnsprWoch1.setText("");
+					textField_MailAnsprWoch1.setText("");
+					textField_AbteilAnsprWoch1.setText("");
+					textField_RaumAnsprWoch1.setText("");
+					textArea_EinsatzortAnsprWoche1.setText("");
+				}
 			}
 		}
 		/**
 		 * Setzt den Inhalt der Ansprechpartner2 Felder entsprechend der Liste
 		 * @param liste
 		 */
-		public void setInhaltAnspr2(ArrayList<ArrayList<String>> liste){
-			try {
-				idAnspr2 = Integer.parseInt(liste.get(0).get(0));
-				textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
-				textField_TelAnsprWoch2.setText(liste.get(0).get(3));
-				textField_MailAnsprWoch2.setText(liste.get(0).get(4));
-				textField_AbteilAnsprWoch2.setText(liste.get(0).get(5));
-				textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
-				textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
-			} catch (Exception e) {
-				setAnspr2Id("0");
-				textField_VornameAnsprWoch2.setText("");
-				textField_TelAnsprWoch2.setText("");
-				textField_MailAnsprWoch2.setText("");
-				textField_AbteilAnsprWoch2.setText("");
-				textField_RaumAnsprWoch2.setText("");
-				textArea_EinsatzortAnsprWoche2.setText("");
+		public void setInhaltAnspr2(int i , ArrayList<ArrayList<String>> liste){
+			if (i>0) {
+				try {
+					idAnspr2 = Integer.parseInt(liste.get(0).get(0));
+					textfield_NameAnsprWoch2.setText(liste.get(0).get(1));
+					textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch2.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch2.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch2.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr2Id("0");
+					textfield_NameAnsprWoch2.setText("");
+					textField_VornameAnsprWoch2.setText("");
+					textField_TelAnsprWoch2.setText("");
+					textField_MailAnsprWoch2.setText("");
+					textField_AbteilAnsprWoch2.setText("");
+					textField_RaumAnsprWoch2.setText("");
+					textArea_EinsatzortAnsprWoche2.setText("");
+				}
+			}else {
+				try {
+					idAnspr2 = Integer.parseInt(liste.get(0).get(0));
+					textField_VornameAnsprWoch2.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch2.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch2.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch2.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch2.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche2.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr2Id("0");
+					textField_VornameAnsprWoch2.setText("");
+					textField_TelAnsprWoch2.setText("");
+					textField_MailAnsprWoch2.setText("");
+					textField_AbteilAnsprWoch2.setText("");
+					textField_RaumAnsprWoch2.setText("");
+					textArea_EinsatzortAnsprWoche2.setText("");
+				}
 			}
 		}
 		/**
 		 * Setzt den Inhalt der Ansprechpartner3 Felder entsprechend der Liste
 		 * @param liste
 		 */
-		public void setInhaltAnspr3(ArrayList<ArrayList<String>> liste){
-			try {
-				idAnspr3 = Integer.parseInt(liste.get(0).get(0));
-				textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
-				textField_TelAnsprWoch3.setText(liste.get(0).get(3));
-				textField_MailAnsprWoch3.setText(liste.get(0).get(4));
-				textField_AbteilAnsprWoch3.setText(liste.get(0).get(5));
-				textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
-				textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
-			} catch (Exception e) {
-				setAnspr3Id("0");
-				textField_VornameAnsprWoch3.setText("");
-				textField_TelAnsprWoch3.setText("");
-				textField_MailAnsprWoch3.setText("");
-				textField_AbteilAnsprWoch3.setText("");
-				textField_RaumAnsprWoch3.setText("");
-				textArea_EinsatzortAnsprWoche3.setText("");
+		public void setInhaltAnspr3(int i , ArrayList<ArrayList<String>> liste){
+			if (i>0) {
+				try {
+					idAnspr3 = Integer.parseInt(liste.get(0).get(0));
+					textfield_NameAnsprWoch3.setText(liste.get(0).get(1));
+					textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch3.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch3.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch3.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr3Id("0");
+					textfield_NameAnsprWoch3.setText("");
+					textField_VornameAnsprWoch3.setText("");
+					textField_TelAnsprWoch3.setText("");
+					textField_MailAnsprWoch3.setText("");
+					textField_AbteilAnsprWoch3.setText("");
+					textField_RaumAnsprWoch3.setText("");
+					textArea_EinsatzortAnsprWoche3.setText("");
+				}
+			}else {
+				try {
+					idAnspr3 = Integer.parseInt(liste.get(0).get(0));
+					textField_VornameAnsprWoch3.setText(liste.get(0).get(2));
+					textField_TelAnsprWoch3.setText(liste.get(0).get(3));
+					textField_MailAnsprWoch3.setText(liste.get(0).get(4));
+					textField_AbteilAnsprWoch3.setText(liste.get(0).get(5));
+					textField_RaumAnsprWoch3.setText(liste.get(0).get(6));
+					textArea_EinsatzortAnsprWoche3.setText(liste.get(0).get(7));
+				} catch (Exception e) {
+					setAnspr3Id("0");
+					textField_VornameAnsprWoch3.setText("");
+					textField_TelAnsprWoch3.setText("");
+					textField_MailAnsprWoch3.setText("");
+					textField_AbteilAnsprWoch3.setText("");
+					textField_RaumAnsprWoch3.setText("");
+					textArea_EinsatzortAnsprWoche3.setText("");
+				}
 			}
 		}
 	/**
@@ -2060,17 +2126,27 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	            platzhalter.add("<<Unterlagenvollst>>");
 	            platzhalter.add("<<AntwortBis>>");
 	            platzhalter.add("<<AnredePostfix>>");
+	            platzhalter.add("<<AnsprID1>>");
+	            platzhalter.add("<<NachnameAnspr>>");
+	            platzhalter.add("<<VornameAnspr>>");
+	            platzhalter.add("<<TeleAnspr>>");
+	            platzhalter.add("<<MailAnspr>>");
+	            platzhalter.add("<<AbteilungAnspr>>");
+	            platzhalter.add("<<Raumnummer>>");
 	            ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-		        daten.add(getInhaltPrakt());
-	            /**
+	            ArrayList<String> daten1d = new ArrayList<String>();
+	            daten1d.addAll(getInhaltPrakt());
+		        /**
 	             * Postfix für Anrede hinzufügen
 	             * Wenn Herr dann r sonst nichts
 	             */
-	            if (daten.get(0).get(1).equals("Herr")) {
-	                daten.get(0).add("r");
+	            if (daten1d.get(1).equals("Herr")) {
+	                daten1d.add("r");
 				} else {
-					daten.get(0).add("");
+					daten1d.add("");
 				}
+	            daten1d.addAll(getInhaltAnspr().get(0));
+	            daten.add(daten1d);
 	            	String nachricht = getNachrichtWahl();
 	            
 	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
@@ -2339,9 +2415,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			comboBox_status.setSelectedItem(daten.get(0).get(25));
 			textArea_anmerkprakt.setText(daten.get(0).get(26));
-			setInhaltAnspr1(getAnsprDaten(daten.get(0).get(27)));
-			setInhaltAnspr2(getAnsprDaten(daten.get(0).get(28)));
-			setInhaltAnspr3(getAnsprDaten(daten.get(0).get(29)));
+			setInhaltAnspr1(1 , getAnsprDaten(daten.get(0).get(27)));
+			setInhaltAnspr2(1 , getAnsprDaten(daten.get(0).get(28)));
+			setInhaltAnspr3(1 , getAnsprDaten(daten.get(0).get(29)));
 			textArea_konsole.setText(daten.get(0).get(30));
 			if (daten.get(0).get(32).equals("1")) {
 				chckbxDatenVollst.setSelected(true);

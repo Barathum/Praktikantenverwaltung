@@ -60,15 +60,12 @@ public class PlatzhalterReplacerUndDokumentWriter {
 		 */
 		private void replacePlaceholder(WordprocessingMLPackage template, String name, String placeholder ) {
 			List<Object> texts = getAllElementFromObject(template.getMainDocumentPart(), Text.class);
-	 
 			for (Object text : texts) {
 				Text textElement = (Text) text;
 				String textElementString = textElement.getValue();
-//				System.out.println(textElementString);
 				if (textElement.getValue().contains(placeholder)) {
 					textElementString = textElementString.replace(placeholder, name);
 					textElement.setValue(textElementString);
-//					System.out.println(textElement.getValue());
 				}
 			}
 		}

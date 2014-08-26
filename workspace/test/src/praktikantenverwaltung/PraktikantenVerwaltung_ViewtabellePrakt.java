@@ -5,6 +5,8 @@ import java.awt.CardLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -207,8 +209,31 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 
 	public void updateTablePrakt(){
 		table_prakt = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
-		table_prakt.setSelectionMode(0);
+//		table_prakt.setSelectionMode(0);
 		table_prakt.setAutoCreateRowSorter(true);
+		table_prakt.addMouseListener(new MouseAdapter() {
+			   public void mouseClicked(MouseEvent e) {
+			      if (e.getClickCount() == 2) {
+			         JTable target = (JTable)e.getSource();
+			         ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			            int markierteReiheNR =  target.getSelectedRow();
+			            ArrayList<String> liste = new ArrayList<String>();
+			            if(markierteReiheNR >= 0){
+			            	String nn = (String) target.getValueAt(markierteReiheNR, 0);
+			                String vn = (String) target.getValueAt(markierteReiheNR, 1);
+			                String status = (String) target.getValueAt(markierteReiheNR, 2);
+			                liste.add(nn);
+			                liste.add(vn);
+			                liste.add(status);
+			                String sql;
+			                sql = getEintragPrakt(liste);
+			                daten = _model.getData(sql);
+			                PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+			          	   _viewprakt.setVisible(true);
+			            }
+			         }
+			   }
+			});
 		scrollPane_Suchliste.setViewportView(table_prakt);
 	}
 	private void setLoeschenListener(ActionListener l){
@@ -227,32 +252,32 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	class PraktLoeschenListener implements ActionListener{ 
 	    public void actionPerformed(ActionEvent e) { 
 	 	   JTable table = getTable();
-	        int markierteReiheNR =  table.getSelectedRow();
-	        ArrayList<String> liste = new ArrayList<String>();
-	        if(markierteReiheNR >= 0){
-		        String nn = (String) table.getValueAt(markierteReiheNR, 0);
-		        String vn = (String) table.getValueAt(markierteReiheNR, 1);
-		        String status = (String) table.getValueAt(markierteReiheNR, 2);
-		        liste.add(nn);
-		        liste.add(vn);
-		        liste.add(status);
-		        String sql;
-		        sql = loescheEintragPrakt(liste);
-		        _model.insertUpdateDeleteTable(sql);
-		        filterPrakt();
-	        }
-	     } 
+	        int[] markierteReiheNR =  table.getSelectedRows();
+	        for (int i = 0; i < markierteReiheNR.length; i++) {
+	        		ArrayList<String> liste = new ArrayList<String>();
+			        String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
+			        String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
+			        String status = (String) table.getValueAt(markierteReiheNR[i], 2);
+			        liste.add(nn);
+			        liste.add(vn);
+			        liste.add(status);
+			        String sql;
+			        sql = loescheEintragPrakt(liste);
+			        _model.insertUpdateDeleteTable(sql);
+			}
+	        filterPrakt();
+	     }
 	   }
 	class PraktBearbeitenListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) { 
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
      	   JTable table = getTable();
-            int markierteReiheNR =  table.getSelectedRow();
-            ArrayList<String> liste = new ArrayList<String>();
-            if(markierteReiheNR >= 0){
-            	String nn = (String) table.getValueAt(markierteReiheNR, 0);
-                String vn = (String) table.getValueAt(markierteReiheNR, 1);
-                String status = (String) table.getValueAt(markierteReiheNR, 2);
+     	  int[] markierteReiheNR =  table.getSelectedRows();
+	        for (int i = 0; i < markierteReiheNR.length; i++) {
+	        	ArrayList<String> liste = new ArrayList<String>();
+            	String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
+                String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
+                String status = (String) table.getValueAt(markierteReiheNR[i], 2);
                 liste.add(nn);
                 liste.add(vn);
                 liste.add(status);
@@ -353,6 +378,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	            platzhalter.add("<<Edit>>");
 	            platzhalter.add("<<Unterlagenvollst>>");
 	            platzhalter.add("<<AntwortBis>>");
+	            platzhalter.add("<<AnredePostfix>>");
 	            if(markierteReiheNR >= 0){
 	            	String nn = (String) table.getValueAt(markierteReiheNR, 0);
 	                String vn = (String) table.getValueAt(markierteReiheNR, 1);
@@ -363,6 +389,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	                String sql;
 	                sql = getEintragPrakt(liste);
 	                daten = _model.getData(sql);
+	                /**
+	                 * Postfix für Anrede hinzufügen
+	                 * Wenn Herr dann r sonst nichts
+	                 */
+	                if (daten.get(0).get(1).equals("Herr")) {
+	                	daten.get(0).add("r");
+					} else {
+						daten.get(0).add("");
+					}
 	                _replacer.schreibeNeuesWordDokumentVonTemplate("template.docx", daten.get(0).get(2) + daten.get(0).get(3) + "-Anschreiben.docx",
 	                		platzhalter, daten.get(0));
 	            }

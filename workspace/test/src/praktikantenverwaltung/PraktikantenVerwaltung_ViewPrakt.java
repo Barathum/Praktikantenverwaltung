@@ -5,14 +5,19 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.KeyboardFocusManager;
+import java.awt.TextArea;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -23,6 +28,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -31,8 +37,11 @@ import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicComboBoxUI;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.JTextComponent;
 
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
@@ -63,12 +72,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextField textField_gvn;
 	private JXDatePicker datePicker_startdatum;
 	private JXDatePicker datePicker_enddatum;
-	private JComboBox comboBox_schule;
-	private JComboBox comboBox_wohn;
-	private JComboBox comboBox_schulform;
+	private JTextComponent textfield_schule;
+	private JTextComponent textfield_schulform;
 	private JTextField txtDeutschland;
-	private JComboBox comboBox_str;
-	private JComboBox comboBox_geburtsort;
 	private JTextField textField_plz;
 	private JTextField textField_RaumAnsprWoch3;
 	private JTextField textField_AbteilAnsprWoch3;
@@ -93,11 +99,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JButton button_woche1;
 	private JButton button_woche2;
 	private JButton button_woche3;
-	private JComboBox comboBox_anrede;
-	private JComboBox comboBox_partners;
+	private JTextComponent textfield_anrede;
+	private JTextComponent textfield_partners;
 	private JTextArea textArea_anmerkschule;
-	private JComboBox comboBox_miki;
-	private JComboBox comboBox_grad;
+	private JTextComponent textfield_miki;
+	private JTextComponent textfield_grad;
 	private JComboBox comboBox_NameAnsprWoch1;
 	private JTextArea textArea_EinsatzortAnsprWoche1;
 	private JComboBox comboBox_NameAnsprWoch2;
@@ -125,6 +131,18 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextArea textArea_anmerkprakt;
 	private JCheckBox chckbxDatenVollst;
 	private int updateOrInsert;
+	private JTextComponent textField_geburtsort;
+	private ArrayList<String> Geburtsortlist;
+	private JTextComponent textfield_str;
+	private ArrayList<String> Strasselist;
+	private JTextComponent textfield_wohn;
+	private ArrayList<String> Wohnortlist;
+	private ArrayList<String> partnersList;
+	private ArrayList<String> schuleList;
+	private ArrayList<String> schulformList;
+	private ArrayList<String> mikiList;
+	private ArrayList<String> gradList;
+	private ArrayList<String> anredeList;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
@@ -209,27 +227,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JLabel label_1 = new JLabel("Vorname:");
 			
 			
+			textfield_wohn = new JTextField();
+			Wohnortlist = new ArrayList<String>();
+			AutoCompleteDecorator.decorate(textfield_wohn, Wohnortlist, false);
 			
-			this.comboBox_wohn = new JComboBox();
-			this.comboBox_wohn.setEditable(true);
-			AutoCompleteDecorator.decorate(this.comboBox_wohn);
-		    
-			this.comboBox_str = new JComboBox();
-			this.comboBox_str.setEditable(true);
-			this.comboBox_str.setUI(new BasicComboBoxUI() {
-				           @Override  
-				            protected JButton createArrowButton() {  
-				                return new JButton() {  
-				                    @Override  
-			                  public int getWidth() {  
-				                return 0;  
-				                   }  
-				               };  
-				           }  
-				        });
-			this.comboBox_str.setBorder(BorderFactory.createLineBorder(Color.black));
-
-			AutoCompleteDecorator.decorate(this.comboBox_str);
+			textfield_str = new JTextField();
+			Strasselist = new ArrayList<String>();
+			AutoCompleteDecorator.decorate(textfield_str, Strasselist, false);
 			
 			txtDeutschland = new JTextField();
 			txtDeutschland.setText("Deutschland");
@@ -255,7 +259,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 								.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_panel_4.createSequentialGroup()
-											.addComponent(comboBox_str, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+											.addComponent(textfield_str, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED))
 										.addGroup(gl_panel_4.createSequentialGroup()
 											.addComponent(textField_tele, 124, 124, Short.MAX_VALUE)
@@ -276,7 +280,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 											.addComponent(label, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
 										.addPreferredGap(ComponentPlacement.RELATED)
 										.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
-											.addComponent(comboBox_wohn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+											.addComponent(textfield_wohn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
 											.addGroup(gl_panel_4.createParallelGroup(Alignment.TRAILING)
 												.addComponent(textField_haus, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
 												.addComponent(textField_gnn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
@@ -295,12 +299,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 							.addComponent(lblStrae)
 							.addComponent(lblMobilnummer_1)
 							.addComponent(textField_haus, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(comboBox_str, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_str, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblHausnummer)
 							.addComponent(lblMailadresse)
-							.addComponent(comboBox_wohn, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textfield_wohn, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 							.addComponent(textField_plz, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
@@ -350,18 +354,22 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			JLabel lblAnmerkungen = new JLabel("Anmerkungen:");
 			
-			String comboBoxListe_partners[] = {"Nein" , "Ja"};
-			comboBox_partners = new JComboBox(comboBoxListe_partners);
+			textfield_partners = new JTextField();
+			partnersList = new ArrayList<String>();
+			partnersList.add("Nein");
+			partnersList.add("Ja");
+			AutoCompleteDecorator.decorate(textfield_partners, partnersList, true);
 			
 			JScrollPane scrollPane = new JScrollPane();
 		    
-			this.comboBox_schule = new JComboBox();
-			this.comboBox_schule.setEditable(true);
-			AutoCompleteDecorator.decorate(this.comboBox_schule);
+			textfield_schule = new JTextField();
+			schuleList = new ArrayList<String>();
+			AutoCompleteDecorator.decorate(textfield_schule, schuleList, false);
 			
-			this.comboBox_schulform = new JComboBox();
-			this.comboBox_schulform.setEditable(true);
-			AutoCompleteDecorator.decorate(this.comboBox_schulform);
+			textfield_schulform = new JTextField();
+			schulformList = new ArrayList<String>();
+			AutoCompleteDecorator.decorate(textfield_schulform, schulformList, false);
+			
 			GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 			gl_panel_5.setHorizontalGroup(
 				gl_panel_5.createParallelGroup(Alignment.LEADING)
@@ -372,15 +380,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 							.addGroup(gl_panel_5.createSequentialGroup()
 								.addComponent(lblNameDerSchule)
 								.addPreferredGap(ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
-								.addComponent(comboBox_schule, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textfield_schule, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel_5.createSequentialGroup()
 								.addComponent(lblSchulform)
 								.addPreferredGap(ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
-								.addComponent(comboBox_schulform, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textfield_schulform, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel_5.createSequentialGroup()
 								.addComponent(lblSiemensprtnerschule)
 								.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-								.addComponent(comboBox_partners, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textfield_partners, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 							.addComponent(lblAnmerkungen))
 						.addContainerGap())
 			);
@@ -390,15 +398,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						.addContainerGap()
 						.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblNameDerSchule)
-							.addComponent(comboBox_schule, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_schule, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblSchulform)
-							.addComponent(comboBox_schulform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_schulform, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_5.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblSiemensprtnerschule)
-							.addComponent(comboBox_partners, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_partners, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addComponent(lblAnmerkungen)
 						.addPreferredGap(ComponentPlacement.RELATED)
@@ -421,12 +429,21 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			JLabel lblGrad = new JLabel("Grad:");
 			
-			String comboBoxListe_miki[] = {"Nein" , "Ja"};
-			comboBox_miki = new JComboBox(comboBoxListe_miki);
+			textfield_miki = new JTextField();
+			mikiList = new ArrayList<String>();
+			mikiList.add("Nein");
+			mikiList.add("Ja");
+			AutoCompleteDecorator.decorate(textfield_miki, mikiList, true);
 			
-			String comboBoxListe_grad[] = {"-" , "Eltern", "Geschwister", "Onkel/Tante", "Groﬂeltern", "siehe Anmerkungen"};
-			comboBox_grad = new JComboBox(comboBoxListe_grad);
-			comboBox_grad.setEnabled(false);
+			textfield_grad = new JTextField();
+			gradList = new ArrayList<String>();
+			gradList.add("Eltern");
+			gradList.add("Geschwister");
+			gradList.add("Onkel/Tante");
+			gradList.add("Groﬂeltern");
+			gradList.add("siehe Anmerkungen");
+			AutoCompleteDecorator.decorate(textfield_grad, gradList, false);
+			
 			GroupLayout gl_panel_6 = new GroupLayout(panel_6);
 			gl_panel_6.setHorizontalGroup(
 				gl_panel_6.createParallelGroup(Alignment.LEADING)
@@ -437,8 +454,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 							.addComponent(lblMitarbeiterkind))
 						.addGap(18)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
-							.addComponent(comboBox_miki, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
-							.addComponent(comboBox_grad, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_miki, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)
+							.addComponent(textfield_grad, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap(26, Short.MAX_VALUE))
 			);
 			gl_panel_6.setVerticalGroup(
@@ -447,11 +464,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						.addGap(20)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblMitarbeiterkind)
-							.addComponent(comboBox_miki, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_miki, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGap(18)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblGrad)
-							.addComponent(comboBox_grad, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_grad, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addContainerGap(28, Short.MAX_VALUE))
 			);
 			panel_6.setLayout(gl_panel_6);
@@ -1212,32 +1229,23 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			datePicker_gb.getEditor().setFormatterFactory(factory);
 			
-			String comboBoxListe_anrede[] = {"Herr", "Frau"};
-			comboBox_anrede = new JComboBox(comboBoxListe_anrede);
-		    
-			this.comboBox_geburtsort = new JComboBox();
-			this.comboBox_geburtsort.setEditable(true);
-			this.comboBox_geburtsort.setUI(new BasicComboBoxUI() {
-				           @Override  
-				            protected JButton createArrowButton() {  
-				                return new JButton() {  
-				                    @Override  
-			                  public int getWidth() {  
-				                return 0;  
-				                   }  
-				               };  
-				           }  
-				        });
-			this.comboBox_geburtsort.setBorder(BorderFactory.createLineBorder(Color.black));
-
-			AutoCompleteDecorator.decorate(this.comboBox_geburtsort);
-			comboBox_geburtsort.setEditable(true);
+			textfield_anrede = new JTextField();
+			anredeList = new ArrayList<String>();
+			anredeList.add("Herr");
+			anredeList.add("Frau");
+			AutoCompleteDecorator.decorate(textfield_anrede, anredeList, false);
+			
+			textField_geburtsort = new JTextField();
+			Geburtsortlist = new ArrayList<String>();
+//			lelist.add("yolo");
+//			lelist.add("swag");
+			AutoCompleteDecorator.decorate(textField_geburtsort, Geburtsortlist, false);
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(
 				gl_panel.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel.createSequentialGroup()
 						.addContainerGap()
-						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(lblNewLabel_1)
 								.addPreferredGap(ComponentPlacement.RELATED, 94, Short.MAX_VALUE)
@@ -1245,7 +1253,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(lblAnrede)
 								.addPreferredGap(ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
-								.addComponent(comboBox_anrede, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
+								.addComponent(textfield_anrede, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel.createSequentialGroup()
 								.addComponent(lblNachname)
 								.addPreferredGap(ComponentPlacement.RELATED, 55, Short.MAX_VALUE)
@@ -1255,13 +1263,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 								.addPreferredGap(ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
 								.addComponent(textField_vn, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(lblGeburtstag)
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblGeburtstag)
+									.addComponent(lblGeburtsort))
 								.addPreferredGap(ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-								.addComponent(datePicker_gb, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel.createSequentialGroup()
-								.addComponent(lblGeburtsort)
-								.addPreferredGap(ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-								.addComponent(comboBox_geburtsort, GroupLayout.PREFERRED_SIZE, 124, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(textField_geburtsort)
+									.addComponent(datePicker_gb, GroupLayout.DEFAULT_SIZE, 124, Short.MAX_VALUE))))
 						.addContainerGap())
 			);
 			gl_panel.setVerticalGroup(
@@ -1274,7 +1282,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblAnrede)
-							.addComponent(comboBox_anrede, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addComponent(textfield_anrede, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblNachname)
@@ -1290,8 +1298,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 							.addComponent(lblGeburtsort)
-							.addComponent(comboBox_geburtsort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(33, Short.MAX_VALUE))
+							.addComponent(textField_geburtsort, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(37, Short.MAX_VALUE))
 			);
 			panel.setLayout(gl_panel);
 			panel_Steckbrief.setLayout(gl_panel_Steckbrief);
@@ -1301,41 +1309,27 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			this.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
 			this.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
 			this.setSchulformAusfuellListener(new SchulformAusfuellListener());
+			this.setMikiAusfuellListener(new MikiAusfuellListener());
 			button_editAnspr1.addActionListener(this);
 		    button_editAnspr2.addActionListener(this);
 		    button_editAnspr3.addActionListener(this);
 		    button_woche1.addActionListener(this);
 		    button_woche2.addActionListener(this);
 		    button_woche3.addActionListener(this);
-		    comboBox_miki.addActionListener(this);
-		    comboBox_anrede.addActionListener(enterAction);
 			textField_nn.addActionListener(enterAction);
 			textField_vn.addActionListener(enterAction);
 			datePicker_gb.addActionListener(enterAction);
-//			comboBox_geburtsort.addActionListener(enterAction);
-//			comboBox_str.addActionListener(enterAction);
 			textField_plz.addActionListener(enterAction);
 			txtDeutschland.addActionListener(enterAction);
 			textField_tele.addActionListener(enterAction);
 			textField_mail.addActionListener(enterAction);
 			textField_mobil.addActionListener(enterAction);
 			textField_haus.addActionListener(enterAction);
-//			comboBox_wohn.addActionListener(enterAction);
 			textField_gnn.addActionListener(enterAction);
 			textField_gvn.addActionListener(enterAction);
-//			comboBox_schule.addActionListener(enterAction);
-//			comboBox_schulform.addActionListener(enterAction);
-//			comboBox_partners.addActionListener(enterAction);
-//			textArea_anmerkschule.addActionListener(enterAction);
-//			comboBox_miki.addActionListener(enterAction);
-//			comboBox_grad.addActionListener(enterAction);
-//			textArea_anmerkperson.addActionListener(enterAction);
 			datePicker_startdatum.addActionListener(enterAction);
 			datePicker_enddatum.addActionListener(enterAction);
-//			comboBox_status.addActionListener(enterAction);
 			datePicker_Antwortfrist.addActionListener(enterAction);
-//			textArea_anmerkprakt.addActionListener(enterAction);
-//			textArea_konsole.addActionListener(enterAction);
 		    textField_VornameAnsprWoch1.addActionListener(enterAction);
 		    textField_TelAnsprWoch1.addActionListener(enterAction);
 		    textField_AbteilAnsprWoch1.addActionListener(enterAction);
@@ -1351,8 +1345,85 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		    textField_AbteilAnsprWoch3.addActionListener(enterAction);
 		    textField_MailAnsprWoch3.addActionListener(enterAction);
 		    textField_RaumAnsprWoch3.addActionListener(enterAction);
-		
+		    textField_geburtsort.addKeyListener(enterKeylistener);
+		    textfield_anrede.addKeyListener(enterKeylistener);
+		    textfield_grad.addKeyListener(enterKeylistener);
+		    textfield_miki.addKeyListener(enterKeylistener);
+		    textfield_partners.addKeyListener(enterKeylistener);
+		    textfield_schule.addKeyListener(enterKeylistener);
+		    textfield_schulform.addKeyListener(enterKeylistener);
+		    textfield_str.addKeyListener(enterKeylistener);
+		    textfield_wohn.addKeyListener(enterKeylistener);
+		    textArea_anmerkschule.addKeyListener(textAreaEnter);
+		    textArea_anmerkperson.addKeyListener(textAreaEnter);
+		    textArea_anmerkprakt.addKeyListener(textAreaEnter);
+		    textArea_EinsatzortAnsprWoche1.addKeyListener(textAreaEnter);
+		    textArea_EinsatzortAnsprWoche2.addKeyListener(textAreaEnter);
+		    textArea_EinsatzortAnsprWoche3.addKeyListener(textAreaEnter);
 	}
+	KeyAdapter textAreaEnter = new KeyAdapter() {
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                if (e.getModifiers() > 0) {
+//                    textArea_anmerkschule.transferFocusBackward();
+                	if (e.getSource().equals(textArea_anmerkschule)) {
+                		textArea_anmerkschule.append("\n");
+					}else if (e.getSource().equals(textArea_anmerkperson)) {
+						textArea_anmerkperson.append("\n");
+					}else if (e.getSource().equals(textArea_anmerkprakt)) {
+						textArea_anmerkprakt.append("\n");
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche1)) {
+						textArea_EinsatzortAnsprWoche1.append("\n");
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche2)) {
+						textArea_EinsatzortAnsprWoche2.append("\n");
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche3)) {
+						textArea_EinsatzortAnsprWoche3.append("\n");
+					}
+                	
+                } else {
+                	if (e.getSource().equals(textArea_anmerkschule)) {
+                		textArea_anmerkschule.transferFocus();
+					}else if (e.getSource().equals(textArea_anmerkperson)) {
+						textArea_anmerkperson.transferFocus();
+					}else if (e.getSource().equals(textArea_anmerkprakt)) {
+						textArea_anmerkprakt.transferFocus();
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche1)) {
+						textArea_EinsatzortAnsprWoche1.transferFocus();
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche2)) {
+						textArea_EinsatzortAnsprWoche2.transferFocus();
+					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche3)) {
+						textArea_EinsatzortAnsprWoche3.transferFocus();
+					}
+                	
+                }
+                e.consume();
+            }
+        }
+	};
+	KeyListener enterKeylistener = new KeyListener() {
+		@Override
+		public void keyTyped(KeyEvent e) {
+//			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+//				KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+//		        manager.getFocusOwner().transferFocus();
+//			}
+		}
+		@Override
+		public void keyReleased(KeyEvent e) {
+//			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+//				KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+//		        manager.getFocusOwner().transferFocus();
+//			}
+		}
+		@Override
+		public void keyPressed(KeyEvent e) {
+			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		        manager.getFocusOwner().transferFocus();
+			}
+		}
+	};
 	Action enterAction = new AbstractAction()
 		{
 			private static final long serialVersionUID = 1L;
@@ -1392,14 +1463,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public void setAnsprAusfuellListener3(ActionListener l){
 		this.comboBox_NameAnsprWoch3.addActionListener(l);
 	}
-	public void setSchulformAusfuellListener(ActionListener l){
-		this.comboBox_schule.addActionListener(l);
+	public void setSchulformAusfuellListener(DocumentListener l){
+		this.textfield_schule.getDocument().addDocumentListener(l);
+	}
+	public void setMikiAusfuellListener(DocumentListener l){
+		this.textfield_miki.getDocument().addDocumentListener(l);
 	}
 	public ArrayList<String> getInhaltPrakt(){
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) textField_id.getText());
-			if (comboBox_anrede.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_anrede.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textfield_anrede.getText().trim().length() > 0){liste.add((String) textfield_anrede.getText().trim());}else{liste.add("");}
 			if (textField_nn.getText().trim().length() > 0){liste.add((String) textField_nn.getText().trim());}else{liste.add("");}
 			if (textField_vn.getText().trim().length() > 0){liste.add((String) textField_vn.getText().trim());}else{liste.add("");}
 			try {
@@ -1407,23 +1481,23 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (Exception e) {
 				liste.add("");
 			}
-			if (comboBox_geburtsort.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_geburtsort.getSelectedItem().toString().trim());}else{liste.add("");}
-			if (comboBox_str.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_str.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textField_geburtsort.getText().trim().length() > 0){liste.add((String) textField_geburtsort.getText().trim());}else{liste.add("");}
+			if (textfield_str.getText().trim().length() > 0){liste.add((String) textfield_str.getText().trim());}else{liste.add("");}
 			if (textField_plz.getText().trim().length() > 0){liste.add((String) textField_plz.getText().trim());}else{liste.add("");}
 			if (txtDeutschland.getText().trim().length() > 0){liste.add((String) txtDeutschland.getText().trim());}else{liste.add("");}
 			if (textField_tele.getText().trim().length() > 0){liste.add((String) textField_tele.getText().trim());}else{liste.add("");}
 			if (textField_mail.getText().trim().length() > 0){liste.add((String) textField_mail.getText().trim());}else{liste.add("");}
 			if (textField_mobil.getText().trim().length() > 0){liste.add((String) textField_mobil.getText().trim());}else{liste.add("");}
 			if (textField_haus.getText().trim().length() > 0){liste.add((String) textField_haus.getText().trim());}else{liste.add("");}
-			if (comboBox_wohn.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_wohn.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textfield_wohn.getText().trim().length() > 0){liste.add((String) textfield_wohn.getText().trim());}else{liste.add("");}
 			if (textField_gnn.getText().trim().length() > 0){liste.add((String) textField_gnn.getText().trim());}else{liste.add("");}
 			if (textField_gvn.getText().trim().length() > 0){liste.add((String) textField_gvn.getText().trim());}else{liste.add("");}
-			if (comboBox_schule.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_schule.getSelectedItem().toString().trim());}else{liste.add("");}
-			if (comboBox_schulform.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_schulform.getSelectedItem().toString().trim());}else{liste.add("");}
-			if (comboBox_partners.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_partners.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textfield_schule.getText().trim().length() > 0){liste.add((String) textfield_schule.getText().trim());}else{liste.add("");}
+			if (textfield_schulform.getText().trim().length() > 0){liste.add((String) textfield_schulform.getText().trim());}else{liste.add("");}
+			if (textfield_partners.getText().trim().length() > 0){liste.add((String) textfield_partners.getText().trim());}else{liste.add("");}
 			if (textArea_anmerkschule.getText().trim().length() > 0){liste.add((String) textArea_anmerkschule.getText().trim());}else{liste.add("");}
-			if (comboBox_miki.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_miki.getSelectedItem().toString().trim());}else{liste.add("");}
-			if (comboBox_grad.getSelectedItem().toString().trim().length() > 0){liste.add((String) comboBox_grad.getSelectedItem().toString().trim());}else{liste.add("");}
+			if (textfield_miki.getText().trim().length() > 0){liste.add((String) textfield_miki.getText().trim());}else{liste.add("");}
+			if (textfield_grad.getText().trim().length() > 0){liste.add((String) textfield_grad.getText().trim());}else{liste.add("");}
 			if (textArea_anmerkperson.getText().trim().length() > 0){liste.add((String) textArea_anmerkperson.getText().trim());}else{liste.add("");}
 			try{
 				if (sdfToDate.format(datePicker_startdatum.getDate()).trim().length() > 0){liste.add((String) sdfToDate.format(datePicker_startdatum.getDate()).trim());}else{liste.add("");}
@@ -1667,34 +1741,82 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			s.add((String) this.comboBox_NameAnsprWoch3.getSelectedItem());
 			return s;
 		}
-		class SchulformAusfuellListener implements ActionListener{ 
-			   public void actionPerformed(ActionEvent e) { 
-				   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-				   ArrayList<String> sname = new ArrayList<String>();
-	        	   sname = getNameSchule();
-	       			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
-	       			setInhaltSchulform(daten);
-	       			daten = _model.getData("SELECT PARTNERS FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND PARTNERS IS NOT NULL AND PARTNERS <> '' AND PARTNERS <> 'null';");
-	       			setInhaltPartners(daten);
-			   }
+		class MikiAusfuellListener implements DocumentListener{ 
+				
+			   @Override
+				public void changedUpdate(DocumentEvent e) {
+				   if (textfield_miki.getText().equals("Nein")) {
+						textfield_grad.setText("");
+						textfield_grad.setEnabled(false);
+					}else{
+						textfield_grad.setEnabled(true);
+					}
+				}
+			
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					if (textfield_miki.getText().equals("Nein")) {
+						textfield_grad.setText("");
+						textfield_grad.setEnabled(false);
+					}else{
+						textfield_grad.setEnabled(true);
+					}
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					if (textfield_miki.getText().equals("Nein")) {
+						textfield_grad.setText("");
+						textfield_grad.setEnabled(false);
+					}else{
+						textfield_grad.setEnabled(true);
+					}
+				}
 		   }
+		
+		class SchulformAusfuellListener implements DocumentListener{ 
+
+			   @Override
+				public void changedUpdate(DocumentEvent e) {
+					fillSchulform();
+				}
+			
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					fillSchulform();
+				}
+
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					fillSchulform();
+				}
+		   }
+		public void fillSchulform (){
+			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   ArrayList<String> sname = new ArrayList<String>();
+			   sname = getNameSchule();
+     			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
+     			setInhaltSchulform(daten);
+     			daten = _model.getData("SELECT PARTNERS FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND PARTNERS IS NOT NULL AND PARTNERS <> '' AND PARTNERS <> 'null';");
+     			setInhaltPartners(daten);
+		}
 		public ArrayList<String>  getNameSchule(){
 			ArrayList<String> s = new ArrayList<String>();
-			s.add((String) this.comboBox_schule.getSelectedItem());
+			s.add((String) this.textfield_schule.getText());
 			return s;
 		}
 		public void setInhaltSchulform(ArrayList<ArrayList<String>> liste){
 			try {
-				comboBox_schulform.setSelectedItem(liste.get(liste.size() - 1).get(0));
+				textfield_schulform.setText(liste.get(liste.size() - 1).get(0));
 			} catch (Exception e) {
-				comboBox_schulform.setSelectedItem("");
+				textfield_schulform.setText("");
 			}
 		}
 		public void setInhaltPartners(ArrayList<ArrayList<String>> liste){
 			try{
-				comboBox_partners.setSelectedItem(liste.get(liste.size() - 1).get(0));
+				textfield_partners.setText(liste.get(liste.size() - 1).get(0));
 			} catch (Exception e) {
-				comboBox_partners.setSelectedItem("Nein");
+				textfield_partners.setText("Nein");
 			}
 		}
 		/**
@@ -1894,89 +2016,62 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			idAnspr3 = Integer.parseInt(id);
 		}
 		 private void comboBox_autocomplete(){
+			 Object[][] Array;
+			 Vector V1 = new Vector<String>();
 			   /**
 			    * Wohnort
 			    */
-	       	   ArrayList<ArrayList<String>> daten_comboBoxItemsWohnort = new ArrayList<ArrayList<String>>();
-	    	   daten_comboBoxItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' AND ORT <> '' GROUP BY ORT");
-	    	   Object[][] Array = new String[daten_comboBoxItemsWohnort.size()][];
-	  			for (int i = 0; i < daten_comboBoxItemsWohnort.size(); i++) {
-	  			    ArrayList<String> row = daten_comboBoxItemsWohnort.get(i);
-	  			    Array[i] = row.toArray(new String[row.size()]);
-	  			}
-	  			Vector V1 = new Vector<String>();
-	  			for (int i = 0; i < Array.length; i++) {
-					V1.add(Array[i][0]);
-				}
-//	  			System.out.println(V1);
-	    	   setComboBoxItems_wohn(V1);
+	       	   ArrayList<ArrayList<String>> daten_ListItemsWohnort = new ArrayList<ArrayList<String>>();
+	       	   ArrayList<String> Liste_DatenWohnort = new ArrayList<String>();
+	    	   daten_ListItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' AND ORT <> '' GROUP BY ORT");
+	    	   for (int i = 0; i < daten_ListItemsWohnort.size(); i++) {
+	    		   Liste_DatenWohnort.add(daten_ListItemsWohnort.get(i).get(0));
+		    	   }
+	    	   setListItems_wohn(Liste_DatenWohnort);
 	    	   
 	    	   /**
 	    	    * Straﬂe
 	    	    */
-	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsStr= new ArrayList<ArrayList<String>>();
-	    	   daten_comboBoxItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' AND STR <> '' GROUP BY STR");
-	    	   Array = new String[daten_comboBoxItemsStr.size()][];
-	  			for (int i = 0; i < daten_comboBoxItemsStr.size(); i++) {
-	  			    ArrayList<String> row = daten_comboBoxItemsStr.get(i);
-	  			    Array[i] = row.toArray(new String[row.size()]);
-	  			}
-	  			V1 = new Vector<String>();
-	  			for (int i = 0; i < Array.length; i++) {
-					V1.add(Array[i][0]);
-				}
-//	  			System.out.println(V1);
-	    	   setComboBoxItems_str(V1);
+	    	   ArrayList<ArrayList<String>> daten_ListItemsStr= new ArrayList<ArrayList<String>>();
+	    	   ArrayList<String> Liste_DatenStrasse = new ArrayList<String>();
+	    	   daten_ListItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' AND STR <> '' GROUP BY STR");
+	    	   for (int i = 0; i < daten_ListItemsStr.size(); i++) {
+	    		   Liste_DatenStrasse.add(daten_ListItemsStr.get(i).get(0));
+		    	   }
+	    	   setListItems_str(Liste_DatenStrasse);
 	    	   
 	    	   /**
 	    	    * Geburtsort
 	    	    */
-	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsGeburtsort= new ArrayList<ArrayList<String>>();
-	    	   daten_comboBoxItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' AND GO <> '' GROUP BY GO");
-	    	   Array = new String[daten_comboBoxItemsGeburtsort.size()][];
-	  			for (int i = 0; i < daten_comboBoxItemsGeburtsort.size(); i++) {
-	  			    ArrayList<String> row = daten_comboBoxItemsGeburtsort.get(i);
-	  			    Array[i] = row.toArray(new String[row.size()]);
-	  			}
-	  			V1 = new Vector<String>();
-	  			for (int i = 0; i < Array.length; i++) {
-					V1.add(Array[i][0]);
-				}
-//	  			System.out.println(V1);
-	    	   setComboBoxItems_geburtsort(V1);
+	    	   ArrayList<ArrayList<String>> daten_ListItemsGeburtsort= new ArrayList<ArrayList<String>>();
+	    	   ArrayList<String> Liste_DatenGeburtsort = new ArrayList<String>();
+	    	   daten_ListItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' AND GO <> '' GROUP BY GO");
+	    	   for (int i = 0; i < daten_ListItemsGeburtsort.size(); i++) {
+				Liste_DatenGeburtsort.add(daten_ListItemsGeburtsort.get(i).get(0));
+	    	   }
+	    	   setListItems_geburtsort(Liste_DatenGeburtsort);
 	    	   
 	    	   /**
 	    	    * Schule
 	    	    */
-	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchule= new ArrayList<ArrayList<String>>();
-	    	   daten_comboBoxItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' AND SCHULE <> '' GROUP BY SCHULE");
-	    	   Array = new String[daten_comboBoxItemsSchule.size()][];
-	  			for (int i = 0; i < daten_comboBoxItemsSchule.size(); i++) {
-	  			    ArrayList<String> row = daten_comboBoxItemsSchule.get(i);
-	  			    Array[i] = row.toArray(new String[row.size()]);
-	  			}
-	  			V1 = new Vector<String>();
-	  			for (int i = 0; i < Array.length; i++) {
-					V1.add(Array[i][0]);
-				}
-//	  			System.out.println(V1);
-	    	   setComboBoxItems_schule(V1);
+	    	   ArrayList<ArrayList<String>> daten_ListItemsSchule= new ArrayList<ArrayList<String>>();
+	    	   ArrayList<String> Liste_DatenSchule = new ArrayList<String>();
+	    	   daten_ListItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' AND SCHULE <> '' GROUP BY SCHULE");
+	  			for (int i = 0; i < daten_ListItemsSchule.size(); i++) {
+	  				Liste_DatenSchule.add(daten_ListItemsSchule.get(i).get(0));
+		    	   }
+	    	   setComboBoxItems_schule(Liste_DatenSchule);
 	    	   
 	    	   /**
 	    	    * Schulform
 	    	    */
-	    	   ArrayList<ArrayList<String>> daten_comboBoxItemsSchulform= new ArrayList<ArrayList<String>>();
-	    	   daten_comboBoxItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' AND SCHULFORM <> '' GROUP BY SCHULFORM");
-	    	   Array = new String[daten_comboBoxItemsSchulform.size()][];
-	  			for (int i = 0; i < daten_comboBoxItemsSchulform.size(); i++) {
-	  			    ArrayList<String> row = daten_comboBoxItemsSchulform.get(i);
-	  			    Array[i] = row.toArray(new String[row.size()]);
-	  			}
-	  			V1 = new Vector<String>();
-	  			for (int i = 0; i < Array.length; i++) {
-					V1.add(Array[i][0]);
-				}
-	  			setComboBoxItems_schulform(V1);
+	    	   ArrayList<ArrayList<String>> daten_ListItemsSchulform= new ArrayList<ArrayList<String>>();
+	    	   ArrayList<String> Liste_DatenSchulform = new ArrayList<String>();
+	    	   daten_ListItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' AND SCHULFORM <> '' GROUP BY SCHULFORM");
+	    	   for (int i = 0; i < daten_ListItemsSchulform.size(); i++) {
+	    		   Liste_DatenSchulform.add(daten_ListItemsSchulform.get(i).get(0));
+		    	   }
+	    	   setComboBoxItems_schulform(Liste_DatenSchulform);
 	  			
 	  			/**
 	  			 * Nachname Ansprechpartner
@@ -2000,61 +2095,42 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBox Wohnort
 			 * @param v
 			 */
-			private void setComboBoxItems_wohn(Vector v){
-				comboBox_wohn.removeAllItems();
-				comboBox_wohn.addItem(""); // leeres Item 
-				for (int i = 0; i < v.size(); i++) {
-				    comboBox_wohn.addItem(v.get(i));
-				}
-				AutoCompleteDecorator.decorate(this.comboBox_wohn);
+		 	private void setListItems_wohn(ArrayList<String> liste){
+				Wohnortlist = liste;
+				AutoCompleteDecorator.decorate(textfield_wohn, Wohnortlist, false);
 			}
 			/**
 			 * Setzt den Inhalt der ComboBox Straﬂe
 			 * @param v
 			 */
-			private void setComboBoxItems_str(Vector v){
-				comboBox_str.removeAllItems();
-				comboBox_str.addItem("");
-				for (int i = 0; i < v.size(); i++) {
-				    comboBox_str.addItem(v.get(i));
-				}
-				AutoCompleteDecorator.decorate(this.comboBox_str);
+			private void setListItems_str(ArrayList<String> liste){
+				Strasselist = liste;
+				AutoCompleteDecorator.decorate(textfield_str, Strasselist, false);
 			}
 			/**
 			 * Setzt den Inhalt der ComboBox Geburtsort
 			 * @param v
 			 */
-			private void setComboBoxItems_geburtsort(Vector v){
-				comboBox_geburtsort.removeAllItems();
-				comboBox_geburtsort.addItem("");
-				for (int i = 0; i < v.size(); i++) {
-				    comboBox_geburtsort.addItem(v.get(i));
-				}
-				AutoCompleteDecorator.decorate(this.comboBox_geburtsort);
+			private void setListItems_geburtsort(ArrayList<String> liste){
+				Geburtsortlist = liste;
+				AutoCompleteDecorator.decorate(textField_geburtsort, Geburtsortlist, false);
 			}
 			/**
 			 * Setzt den Inhalt der ComboBox Schule
 			 * @param v
 			 */
-			private void setComboBoxItems_schule(Vector v){
-				comboBox_schule.removeAllItems();
-				comboBox_schule.addItem("");
-				for (int i = 0; i < v.size(); i++) {
-				    comboBox_schule.addItem(v.get(i));
-				}
-				AutoCompleteDecorator.decorate(this.comboBox_schule);
+			
+			private void setComboBoxItems_schule(ArrayList<String> liste){
+				schuleList = liste;
+				AutoCompleteDecorator.decorate(textfield_schule, schuleList, false);
 			}
 			/**
 			 * Setzt den Inhalt der ComboBox Schulform
 			 * @param v
 			 */
-			private void setComboBoxItems_schulform(Vector v){
-				comboBox_schulform.removeAllItems();
-				comboBox_schulform.addItem("");
-				for (int i = 0; i < v.size(); i++) {
-					comboBox_schulform.addItem(v.get(i));
-				}
-				AutoCompleteDecorator.decorate(this.comboBox_schulform);
+			private void setComboBoxItems_schulform(ArrayList<String> liste){
+				schulformList = liste;
+				AutoCompleteDecorator.decorate(textfield_schulform, schulformList, false);
 			}
 			/**
 			 * Setzt den Inhalt der ComboBoxen der Ansprechpartner Nachnamen
@@ -2157,7 +2233,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		public void setInhaltPrakt(ArrayList<ArrayList<String>> daten){
 			SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			textField_id.setText(daten.get(0).get(0));
-			comboBox_anrede.setSelectedItem(daten.get(0).get(1));
+			textfield_anrede.setText(daten.get(0).get(1));
 			textField_nn.setText(daten.get(0).get(2));
 			textField_vn.setText(daten.get(0).get(3));
 			try {
@@ -2165,23 +2241,23 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (ParseException e) {
 				datePicker_gb.setDate(null);
 			}
-			comboBox_geburtsort.setSelectedItem(daten.get(0).get(5));
-			comboBox_str.setSelectedItem(daten.get(0).get(6));
+			textField_geburtsort.setText(daten.get(0).get(5));
+			textfield_str.setText(daten.get(0).get(6));
 			textField_plz.setText(daten.get(0).get(7));
 			txtDeutschland.setText(daten.get(0).get(8));
 			textField_tele.setText(daten.get(0).get(9));
 			textField_mail.setText(daten.get(0).get(10));
 			textField_mobil.setText(daten.get(0).get(11));
 			textField_haus.setText(daten.get(0).get(12));
-			comboBox_wohn.setSelectedItem(daten.get(0).get(13));
+			textfield_wohn.setText(daten.get(0).get(13));
 			textField_gnn.setText(daten.get(0).get(14));
 			textField_gvn.setText(daten.get(0).get(15));
-			comboBox_schule.setSelectedItem(daten.get(0).get(16));
-			comboBox_schulform.setSelectedItem(daten.get(0).get(17));
-			comboBox_partners.setSelectedItem(daten.get(0).get(18));
+			textfield_schule.setText(daten.get(0).get(16));
+			textfield_schulform.setText(daten.get(0).get(17));
+			textfield_partners.setText(daten.get(0).get(18));
 			textArea_anmerkschule.setText(daten.get(0).get(19));
-			comboBox_miki.setSelectedItem(daten.get(0).get(20));
-			comboBox_grad.setSelectedItem(daten.get(0).get(21));
+			textfield_miki.setText(daten.get(0).get(20));
+			textfield_grad.setText(daten.get(0).get(21));
 			textArea_anmerkperson.setText(daten.get(0).get(22));
 			try {
 				datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
@@ -2251,20 +2327,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textArea_EinsatzortAnsprWoche3.setEditable(true);
 					ansprbearb3gedrueckt = true;
 					button_editAnspr3.setEnabled(false);
-				} else if (src == comboBox_miki) {
-					if (comboBox_miki.getSelectedItem() == "Nein") {
-						comboBox_grad.setSelectedItem("-");
-						comboBox_grad.setEnabled(false);
-					}else{
-						comboBox_grad.setEnabled(true);
-					}
-				} else if (src == comboBox_miki) {
-					if (comboBox_miki.getSelectedItem() == "Nein") {
-						comboBox_grad.setSelectedItem("-");
-						comboBox_grad.setEnabled(false);
-					}else{
-						comboBox_grad.setEnabled(true);
-					}
-				}
+				} 
 		}
 }

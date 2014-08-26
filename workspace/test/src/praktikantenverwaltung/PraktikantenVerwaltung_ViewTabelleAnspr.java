@@ -22,6 +22,8 @@ import javax.swing.event.DocumentListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JCheckBox;
 
@@ -231,8 +233,31 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	}
 	public void updateTable(){
 		table_anspr = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenansprech, datenansprech));
-		table_anspr.setSelectionMode(0);
+//		table_anspr.setSelectionMode(0);
 		table_anspr.setAutoCreateRowSorter(true);
+		table_anspr.addMouseListener(new MouseAdapter() {
+			   public void mouseClicked(MouseEvent e) {
+			      if (e.getClickCount() == 2) {
+			    	  ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			    	  JTable target = (JTable)e.getSource();
+			            int markierteReiheNR =  target.getSelectedRow();
+			            ArrayList<String> liste = new ArrayList<String>();
+			            if(markierteReiheNR >= 0){
+				            String nn = (String) target.getValueAt(markierteReiheNR, 0);
+				            String vn = (String) target.getValueAt(markierteReiheNR, 1);
+				            String tele = (String) target.getValueAt(markierteReiheNR, 2);
+				            liste.add(nn);
+				            liste.add(vn);
+				            liste.add(tele);
+				            String sql;
+				            sql = getEintragAnspr(liste);
+				            daten = _model.getData(sql);
+				            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+				      	   _viewanspr.setVisible(true);
+			            }
+			         }
+			   }
+			});
 		scrollPane_SuchlisteAnspr.setViewportView(table_anspr);
 	}
 	private void setLoeschenListener(ActionListener l){
@@ -260,12 +285,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
         public void actionPerformed(ActionEvent e) { 
      	   JTable table = getTable();
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-            int markierteReiheNR =  table.getSelectedRow();
-            ArrayList<String> liste = new ArrayList<String>();
-            if(markierteReiheNR >= 0){
-	            String nn = (String) table.getValueAt(markierteReiheNR, 0);
-	            String vn = (String) table.getValueAt(markierteReiheNR, 1);
-	            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+            int[] markierteReiheNR =  table.getSelectedRows();
+            for (int i = 0; i < markierteReiheNR.length; i++) {
+            	ArrayList<String> liste = new ArrayList<String>();
+	            String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
+	            String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
+	            String tele = (String) table.getValueAt(markierteReiheNR[i], 2);
 	            liste.add(nn);
 	            liste.add(vn);
 	            liste.add(tele);
@@ -280,20 +305,20 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	            _model.insertUpdateDeleteTable(sql);
 	            sql = loescheEintragAnspr(liste);
 	            _model.insertUpdateDeleteTable(sql);
-	            filter();
+			}
+	         filter();
             }
-         } 
 	   }
 	class AnsprBearbeitenListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) { 
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
      	   JTable table = getTable();
-            int markierteReiheNR =  table.getSelectedRow();
-            ArrayList<String> liste = new ArrayList<String>();
-            if(markierteReiheNR >= 0){
-	            String nn = (String) table.getValueAt(markierteReiheNR, 0);
-	            String vn = (String) table.getValueAt(markierteReiheNR, 1);
-	            String tele = (String) table.getValueAt(markierteReiheNR, 2);
+     	  int[] markierteReiheNR =  table.getSelectedRows();
+          for (int i = 0; i < markierteReiheNR.length; i++) {
+          	ArrayList<String> liste = new ArrayList<String>();
+	            String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
+	            String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
+	            String tele = (String) table.getValueAt(markierteReiheNR[i], 2);
 	            liste.add(nn);
 	            liste.add(vn);
 	            liste.add(tele);

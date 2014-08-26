@@ -348,7 +348,7 @@ public class PraktikantenVerwaltung_Control {
         	   ArrayList<String> suche = new ArrayList<String>();
         	   suche = _view.getSuchePrakt();
         	   String suchekrit = new String();
-        	   if(suche.get(0) == "Nachname"){
+        	   if(suche.get(0).equals("Nachname")){
         		   suchekrit = "NN";
         	   }
        			daten = _model.getData("SELECT ID , NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE " + suchekrit + " LIKE '"+ suche.get(1) +"%' ORDER BY NN DESC;");
@@ -383,7 +383,7 @@ public class PraktikantenVerwaltung_Control {
         	   ArrayList<String> suche = new ArrayList<String>();
         	   suche = _view.getSucheAnspr();
         	   String suchekrit = new String();
-        	   if(suche.get(0) == "Nachname"){
+        	   if(suche.get(0).equals("Nachname")){
         		   suchekrit = "NN";
         	   }
        			daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR FROM ANSPRECHPARTNER WHERE " + suchekrit + " LIKE '" + suche.get(1) + "%' ORDER BY NN;");

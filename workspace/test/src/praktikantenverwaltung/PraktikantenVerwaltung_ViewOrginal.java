@@ -10,6 +10,8 @@ import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1734,7 +1736,20 @@ public class PraktikantenVerwaltung_ViewOrginal extends JFrame implements Action
 //		comboBox_status.addActionListener(enterAction);
 //		textArea_anmerkprakt.addActionListener(enterAction);
 //		textArea_konsole.addActionListener(enterAction);
-	    
+		textArea_anmerkschule.addKeyListener(new KeyAdapter() {
+	        @Override
+	        public void keyPressed(KeyEvent e) {
+	            if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+	                if (e.getModifiers() > 0) {
+//	                    textArea_anmerkschule.transferFocusBackward();
+	                	textArea_anmerkschule.append("\n");
+	                } else {
+	                	textArea_anmerkschule.transferFocus();
+	                }
+	                e.consume();
+	            }
+	        }
+		});
 	}
 	Action enterAction = new AbstractAction()
 	{

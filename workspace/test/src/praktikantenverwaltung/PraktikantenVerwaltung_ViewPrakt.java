@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -43,6 +44,8 @@ import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
+import praktikantenverwaltung.PraktikantenVerwaltung_ViewtabellePrakt.NachrichtSendenListener;
+
 import javax.swing.JCheckBox;
 
 public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
@@ -55,6 +58,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	 */
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
+	private PlatzhalterReplacerUndDokumentWriter _replacer;
 	private JPanel mainPanel;
 	private JTextField textField_id;
 	private JTextField textField_nn;
@@ -142,6 +146,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private Vector comboBoxNachrichtenItems = new Vector();
 	File f = new File("templates");
 	private JComboBox comboBox_NachrichtWahl;
+	private String tempFolder = new String("temp");
+	private String templateFolder = new String("templates");
+	private JButton btnNachrichtErstellen;
 
 	public PraktikantenVerwaltung_ViewPrakt(){
 		  this._model = new PraktikantenVerwaltung_Modell();
@@ -162,6 +169,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
+			this._replacer = new PlatzhalterReplacerUndDokumentWriter();
 			setResizable(true);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(20, 20, 1280, 720);
@@ -619,7 +627,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JLabel lblStatus_1 = new JLabel("Info");
 			lblStatus_1.setFont(new Font("Tahoma", Font.BOLD, 12));
 			
-			JButton btnNachrichtErstellen = new JButton("Nachricht erstellen");
+			btnNachrichtErstellen = new JButton("Nachricht erstellen");
 			
 			panel_ansprechPartner = new JPanel();
 			
@@ -1312,6 +1320,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			this.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
 			this.setSchulformAusfuellListener(new SchulformAusfuellListener());
 			this.setMikiAusfuellListener(new MikiAusfuellListener());
+			this.setNachrichtSendenListener(new NachrichtSendenListener());
 			button_editAnspr1.addActionListener(this);
 		    button_editAnspr2.addActionListener(this);
 		    button_editAnspr3.addActionListener(this);
@@ -1485,6 +1494,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	};
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
+	}
+	private void setNachrichtSendenListener(ActionListener l){
+		this.btnNachrichtErstellen.addActionListener(l);
 	}
 	/**
 	 * Setzt einen Listener auf die ComboBox NachnameAnsprechpartner 1 
@@ -2009,6 +2021,66 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             comboBox_autocomplete();
         } 
 	   }
+	   class NachrichtSendenListener implements ActionListener{ 
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				ArrayList<String> platzhalter = new ArrayList<String>();
+	            platzhalter.add("<<ID>>");
+	            platzhalter.add("<<Anrede>>");
+	            platzhalter.add("<<Nachname>>");
+	            platzhalter.add("<<Vorname>>");
+	            platzhalter.add("<<Geburtsdatum>>");
+	            platzhalter.add("<<Geburtsort>>");
+	            platzhalter.add("<<Straße>>");
+	            platzhalter.add("<<PLZ>>");
+	            platzhalter.add("<<Land>>");
+	            platzhalter.add("<<Telefon>>");
+	            platzhalter.add("<<Mail>>");
+	            platzhalter.add("<<Mobil>>");
+	            platzhalter.add("<<Hausnummer>>");
+	            platzhalter.add("<<Ort>>");
+	            platzhalter.add("<<VertreterNachname>>");
+	            platzhalter.add("<<VertreterVorname>>");
+	            platzhalter.add("<<Schule>>");
+	            platzhalter.add("<<Schulform>>");
+	            platzhalter.add("<<Partnerschule>>");
+	            platzhalter.add("<<AnmerkungenSchule>>");
+	            platzhalter.add("<<Miki>>");
+	            platzhalter.add("<<Miki-Grad>>");
+	            platzhalter.add("<<AnmerkungenPerson>>");
+	            platzhalter.add("<<Startdatum>>");
+	            platzhalter.add("<<Enddatum>>");
+	            platzhalter.add("<<Status>>");
+	            platzhalter.add("<<AnmerkungenPraktikum>>");
+	            platzhalter.add("<<Anspr1>>");
+	            platzhalter.add("<<Anspr2>>");
+	            platzhalter.add("<<Anspr3>>");
+	            platzhalter.add("<<Info>>");
+	            platzhalter.add("<<Edit>>");
+	            platzhalter.add("<<Unterlagenvollst>>");
+	            platzhalter.add("<<AntwortBis>>");
+	            platzhalter.add("<<AnredePostfix>>");
+	            ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		        daten.add(getInhaltPrakt());
+	            /**
+	             * Postfix für Anrede hinzufügen
+	             * Wenn Herr dann r sonst nichts
+	             */
+	            if (daten.get(0).get(1).equals("Herr")) {
+	                daten.get(0).add("r");
+				} else {
+					daten.get(0).add("");
+				}
+	            	String nachricht = getNachrichtWahl();
+	            
+	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
+	            		   tempFolder + "/" + daten.get(0).get(2) + daten.get(0).get(3) + "-" + nachricht + ".docx",
+	            		   platzhalter, daten.get(0));
+			}
+		}
+	   private String getNachrichtWahl(){
+			return comboBox_NachrichtWahl.getSelectedItem().toString();
+		}
 		public Integer getAnspr1ID(){
 			return this.idAnspr1;
 		}

@@ -3,11 +3,21 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.io.File;
+import java.io.IOException;
+
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
+
+import org.apache.commons.io.FileUtils;
 
 public class PraktikantenVerwaltung_ViewStart extends JFrame {
 
@@ -17,6 +27,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	 * erstellen der Fields
 	 */
 	private JPanel mainPanel;
+	private String tempFolder = new String("temp");
 	JMenuItem menuNeuerPraktikant = new JMenuItem("Neuer Praktikant");
 	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Ansprechpartner");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige Praktikantentabelle");
@@ -27,9 +38,8 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	 */
 	public PraktikantenVerwaltung_ViewStart() {
 		setResizable(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(5, 5, 1280, 720);
-		
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -50,6 +60,42 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		    start.add(menuAlleAnsprechpartner);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
+		    this.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowOpened(WindowEvent e) {
+				}
+				@Override
+				public void windowIconified(WindowEvent e) {
+				}
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+				}
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+				}
+				@Override
+				public void windowClosing(WindowEvent e) {
+					try {
+						FileUtils.cleanDirectory(new File(tempFolder));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					int confirmed = JOptionPane.showConfirmDialog(null, 
+					        "Wirklich Schlieﬂen? Alle nicht gespeicherten Daten gehen verloren!", "",
+					        JOptionPane.YES_NO_OPTION);
+					    if (confirmed == JOptionPane.YES_OPTION) {
+					    	dispose();
+					    }
+				}
+				@Override
+				public void windowClosed(WindowEvent e) {
+					
+				}
+				@Override
+				public void windowActivated(WindowEvent e) {
+				}
+			});
 	}
 	public void setNeuerPraktListener(ActionListener l){ 
         this.menuNeuerPraktikant.addActionListener(l); 

@@ -395,8 +395,16 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
             platzhalter.add("<<Unterlagenvollst>>");
             platzhalter.add("<<AntwortBis>>");
             platzhalter.add("<<AnredePostfix>>");
+            platzhalter.add("<<AnsprID1>>");
+            platzhalter.add("<<NachnameAnspr>>");
+            platzhalter.add("<<VornameAnspr>>");
+            platzhalter.add("<<TeleAnspr>>");
+            platzhalter.add("<<MailAnspr>>");
+            platzhalter.add("<<AbteilungAnspr>>");
+            platzhalter.add("<<Raumnummer>>");
 	        for (int i = 0; i < markierteReiheNR.length; i++) {
 				ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+				ArrayList<String> daten1d = new ArrayList<String>();
 	            ArrayList<String> liste = new ArrayList<String>();
 	            String nn = (String) table.getValueAt(markierteReiheNR[i], 0);
 	            String vn = (String) table.getValueAt(markierteReiheNR[i], 1);
@@ -407,22 +415,38 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	            String sql;
 	            sql = getEintragPrakt(liste);
 	            daten = _model.getData(sql);
+	            daten1d.addAll(daten.get(0));
 	            /**
 	             * Postfix für Anrede hinzufügen
 	             * Wenn Herr dann r sonst nichts
 	             */
-	            if (daten.get(0).get(1).equals("Herr")) {
-	                daten.get(0).add("r");
+	            if (daten1d.get(1).equals("Herr")) {
+	                daten1d.add("r");
 				} else {
-					daten.get(0).add("");
+					daten1d.add("");
 				}
+	            daten1d.addAll(getInhaltAnspr(daten1d.get(27),platzhalter));
+	            daten.add(daten1d);
 	            	String nachricht = getNachrichtWahl();
 	            
 	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
-	            		   tempFolder + "/" + daten.get(0).get(2) + daten.get(0).get(3) + "-" + nachricht + ".docx",
-	            		   platzhalter, daten.get(0));
+	            		   tempFolder + "/" + daten.get(1).get(2) + daten.get(1).get(3) + "-" + nachricht + ".docx",
+	            		   platzhalter, daten.get(1));
 	        }
 		}
+	}
+	private ArrayList<String> getInhaltAnspr(String id , ArrayList<String> platzhalter){
+		String sql;
+		ArrayList<String> liste = new ArrayList<String>();
+		sql = "SELECT * from ANSPRECHPARTNER where ID='" + id + "';";
+		try {
+			liste = _model.getData(sql).get(0);
+		} catch (Exception e) {
+			for (int i = 0; i < platzhalter.size(); i++) {
+				liste.add("");
+			}
+		}
+		return liste;
 	}
 	private String getNachrichtWahl(){
 		return comboBox_Nachrichtwahl.getSelectedItem().toString();

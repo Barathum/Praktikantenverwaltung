@@ -1,5 +1,6 @@
 package praktikantenverwaltung;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -84,6 +85,7 @@ public class PlatzhalterReplacerUndDokumentWriter {
 		 * Hauptmethode der Klasse, die alle anderen Methoden dazu verwendet das template
 		 * zu laden alle Platzhalter placeholders mit dem gewünschten Text realText zu ersetzen und das Ergebnis Dukoment unter
 		 * dem Pfad target zu speichern
+		 * öffnet danach Die gerade erstellte Datei mit dem Default Programm(Hier Word)
 		 * @param template Das Vorlagen Dokument
 		 * @param target Zielpfad für fertiges Dokument
 		 * @param placeholders Platzhalter
@@ -114,6 +116,13 @@ public class PlatzhalterReplacerUndDokumentWriter {
 				e.printStackTrace();
 				return;
 			}
+	        try {
+	            if (Desktop.isDesktopSupported()) {
+	              Desktop.getDesktop().open(new File(target));
+	            }
+	          } catch (IOException ioe) {
+	            ioe.printStackTrace();
+	         }
 		}
 		
 

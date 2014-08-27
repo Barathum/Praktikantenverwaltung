@@ -3,6 +3,7 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
@@ -147,13 +148,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private ArrayList<String> ansprList;
 	private Vector comboBoxNachrichtenItems = new Vector();
 	File f = new File("templates");
-	private JComboBox comboBox_NachrichtWahl;
+//	private JComboBox comboBox_NachrichtWahl;
+	private SteppedComboBox comboBox_NachrichtWahl;
 	private String tempFolder = new String("temp");
 	private String templateFolder = new String("templates");
 	private JButton btnNachrichtErstellen;
 	ImageIcon IconEdit = new ImageIcon(new ImageIcon("img/editIcon.png").getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH));
 	Color coolBlue = new Color(4, 122, 201); 
 	
+	/**
+	 * @wbp.parser.constructor
+	 */
 	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model){
 		  this._model = model;
 		  this._control = control;
@@ -639,13 +644,19 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JPanel panel_1 = new JPanel();
 			panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			
-			comboBox_NachrichtWahl = new JComboBox();
+			String[] str = {
+				      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				    };
+			comboBox_NachrichtWahl = new SteppedComboBox(str);
+		    Dimension d = comboBox_NachrichtWahl.getPreferredSize();
+		    comboBox_NachrichtWahl.setPreferredSize(new Dimension(50, d.height));
+		    comboBox_NachrichtWahl.setPopupWidth(d.width);
 			GroupLayout gl_panel_Steckbrief = new GroupLayout(panel_Steckbrief);
 			gl_panel_Steckbrief.setHorizontalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 						.addGap(43)
-						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
+						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 									.addComponent(lblNewLabel)
@@ -679,7 +690,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 												.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)))
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addPreferredGap(ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
 												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 													.addComponent(lblDatenZumPraktikum)
 													.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
@@ -687,15 +698,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 												.addGap(71)
 												.addComponent(lblAnmerkungenZumEinsatzort, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))))
-								.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addGap(3)
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
-											.addComponent(btnSpeichern, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
 											.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(comboBox_NachrichtWahl, Alignment.LEADING, 0, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(btnNachrichtErstellen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
-										.addGap(18)
+												.addComponent(btnNachrichtErstellen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(btnSpeichern, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
+											.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
+										.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
 											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)))
@@ -703,9 +714,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 										.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
 										.addGap(112))
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-										.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 363, GroupLayout.PREFERRED_SIZE)
+										.addGap(25)
+										.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 358, Short.MAX_VALUE)
 										.addGap(2)))))
-						.addContainerGap(53, Short.MAX_VALUE))
+						.addGap(49))
 			);
 			gl_panel_Steckbrief.setVerticalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
@@ -722,7 +734,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 									.addComponent(panel_5, 0, 0, Short.MAX_VALUE)
 									.addComponent(panel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 									.addComponent(panel_4, GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE))
-								.addPreferredGap(ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+								.addGap(50)
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING, false)
 										.addGroup(gl_panel_Steckbrief.createSequentialGroup()
@@ -756,11 +768,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 										.addComponent(panel_ansprechPartner, GroupLayout.PREFERRED_SIZE, 197, GroupLayout.PREFERRED_SIZE)
 										.addContainerGap())
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
+										.addGap(74)
 										.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addPreferredGap(ComponentPlacement.UNRELATED, 11, Short.MAX_VALUE)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+												.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(ComponentPlacement.UNRELATED)
 												.addComponent(btnNachrichtErstellen, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(ComponentPlacement.RELATED)
@@ -768,7 +781,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
 										.addGap(26))))
 							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-								.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 176, GroupLayout.PREFERRED_SIZE)
+								.addGap(304)
+								.addComponent(panel_1, GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
 								.addGap(196))))
 			);
 			

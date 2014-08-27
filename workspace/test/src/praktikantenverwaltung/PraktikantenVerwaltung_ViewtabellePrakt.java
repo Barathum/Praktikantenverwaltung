@@ -178,11 +178,11 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					.addComponent(btn_praktbearbeiten)
 					.addGap(18)
 					.addComponent(btn_praktloeschen, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
-					.addGap(52)
-					.addComponent(comboBox_Nachrichtwahl, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
+					.addGap(30)
+					.addComponent(comboBox_Nachrichtwahl, GroupLayout.PREFERRED_SIZE, 200, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btn_praktNachrichtSchreiben)
-					.addContainerGap(757, Short.MAX_VALUE))
+					.addContainerGap(607, Short.MAX_VALUE))
 		);
 		gl_panel_10.setVerticalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
@@ -220,12 +220,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		@Override
 	    public void actionPerformed(ActionEvent e)
 	    {
-//	    	try {
-	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		        manager.getFocusOwner().transferFocus();
-//			} catch (Exception e2) {
-//				// TODO: handle exception
-//			}
+    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+	        manager.getFocusOwner().transferFocus();
 	    }
 	};
 	private void setDatenPrakt(Object[][] daten){

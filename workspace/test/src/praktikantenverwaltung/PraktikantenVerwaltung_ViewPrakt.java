@@ -152,7 +152,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private String templateFolder = new String("templates");
 	private JButton btnNachrichtErstellen;
 	ImageIcon IconEdit = new ImageIcon(new ImageIcon("img/editIcon.png").getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH));
-
+	Color coolBlue = new Color(4, 122, 201); 
+	
 	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model){
 		  this._model = model;
 		  this._control = control;
@@ -570,6 +571,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			panel_8.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			
 			button_woche1 = new JButton("1");
+			button_woche1.setBackground(coolBlue);
 			
 			button_woche2 = new JButton("2");
 			
@@ -1412,14 +1414,23 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					}else if (e.getSource().equals(textArea_anmerkprakt)) {
 						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
+						button_woche1.setBackground(coolBlue);
+						button_woche2.setBackground(null);
+						button_woche3.setBackground(null);
 						textfield_NameAnsprWoch1.requestFocus();
 					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche1)) {
 						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(coolBlue);
+						button_woche3.setBackground(null);
 						textfield_NameAnsprWoch2.requestFocus();
 					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche2)) {
 						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(null);
+						button_woche3.setBackground(coolBlue);
 						textfield_NameAnsprWoch3.requestFocus();
 					}else if (e.getSource().equals(textArea_EinsatzortAnsprWoche3)) {
 						textArea_EinsatzortAnsprWoche3.transferFocus();
@@ -1453,6 +1464,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
 						textfield_NameAnsprWoch2.requestFocus();
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(coolBlue);
+						button_woche3.setBackground(null);
 					}else{
 						KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 				        manager.getFocusOwner().transferFocus();
@@ -1462,6 +1476,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
 						textfield_NameAnsprWoch3.requestFocus();
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(null);
+						button_woche3.setBackground(coolBlue);
 					}else{
 						KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 				        manager.getFocusOwner().transferFocus();
@@ -2446,10 +2463,22 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
 			   if (src == button_woche1) {
 					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche1");
+					button_woche1.setBackground(coolBlue);
+					button_woche2.setBackground(null);
+					button_woche3.setBackground(null);
+					textfield_NameAnsprWoch1.requestFocus();
 				} else if (src == button_woche2) {
-					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");	
+					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
+					button_woche1.setBackground(null);
+					button_woche2.setBackground(coolBlue);
+					button_woche3.setBackground(null);
+					textfield_NameAnsprWoch2.requestFocus();
 				} else if (src == button_woche3) {
 					cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
+					button_woche1.setBackground(null);
+					button_woche2.setBackground(null);
+					button_woche3.setBackground(coolBlue);
+					textfield_NameAnsprWoch3.requestFocus();
 				} else if (src == button_editAnspr1){
 					textfield_NameAnsprWoch1.setEditable(true);
 					textField_VornameAnsprWoch1.setEditable(true);

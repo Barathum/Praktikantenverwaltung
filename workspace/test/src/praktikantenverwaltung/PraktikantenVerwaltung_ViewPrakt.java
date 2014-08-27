@@ -21,7 +21,9 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -149,6 +151,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private String tempFolder = new String("temp");
 	private String templateFolder = new String("templates");
 	private JButton btnNachrichtErstellen;
+	ImageIcon IconEdit = new ImageIcon(new ImageIcon("img/editIcon.png").getImage().getScaledInstance(20, 20, java.awt.Image.SCALE_SMOOTH));
 
 	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model){
 		  this._model = model;
@@ -867,7 +870,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			textfield_NameAnsprWoch1 = new JTextField();
 			
-			button_editAnspr1 = new JButton("");
+			button_editAnspr1 = new JButton(IconEdit);
+			button_editAnspr1.setBorder(BorderFactory.createEmptyBorder());
 			
 			GroupLayout gl_panel_13 = new GroupLayout(panel_13);
 			gl_panel_13.setHorizontalGroup(
@@ -992,7 +996,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			textfield_NameAnsprWoch2 = new JTextField();
 			
-			button_editAnspr2 = new JButton("");
+			button_editAnspr2 = new JButton(IconEdit);
+			button_editAnspr2.setBorder(BorderFactory.createEmptyBorder());
 			GroupLayout gl_panel_12 = new GroupLayout(panel_12);
 			gl_panel_12.setHorizontalGroup(
 				gl_panel_12.createParallelGroup(Alignment.LEADING)
@@ -1116,7 +1121,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			textfield_NameAnsprWoch3 = new JTextField();
 			
-			button_editAnspr3 = new JButton("");
+			button_editAnspr3 = new JButton(IconEdit);
+			button_editAnspr3.setBorder(BorderFactory.createEmptyBorder());
 			GroupLayout gl_panel_11 = new GroupLayout(panel_11);
 			gl_panel_11.setHorizontalGroup(
 				gl_panel_11.createParallelGroup(Alignment.LEADING)

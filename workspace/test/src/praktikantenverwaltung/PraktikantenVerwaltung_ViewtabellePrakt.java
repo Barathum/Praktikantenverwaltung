@@ -13,8 +13,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import javafx.scene.control.SelectionModel;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.GroupLayout;
@@ -73,9 +71,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private String templateFolder = new String("templates");
 	private JComboBox comboBox_Nachrichtwahl;
 	
-	public PraktikantenVerwaltung_ViewtabellePrakt(ArrayList<ArrayList<String>> Tabellen_Eintraege){
-		this._model = new PraktikantenVerwaltung_Modell();
-		this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewtabellePrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege){
+		this._model = model;
+		this._control = control;
 		this._replacer = new PlatzhalterReplacerUndDokumentWriter();
 		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
@@ -265,7 +263,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			                daten = _model.getData(sql);
 			                try {
 			                	PraktikantenVerwaltung_ViewPrakt _viewprakt = null;
-			                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+			                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(_control, _model , daten);
 			                    _viewprakt.setVisible(true);
 							} catch (IndexOutOfBoundsException e2) {
 								return;
@@ -326,7 +324,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
                 daten = _model.getData(sql);
                 try {
                 	PraktikantenVerwaltung_ViewPrakt _viewprakt = null;
-                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(_control, _model , daten);
                     _viewprakt.setVisible(true);
 				} catch (IndexOutOfBoundsException e2) {
 					return;

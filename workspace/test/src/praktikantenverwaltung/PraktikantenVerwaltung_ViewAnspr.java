@@ -67,16 +67,16 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PraktikantenVerwaltung_ViewAnspr() {
-		this._model = new PraktikantenVerwaltung_Modell();
-		this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
+		this._model = model;
+		this._control = control;
 		updateorinsert = 2;
 		viewKontrukt();
 		
 	}
-	public PraktikantenVerwaltung_ViewAnspr(ArrayList<ArrayList<String>> Ansprechpartnereintrag) throws IndexOutOfBoundsException{
-		this._model = new PraktikantenVerwaltung_Modell();
-		this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Ansprechpartnereintrag) throws IndexOutOfBoundsException{
+		this._model = model;
+		this._control = control;
 		updateorinsert = 1;
 		viewKontrukt();
 		setInhaltAnsprBearb(Ansprechpartnereintrag);

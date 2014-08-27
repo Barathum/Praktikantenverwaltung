@@ -67,9 +67,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	/**
 	 * Create the frame.
 	 */
-	public PraktikantenVerwaltung_ViewTabelleAnspr(ArrayList<ArrayList<String>> Tabellen_Eintraege) {
-		this._model = new PraktikantenVerwaltung_Modell();
-		this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewTabelleAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege) {
+		this._model = model;
+		this._control = control;
 		setDatenAnspr(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -256,7 +256,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 				            sql = getEintragAnspr(liste);
 				            daten = _model.getData(sql);
 				            try {
-				            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+				            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(_control, _model , daten);
 						      	   _viewanspr.setVisible(true);
 							} catch (IndexOutOfBoundsException e2) {
 								return;
@@ -334,7 +334,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	            sql = getEintragAnspr(liste);
 	            daten = _model.getData(sql);
 	            try {
-	            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+	            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(_control, _model , daten);
 			      	   _viewanspr.setVisible(true);
 				} catch (IndexOutOfBoundsException e2) {
 					return;

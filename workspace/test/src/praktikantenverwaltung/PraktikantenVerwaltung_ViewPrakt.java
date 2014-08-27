@@ -150,16 +150,16 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private String templateFolder = new String("templates");
 	private JButton btnNachrichtErstellen;
 
-	public PraktikantenVerwaltung_ViewPrakt(){
-		  this._model = new PraktikantenVerwaltung_Modell();
-		  this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model){
+		  this._model = model;
+		  this._control = control;
 		  updateOrInsert = 2;
 		  viewKontrukt();
 		  comboBox_autocomplete();
 	}
-	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrag) throws IndexOutOfBoundsException{
-		  this._model = new PraktikantenVerwaltung_Modell();
-		  this._control = new PraktikantenVerwaltung_Control();
+	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Praktikanteneintrag) throws IndexOutOfBoundsException{
+		  this._model = model;
+		  this._control = control;
 		  updateOrInsert = 1;
 		  viewKontrukt();
 		  comboBox_autocomplete();

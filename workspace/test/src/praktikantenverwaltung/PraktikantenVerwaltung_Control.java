@@ -21,6 +21,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewAnspr _viewanspr;
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
+	private PraktikantenVerwaltung_Control _control; 
 	private Integer hoechstePraktID = 100000;
 	private Integer hoechsteAnsprID = 100000;
 	private String neuePraktID = "";
@@ -30,7 +31,7 @@ public class PraktikantenVerwaltung_Control {
 	 */
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
-		this._view = new PraktikantenVerwaltung_ViewOrginal(); 
+		this._control = this;
 		this._viewStart = new PraktikantenVerwaltung_ViewStart();
 		addListener();
 	}
@@ -38,7 +39,7 @@ public class PraktikantenVerwaltung_Control {
 	 * Zeigt den View an
 	 */
 	public void showView(){ 
-		        this._viewStart.setVisible(true); 
+		this._viewStart.setVisible(true); 
 	}
 	/**
 	 * gibt die Aktuell höchste Praktikanten ID aus der Datenbank zurück
@@ -47,16 +48,12 @@ public class PraktikantenVerwaltung_Control {
 	public Integer getHoechstePraktID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM PRAKTIKANTEN;");
-//		System.out.println(daten);
 		String ID;
 		try {
 			ID = daten.get(daten.size()-1).get(0).substring(2);
-//			System.out.println("try");
 		} catch (Exception e) {
 			ID = hoechstePraktID.toString();
-//			System.out.println("catch");
 		}
-//		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
 	/**
@@ -66,39 +63,18 @@ public class PraktikantenVerwaltung_Control {
 	public Integer getHoechsteAnsprID(){
 		 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT * FROM ANSPRECHPARTNER;");
-//		System.out.println(daten);
 		String ID;
 		try {
 			ID = daten.get(daten.size()-1).get(0);
-//			System.out.println("try");
 		} catch (Exception e) {
 			ID = hoechsteAnsprID.toString();
-//			System.out.println("catch");
 		}
-//		System.out.println(ID);
 		return Integer.parseInt(ID);
 	}
 	/**
 	 * fügt die Listener dem View hinzu
 	 */
 	   private void addListener(){ 
-//		            this._view.setPraktSpeichernListener(new PraktSpeichernListener());
-		            this._view.setAnsprSpeichernListener(new AnsprSpeichernListener());
-		            this._view.setAnsprLoeschenListener(new AnsprLoeschenListener());
-		            this._view.setPraktLoeschenListener(new PraktLoeschenListener());
-		            this._view.setAllePraktListener(new AllePraktListener());
-		            this._view.setAlleAnsprListener(new AlleAnsprListener());
-		            this._view.setSuchePraktListener(new SuchePraktListener());
-		            this._view.setSucheAnsprListener(new SucheAnsprListener());
-		            this._view.setNeuerEintragListener(new NeuerEintragListener());
-		            this._view.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
-		            this._view.setAnsprAusfuellListener2(new AnsprAusfuellListener2());
-		            this._view.setAnsprAusfuellListener3(new AnsprAusfuellListener3());
-		            this._view.setSchulformAusfuellListener(new SchulformAusfuellListener());
-		            this._view.setAnsprBearbeitenListener(new AnsprBearbeitenListener());
-		            this._view.setPraktBearbeitenListener(new PraktBearbeitenListener());
-		            this._view.setAnsprInfoListener(new AnsprInfoListener());
-		            this._view.setPraktInfoListener(new PraktInfoListener());
 		            this._viewStart.setNeuerPraktListener(new NeuerPraktListener());
 		            this._viewStart.setNeuerAnsprListener(new NeuerAnsprListener());
 		            this._viewStart.setTabellePraktListener(new TabellePraktListener());
@@ -106,13 +82,13 @@ public class PraktikantenVerwaltung_Control {
 	   } 
 	   class NeuerPraktListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-                _viewprakt = new PraktikantenVerwaltung_ViewPrakt();
+                _viewprakt = new PraktikantenVerwaltung_ViewPrakt(_control, _model);
                 _viewprakt.setVisible(true);
             } 
 	   }
 	   class NeuerAnsprListener implements ActionListener{ 
-           public void actionPerformed(ActionEvent e) { 
-        	   _viewanspr = new PraktikantenVerwaltung_ViewAnspr();
+           public void actionPerformed(ActionEvent e) {
+        	   _viewanspr = new PraktikantenVerwaltung_ViewAnspr(_control, _model);
         	   _viewanspr.setVisible(true);
             } 
 	   }
@@ -121,7 +97,7 @@ public class PraktikantenVerwaltung_Control {
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
        			daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
        			
-        	   _viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt(daten);
+        	   _viewprakttabelle = new PraktikantenVerwaltung_ViewtabellePrakt(_control, _model , daten);
         	   _viewprakttabelle.setVisible(true);
             } 
 	   }
@@ -131,7 +107,7 @@ public class PraktikantenVerwaltung_Control {
         	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
         	   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER ORDER BY NN;");
       			
-        	   _viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr(daten);
+        	   _viewansprtabelle = new PraktikantenVerwaltung_ViewTabelleAnspr(_control, _model , daten);
         	   _viewansprtabelle.setVisible(true);
             } 
 	   }

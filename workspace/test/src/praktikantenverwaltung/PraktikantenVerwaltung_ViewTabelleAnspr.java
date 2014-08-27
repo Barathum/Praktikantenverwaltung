@@ -9,7 +9,9 @@ import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -63,6 +65,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	private JCheckBox chckbxEtechnik;
 	private JCheckBox chckbxInformatik;
 	private JCheckBox chckbxKaufmnnisch;
+	ImageIcon iconAktualisieren = new ImageIcon(new ImageIcon("img/aktualisierenIcon.png").getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH));
 
 	/**
 	 * Create the frame.
@@ -112,7 +115,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 textField_tabelleBlockBis = new JTextField();
 		 textField_tabelleBlockBis.setColumns(10);
 		 
-		 button_aktualisieren = new JButton("");
+		 button_aktualisieren = new JButton(iconAktualisieren);
+		 button_aktualisieren.setBorder(BorderFactory.createEmptyBorder());
 		 GroupLayout gl_panel = new GroupLayout(panel);
 		 gl_panel.setHorizontalGroup(
 		 	gl_panel.createParallelGroup(Alignment.LEADING)

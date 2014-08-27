@@ -15,7 +15,9 @@ import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -70,6 +72,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private String tempFolder = new String("temp");
 	private String templateFolder = new String("templates");
 	private JComboBox comboBox_Nachrichtwahl;
+	ImageIcon iconAktualisieren = new ImageIcon(new ImageIcon("img/aktualisierenIcon.png").getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH));
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege){
 		this._model = model;
@@ -113,7 +116,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		textFieldEditPrakt = new JTextField();
 		textFieldEditPrakt.setColumns(10);
 		
-		button_aktualisieren = new JButton("");
+		button_aktualisieren = new JButton(iconAktualisieren);
+		button_aktualisieren.setBorder(BorderFactory.createEmptyBorder());
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)

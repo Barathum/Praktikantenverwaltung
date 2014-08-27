@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.KeyboardFocusManager;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -14,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -31,7 +34,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
-	private JTable table_anspr;
+	private JTable table_anspr = new JTable();
 	private JScrollPane scrollPane_SuchlisteAnspr;
 	private String[] spaltennamenansprech = {
             "Nachname",
@@ -212,6 +215,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 			textField_tabelleBlockVon.addActionListener(enterAction);
 			textField_tabelleBlockBis.addActionListener(enterAction);
 			updateTable();
+			Timer timer = new Timer();
+			timer.schedule(new refreshAnspr(), 0, 2500);
 	}
 	Action enterAction = new AbstractAction()
 	{
@@ -233,8 +238,6 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	}
 	public void updateTable(){
 		table_anspr = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenansprech, datenansprech));
-//		table_anspr.setSelectionMode(0);
-		table_anspr.setAutoCreateRowSorter(true);
 		table_anspr.addMouseListener(new MouseAdapter() {
 			   public void mouseClicked(MouseEvent e) {
 			      if (e.getClickCount() == 2) {
@@ -252,8 +255,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 				            String sql;
 				            sql = getEintragAnspr(liste);
 				            daten = _model.getData(sql);
-				            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
-				      	   _viewanspr.setVisible(true);
+				            try {
+				            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+						      	   _viewanspr.setVisible(true);
+							} catch (IndexOutOfBoundsException e2) {
+								return;
+							}
+				            
 			            }
 			         }
 			   }
@@ -325,8 +333,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	            String sql;
 	            sql = getEintragAnspr(liste);
 	            daten = _model.getData(sql);
-	            PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
-	      	   _viewanspr.setVisible(true);
+	            try {
+	            	PraktikantenVerwaltung_ViewAnspr _viewanspr = new PraktikantenVerwaltung_ViewAnspr(daten);
+			      	   _viewanspr.setVisible(true);
+				} catch (IndexOutOfBoundsException e2) {
+					return;
+				}
             }
          } 
 	   }
@@ -374,6 +386,18 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
 		   setDatenAnspr(_control.ArrayListtoArray(daten));
 		   updateTable();
+	}
+	class refreshAnspr extends TimerTask {
+		public void run() {
+			ListSelectionModel model = getTable().getSelectionModel();
+			int[] rows = getTable().getSelectedRows();
+			model.clearSelection();
+			filter();
+			for (int i = 0; i < rows.length; i++) {
+				model.addSelectionInterval(rows[i], rows[i]);
+			}
+			table_anspr.setSelectionModel(model);
+		}
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();

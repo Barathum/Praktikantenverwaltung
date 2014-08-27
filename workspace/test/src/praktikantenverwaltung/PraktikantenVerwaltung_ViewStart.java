@@ -5,7 +5,6 @@ import java.awt.CardLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -75,18 +74,18 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				}
 				@Override
 				public void windowClosing(WindowEvent e) {
-					try {
-						FileUtils.cleanDirectory(new File(tempFolder));
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
-					int confirmed = JOptionPane.showConfirmDialog(null, 
-					        "Wirklich Schlieﬂen? Alle nicht gespeicherten Daten gehen verloren!", "",
-					        JOptionPane.YES_NO_OPTION);
-					    if (confirmed == JOptionPane.YES_OPTION) {
-					    	dispose();
-					    }
+//					int confirmed = JOptionPane.showConfirmDialog(null, 
+//					        "Wirklich Schlieﬂen? Alle nicht gespeicherten Daten gehen verloren!", "",
+//					        JOptionPane.YES_NO_OPTION);
+//					    if (confirmed == JOptionPane.YES_OPTION) {
+					    	try {
+								FileUtils.cleanDirectory(new File(tempFolder));
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+					    	System.exit(0);
+//					    }
 				}
 				@Override
 				public void windowClosed(WindowEvent e) {

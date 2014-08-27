@@ -74,7 +74,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		viewKontrukt();
 		
 	}
-	public PraktikantenVerwaltung_ViewAnspr(ArrayList<ArrayList<String>> Ansprechpartnereintrag) {
+	public PraktikantenVerwaltung_ViewAnspr(ArrayList<ArrayList<String>> Ansprechpartnereintrag) throws IndexOutOfBoundsException{
 		this._model = new PraktikantenVerwaltung_Modell();
 		this._control = new PraktikantenVerwaltung_Control();
 		updateorinsert = 1;
@@ -439,7 +439,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			}
 		return liste;
 		}
-	   private void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten){
+	   private void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			neueAnsprID = daten.get(0).get(0);
 			textField_NameAnsprBearb.setText(daten.get(0).get(1));

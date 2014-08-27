@@ -157,7 +157,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  viewKontrukt();
 		  comboBox_autocomplete();
 	}
-	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrag){
+	public PraktikantenVerwaltung_ViewPrakt(ArrayList<ArrayList<String>> Praktikanteneintrag) throws IndexOutOfBoundsException{
 		  this._model = new PraktikantenVerwaltung_Modell();
 		  this._control = new PraktikantenVerwaltung_Control();
 		  updateOrInsert = 1;
@@ -2147,11 +2147,13 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				}
 	            daten1d.addAll(getInhaltAnspr().get(0));
 	            daten.add(daten1d);
-	            	String nachricht = getNachrichtWahl();
+            	String nachricht = getNachrichtWahl();
 	            
-	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
-	            		   tempFolder + "/" + daten.get(0).get(2) + daten.get(0).get(3) + "-" + nachricht + ".docx",
-	            		   platzhalter, daten.get(0));
+               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
+    		   tempFolder + "/" + daten.get(0).get(2) + daten.get(0).get(3) + "-" + nachricht + ".docx",
+    		   platzhalter, daten.get(0));
+               
+               statusupdate(nachricht , daten.get(0).get(0));
 			}
 		}
 	   private String getNachrichtWahl(){
@@ -2374,61 +2376,62 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			return sql;
 		}
-		public void setInhaltPrakt(ArrayList<ArrayList<String>> daten){
+		public void setInhaltPrakt(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
 			SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
-			textField_id.setText(daten.get(0).get(0));
-			textfield_anrede.setText(daten.get(0).get(1));
-			textField_nn.setText(daten.get(0).get(2));
-			textField_vn.setText(daten.get(0).get(3));
-			try {
-				datePicker_gb.setDate(sdfToDate.parse(daten.get(0).get(4)));
-			} catch (ParseException e) {
-				datePicker_gb.setDate(null);
-			}
-			textField_geburtsort.setText(daten.get(0).get(5));
-			textfield_str.setText(daten.get(0).get(6));
-			textField_plz.setText(daten.get(0).get(7));
-			txtDeutschland.setText(daten.get(0).get(8));
-			textField_tele.setText(daten.get(0).get(9));
-			textField_mail.setText(daten.get(0).get(10));
-			textField_mobil.setText(daten.get(0).get(11));
-			textField_haus.setText(daten.get(0).get(12));
-			textfield_wohn.setText(daten.get(0).get(13));
-			textField_gnn.setText(daten.get(0).get(14));
-			textField_gvn.setText(daten.get(0).get(15));
-			textfield_schule.setText(daten.get(0).get(16));
-			textfield_schulform.setText(daten.get(0).get(17));
-			textfield_partners.setText(daten.get(0).get(18));
-			textArea_anmerkschule.setText(daten.get(0).get(19));
-			textfield_miki.setText(daten.get(0).get(20));
-			textfield_grad.setText(daten.get(0).get(21));
-			textArea_anmerkperson.setText(daten.get(0).get(22));
-			try {
-				datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
-			} catch (ParseException e) {
-				datePicker_startdatum.setDate(null);
-			}
-			try {
-				datePicker_enddatum.setDate(sdfToDate.parse(daten.get(0).get(24)));
-			} catch (ParseException e) {
-				datePicker_enddatum.setDate(null);
-			}
-			comboBox_status.setSelectedItem(daten.get(0).get(25));
-			textArea_anmerkprakt.setText(daten.get(0).get(26));
-			setInhaltAnspr1(1 , getAnsprDaten(daten.get(0).get(27)));
-			setInhaltAnspr2(1 , getAnsprDaten(daten.get(0).get(28)));
-			setInhaltAnspr3(1 , getAnsprDaten(daten.get(0).get(29)));
-			textArea_konsole.setText(daten.get(0).get(30));
-			if (daten.get(0).get(32).equals("1")) {
-				chckbxDatenVollst.setSelected(true);
-			}else {
-				chckbxDatenVollst.setSelected(false);
-			}
-			try {
-				datePicker_Antwortfrist.setDate(sdfToDate.parse(daten.get(0).get(33)));
-			} catch (ParseException e) {
-				datePicker_Antwortfrist.setDate(null);
-			}
+				textField_id.setText(daten.get(0).get(0));
+				textfield_anrede.setText(daten.get(0).get(1));
+				textField_nn.setText(daten.get(0).get(2));
+				textField_vn.setText(daten.get(0).get(3));
+				try {
+					datePicker_gb.setDate(sdfToDate.parse(daten.get(0).get(4)));
+				} catch (ParseException e) {
+					datePicker_gb.setDate(null);
+				}
+				textField_geburtsort.setText(daten.get(0).get(5));
+				textfield_str.setText(daten.get(0).get(6));
+				textField_plz.setText(daten.get(0).get(7));
+				txtDeutschland.setText(daten.get(0).get(8));
+				textField_tele.setText(daten.get(0).get(9));
+				textField_mail.setText(daten.get(0).get(10));
+				textField_mobil.setText(daten.get(0).get(11));
+				textField_haus.setText(daten.get(0).get(12));
+				textfield_wohn.setText(daten.get(0).get(13));
+				textField_gnn.setText(daten.get(0).get(14));
+				textField_gvn.setText(daten.get(0).get(15));
+				textfield_schule.setText(daten.get(0).get(16));
+				textfield_schulform.setText(daten.get(0).get(17));
+				textfield_partners.setText(daten.get(0).get(18));
+				textArea_anmerkschule.setText(daten.get(0).get(19));
+				textfield_miki.setText(daten.get(0).get(20));
+				textfield_grad.setText(daten.get(0).get(21));
+				textArea_anmerkperson.setText(daten.get(0).get(22));
+				try {
+					datePicker_startdatum.setDate(sdfToDate.parse(daten.get(0).get(23)));
+				} catch (ParseException e) {
+					datePicker_startdatum.setDate(null);
+				}
+				try {
+					datePicker_enddatum.setDate(sdfToDate.parse(daten.get(0).get(24)));
+				} catch (ParseException e) {
+					datePicker_enddatum.setDate(null);
+				}
+				comboBox_status.setSelectedItem(daten.get(0).get(25));
+				textArea_anmerkprakt.setText(daten.get(0).get(26));
+				setInhaltAnspr1(1 , getAnsprDaten(daten.get(0).get(27)));
+				setInhaltAnspr2(1 , getAnsprDaten(daten.get(0).get(28)));
+				setInhaltAnspr3(1 , getAnsprDaten(daten.get(0).get(29)));
+				textArea_konsole.setText(daten.get(0).get(30));
+				if (daten.get(0).get(32).equals("1")) {
+					chckbxDatenVollst.setSelected(true);
+				}else {
+					chckbxDatenVollst.setSelected(false);
+				}
+				try {
+					datePicker_Antwortfrist.setDate(sdfToDate.parse(daten.get(0).get(33)));
+				} catch (ParseException e) {
+					datePicker_Antwortfrist.setDate(null);
+				}
+			
 
 		}
 		@Override
@@ -2491,5 +2494,48 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				comboBox_NachrichtWahl.addItem(v.get(i));
 			}
 			AutoCompleteDecorator.decorate(this.comboBox_NachrichtWahl);
+		}
+		private void statusupdate(String nachricht , String id){
+			String sql = "";
+			if (id.startsWith("SP")) {
+				if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Eingangsbescheid")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Praktikumsbestätigung")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Rücksendung_Unterlagen")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Selbstabsage_Vorlage")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Unterlagen_vervollständigen")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
+				}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+				}else {
+					sql = "";
+				}
+			}
+			_model.insertUpdateDeleteTable(sql);
+			
+			if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
+				comboBox_status.setSelectedItem("Absage");
+			}else if (nachricht.equals("Eingangsbescheid")) {
+				comboBox_status.setSelectedItem("Eingangsbestätigung");
+			}else if (nachricht.equals("Praktikumsbestätigung")) {
+				comboBox_status.setSelectedItem("abgeschlossen");
+			}else if (nachricht.equals("Rücksendung_Unterlagen")) {
+				comboBox_status.setSelectedItem("Zusage");
+			}else if (nachricht.equals("Selbstabsage_Vorlage")) {
+				comboBox_status.setSelectedItem("Selbstabsage");
+			}else if (nachricht.equals("Unterlagen_vervollständigen")) {
+				comboBox_status.setSelectedItem("Bewerbung unvollständig");
+			}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
+				comboBox_status.setSelectedItem("Zusage");
+			}else {
+				sql = "";
+				comboBox_status.setSelectedItem("leer");
+			}
+			
 		}
 }

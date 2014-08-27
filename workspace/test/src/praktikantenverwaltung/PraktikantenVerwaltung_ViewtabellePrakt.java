@@ -9,7 +9,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
+
+import javafx.scene.control.SelectionModel;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -20,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.event.DocumentEvent;
@@ -36,7 +41,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
-	private JTable table_prakt;
+	private JTable table_prakt = new JTable();
 	private JScrollPane scrollPane_Suchliste;
 	private String[] spaltennamenprak = {
             "Nachname",
@@ -205,6 +210,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		getDocx(f);
 		setComboBoxItems_Nachricht(comboBoxNachrichtenItems);
 		updateTablePrakt();
+		Timer timer = new Timer();
+		 timer.schedule(new refresh(), 0, 2500);
 	}
 	Action enterAction = new AbstractAction()
 	{
@@ -224,11 +231,21 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private void setDatenPrakt(Object[][] daten){
 		this.datenprak = daten;
 	}
+	class refresh extends TimerTask {
+		public void run() {
+			ListSelectionModel model = getTable().getSelectionModel();
+			int[] rows = getTable().getSelectedRows();
+			model.clearSelection();
+			filterPrakt();
+			for (int i = 0; i < rows.length; i++) {
+				model.addSelectionInterval(rows[i], rows[i]);
+			}
+			table_prakt.setSelectionModel(model);
+		}
+	}
 
 	public void updateTablePrakt(){
 		table_prakt = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamenprak, datenprak));
-//		table_prakt.setSelectionMode(0);
-		table_prakt.setAutoCreateRowSorter(true);
 		table_prakt.addMouseListener(new MouseAdapter() {
 			   public void mouseClicked(MouseEvent e) {
 			      if (e.getClickCount() == 2) {
@@ -246,8 +263,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			                String sql;
 			                sql = getEintragPrakt(liste);
 			                daten = _model.getData(sql);
-			                PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
-			          	   _viewprakt.setVisible(true);
+			                try {
+			                	PraktikantenVerwaltung_ViewPrakt _viewprakt = null;
+			                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+			                    _viewprakt.setVisible(true);
+							} catch (IndexOutOfBoundsException e2) {
+								return;
+							}
 			            }
 			         }
 			   }
@@ -302,8 +324,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
                 String sql;
                 sql = getEintragPrakt(liste);
                 daten = _model.getData(sql);
-                PraktikantenVerwaltung_ViewPrakt _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
-          	   _viewprakt.setVisible(true);
+                try {
+                	PraktikantenVerwaltung_ViewPrakt _viewprakt = null;
+                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(daten);
+                    _viewprakt.setVisible(true);
+				} catch (IndexOutOfBoundsException e2) {
+					return;
+				}
             }
          } 
 	   }
@@ -357,6 +384,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	class NachrichtSendenListener implements ActionListener{ 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
+			String nachricht = getNachrichtWahl();
 			JTable table = getTable();
 			int[] markierteReiheNR =  table.getSelectedRows();
 			ArrayList<String> platzhalter = new ArrayList<String>();
@@ -427,13 +455,35 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 				}
 	            daten1d.addAll(getInhaltAnspr(daten1d.get(27),platzhalter));
 	            daten.add(daten1d);
-	            	String nachricht = getNachrichtWahl();
 	            
-	               _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
-	            		   tempFolder + "/" + daten.get(1).get(2) + daten.get(1).get(3) + "-" + nachricht + ".docx",
-	            		   platzhalter, daten.get(1));
+	            _replacer.schreibeNeuesWordDokumentVonTemplate(templateFolder + "/" + nachricht + ".docx", 
+	            tempFolder + "/" + daten.get(1).get(2) + daten.get(1).get(3) + "-" + nachricht + ".docx",
+	            platzhalter, daten.get(1));
+	            statusupdate(nachricht , daten.get(1).get(0));
 	        }
 		}
+	}
+	private void statusupdate(String nachricht , String id){
+		String sql = "";
+		if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Eingangsbescheid")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Praktikumsbestätigung")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Rücksendung_Unterlagen")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Selbstabsage_Vorlage")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Unterlagen_vervollständigen")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
+		}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+		}else {
+			sql = "";
+		}
+		
+		_model.insertUpdateDeleteTable(sql);
 	}
 	private ArrayList<String> getInhaltAnspr(String id , ArrayList<String> platzhalter){
 		String sql;

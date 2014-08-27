@@ -208,8 +208,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		getDocx(f);
 		setComboBoxItems_Nachricht(comboBoxNachrichtenItems);
 		updateTablePrakt();
-		Timer timer = new Timer();
-		 timer.schedule(new refresh(), 0, 2500);
 	}
 	Action enterAction = new AbstractAction()
 	{
@@ -229,8 +227,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private void setDatenPrakt(Object[][] daten){
 		this.datenprak = daten;
 	}
-	class refresh extends TimerTask {
-		public void run() {
+	private void refresh(){
 			ListSelectionModel model = getTable().getSelectionModel();
 			int[] rows = getTable().getSelectedRows();
 			model.clearSelection();
@@ -239,7 +236,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 				model.addSelectionInterval(rows[i], rows[i]);
 			}
 			table_prakt.setSelectionModel(model);
-		}
 	}
 
 	public void updateTablePrakt(){
@@ -247,7 +243,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		table_prakt.addMouseListener(new MouseAdapter() {
 			   public void mouseClicked(MouseEvent e) {
 			      if (e.getClickCount() == 2) {
-			         JTable target = (JTable)e.getSource();
+			    	  refresh();
+			         JTable target = getTable();
 			         ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			            int markierteReiheNR =  target.getSelectedRow();
 			            ArrayList<String> liste = new ArrayList<String>();
@@ -309,6 +306,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	class PraktBearbeitenListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) { 
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+     	   refresh();
      	   JTable table = getTable();
      	  int[] markierteReiheNR =  table.getSelectedRows();
 	        for (int i = 0; i < markierteReiheNR.length; i++) {

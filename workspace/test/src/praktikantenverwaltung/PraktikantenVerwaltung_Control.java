@@ -84,6 +84,17 @@ public class PraktikantenVerwaltung_Control {
            public void actionPerformed(ActionEvent e) { 
                 _viewprakt = new PraktikantenVerwaltung_ViewPrakt(_control, _model);
                 _viewprakt.setVisible(true);
+//        		ArrayList<String> liste = _viewprakt.getInhaltPrakt();
+//        		String sql;
+//        		sql = "INSERT INTO PRAKTIKANTEN " +
+//                        "VALUES ('" + neuePraktID +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+//                        +"','"+ liste.get(6) +"','"+ liste.get(7) +"','"+ liste.get(8) +"','"+ liste.get(9) +"','"+ liste.get(10) +"','"+ liste.get(11) +"','"+ liste.get(12)
+//                        +"','"+ liste.get(13) +"','"+ liste.get(14) +"','"+ liste.get(15) +"','"+ liste.get(16) +"','"+ liste.get(17) +"','"+ liste.get(18) +"','"+ liste.get(19)
+//                        +"','"+ liste.get(20) +"','"+ liste.get(21) +"','"+ liste.get(22) +"','"+ liste.get(23) +"','"+ liste.get(24) +"','"+ liste.get(25) +"','"+ liste.get(26)
+//                        +"','"+ liste.get(27) +"','"+ liste.get(28) +"','"+ liste.get(29) +"','"+ liste.get(30) +"','"+ liste.get(31) +"','"+ liste.get(32) +"','"+ liste.get(33) +"');";
+//        		for (int i = 0; i < 200; i++) {
+//        			_model.insertUpdateDeleteTable(sql);
+//				}
             } 
 	   }
 	   class NeuerAnsprListener implements ActionListener{ 

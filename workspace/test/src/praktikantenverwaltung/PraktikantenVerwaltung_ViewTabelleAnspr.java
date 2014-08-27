@@ -215,8 +215,6 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 			textField_tabelleBlockVon.addActionListener(enterAction);
 			textField_tabelleBlockBis.addActionListener(enterAction);
 			updateTable();
-			Timer timer = new Timer();
-			timer.schedule(new refreshAnspr(), 0, 2500);
 	}
 	Action enterAction = new AbstractAction()
 	{
@@ -241,8 +239,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		table_anspr.addMouseListener(new MouseAdapter() {
 			   public void mouseClicked(MouseEvent e) {
 			      if (e.getClickCount() == 2) {
+			    	  refresh();
 			    	  ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			    	  JTable target = (JTable)e.getSource();
+			    	  JTable target = getTable();
 			            int markierteReiheNR =  target.getSelectedRow();
 			            ArrayList<String> liste = new ArrayList<String>();
 			            if(markierteReiheNR >= 0){
@@ -320,6 +319,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	class AnsprBearbeitenListener implements ActionListener{ 
         public void actionPerformed(ActionEvent e) { 
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+     	  refresh();
      	   JTable table = getTable();
      	  int[] markierteReiheNR =  table.getSelectedRows();
           for (int i = 0; i < markierteReiheNR.length; i++) {
@@ -387,17 +387,15 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   setDatenAnspr(_control.ArrayListtoArray(daten));
 		   updateTable();
 	}
-	class refreshAnspr extends TimerTask {
-		public void run() {
-			ListSelectionModel model = getTable().getSelectionModel();
-			int[] rows = getTable().getSelectedRows();
-			model.clearSelection();
-			filter();
-			for (int i = 0; i < rows.length; i++) {
-				model.addSelectionInterval(rows[i], rows[i]);
-			}
-			table_anspr.setSelectionModel(model);
+	private void refresh(){
+		ListSelectionModel model = getTable().getSelectionModel();
+		int[] rows = getTable().getSelectedRows();
+		model.clearSelection();
+		filter();
+		for (int i = 0; i < rows.length; i++) {
+			model.addSelectionInterval(rows[i], rows[i]);
 		}
+		table_anspr.setSelectionModel(model);
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();

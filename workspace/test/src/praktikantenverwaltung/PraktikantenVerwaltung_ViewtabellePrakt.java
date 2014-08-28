@@ -387,7 +387,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			   /**
 			    * In eines der Felder wurde < oder > eingegeben
 			    */
-			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.mm.yyyy");
+			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
 			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
 			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
 			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");

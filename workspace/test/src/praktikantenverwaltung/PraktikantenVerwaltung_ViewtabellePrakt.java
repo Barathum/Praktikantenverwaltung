@@ -11,6 +11,7 @@ import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -391,7 +392,10 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			    * In eines der Felder wurde < oder > eingegeben
 			    */
 			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
-			   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
+			   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
+			   Calendar cal = Calendar.getInstance();
+				cal.add(Calendar.YEAR, -50);
+				sdfToDate.set2DigitYearStart(cal.getTime());
 			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
 			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
 			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");
@@ -430,6 +434,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
 					   try {
 						startDatumAusEingabeDatesdf = sdfToDate.parse(startDatumAusEingabe);
+						System.out.println(startDatumAusEingabeDatesdf.toString());
 					   } catch (ParseException e1) {
 						
 					   }

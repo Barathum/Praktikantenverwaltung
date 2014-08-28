@@ -46,6 +46,12 @@ import javax.swing.text.JTextComponent;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Instant;
+import org.joda.time.Interval;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import praktikantenverwaltung.PraktikantenVerwaltung_ViewtabellePrakt.NachrichtSendenListener;
 
@@ -114,7 +120,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private JTextField textField_TelAnsprWoch3;
 	private JTextArea textArea_EinsatzortAnsprWoche3;
 	private JTextArea textArea_anmerkperson;
-	private JComboBox comboBox_status;
+	private SteppedComboBox comboBox_status;
 	private Integer idAnspr1 = new Integer(0);
 	private Integer idAnspr2 = new Integer(0);
 	private Integer idAnspr3 = new Integer(0);
@@ -536,7 +542,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JLabel lblStatus = new JLabel("Status:");
 			
 			String comboBoxListe_state[] = {"leer", "Eingangsbestätigung", "Bewerbung unvollständig" ,  "Zusage", "Selbstabsage", "Absage", "anwesend", "abgeschlossen"};
-			comboBox_status = new JComboBox(comboBoxListe_state);
+			comboBox_status = new SteppedComboBox(comboBoxListe_state);
+		    Dimension d = comboBox_status.getPreferredSize();
+		    comboBox_status.setPreferredSize(new Dimension(50, d.height));
+		    comboBox_status.setPopupWidth(d.width);
 			GroupLayout gl_panel_7 = new GroupLayout(panel_7);
 			gl_panel_7.setHorizontalGroup(
 				gl_panel_7.createParallelGroup(Alignment.LEADING)
@@ -645,10 +654,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			panel_1.setBorder(new LineBorder(new Color(0, 0, 0), 1, true));
 			
 			String[] str = {
-				      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+				      "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 				    };
 			comboBox_NachrichtWahl = new SteppedComboBox(str);
-		    Dimension d = comboBox_NachrichtWahl.getPreferredSize();
+		    d = comboBox_NachrichtWahl.getPreferredSize();
 		    comboBox_NachrichtWahl.setPreferredSize(new Dimension(50, d.height));
 		    comboBox_NachrichtWahl.setPopupWidth(d.width);
 			GroupLayout gl_panel_Steckbrief = new GroupLayout(panel_Steckbrief);
@@ -2112,9 +2121,50 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					}
             }
             
+            /**
+             * Hier Abfrage ob Praktikant 1 2 oder 3 Wochen vorort
+             * Bei 1 Woche nichts tun bei 2 oder 3 Wochen prüfen ob Anspr Woche 2 und oder 3 leer
+             * Wenn 1 gefüllt 2 und 3 leer und dauer Praktikum 3 Wochen dann Anspr 1 auf Woche 2 und 3 übertragen
+             * usw.
+             */
+            String idAnspr1Datensatz = datensatz.get(27);
+            String idAnspr2Datensatz = datensatz.get(28);
+            String idAnspr3Datensatz = datensatz.get(29);
+            DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+            String timeStart = datensatz.get(23);
+            try {
+            	DateTime dateStart = dateStringFormat.parseDateTime(timeStart);
+                String timeEnd = datensatz.get(24);
+                DateTime dateEnd = dateStringFormat.parseDateTime(timeEnd);
+                int anzahlTage = Days.daysBetween(dateStart.withTimeAtStartOfDay() , dateEnd.withTimeAtStartOfDay() ).getDays() + 1 ;
+                if (anzahlTage > 7) {
+                	if (idAnspr1Datensatz.equals("0")) {
+    					datensatz.set(27, datensatz.get(28));
+    					idAnspr1Datensatz = datensatz.get(27);
+    				}
+                	if (idAnspr2Datensatz.equals("0")) {
+    					datensatz.set(28, datensatz.get(27));
+    					idAnspr1Datensatz = datensatz.get(28);
+    				}
+    				if (anzahlTage > 14) {
+    					if (idAnspr1Datensatz.equals("0")) {
+    						datensatz.set(27, datensatz.get(29));
+    					}
+    	            	if (idAnspr2Datensatz.equals("0")) {
+    						datensatz.set(28, datensatz.get(29));
+    					}
+    					if (idAnspr3Datensatz.equals("0")) {
+    						datensatz.set(29, datensatz.get(28));
+    					}
+    				}
+    			}
+			} catch (IllegalArgumentException e2) {
+				
+			}
+            
             sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
             _model.insertUpdateDeleteTable(sql);
-            updateOrInsert = 1;
+            updateOrInsert = 1;// sollte der Praktikant noch nicht existiert haben ist dies nun der Fall daher updateOrInsert auf 1 für update
             
             setPraktId(neuePraktID);
             

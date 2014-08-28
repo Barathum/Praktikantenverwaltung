@@ -33,6 +33,10 @@ import javax.swing.JComboBox;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements ActionListener{
 
@@ -371,9 +375,226 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		   ArrayList<String> datenTextfields = new ArrayList<String>();
 		   datenTextfields = getInhaltSuchFelders();
-		   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-		   		+ "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND STARTDATUM LIKE '%" + datenTextfields.get(3) + "%' AND ENDDATUM LIKE '%" + datenTextfields.get(4) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' AND EDIT LIKE '%" + datenTextfields.get(6)
-		   		+ "%' ORDER BY NN;");
+		   /**
+		    * Hier prüfen ob größer oder kleiner bei Start und oder Enddatum
+		    * Wenn Ja anderen Suchalgorithmus mit joda.isafter bzw. is before
+		    * Eingabe im Datumsfeld nach dem Template ([<> or ''])([0-9]*).([0-9]*).([0-9]+)
+		    * Indizes 3 = Startdatum , 4 = Enddatum , 6 = EditDatum
+		    */
+		   if (datenTextfields.get(3).trim().startsWith("<") || datenTextfields.get(3).trim().startsWith(">")
+				   || datenTextfields.get(4).trim().startsWith("<") || datenTextfields.get(4).trim().startsWith(">")
+				   || datenTextfields.get(6).trim().startsWith("<") || datenTextfields.get(6).trim().startsWith(">")) {
+			   /**
+			    * In eines der Felder wurde < oder > eingegeben
+			    */
+			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.mm.yyyy");
+			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
+			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");
+			   char startVonStartDatum;
+			   char startVonEndDatum;
+			   char startVonEditDatum;
+			   
+			   try {
+				   startVonStartDatum = datenTextfields.get(3).trim().charAt(0);
+				} catch (StringIndexOutOfBoundsException e) {
+					startVonStartDatum = ' ';
+				}
+			   
+				try {
+				   startVonEndDatum = datenTextfields.get(4).trim().charAt(0);
+				} catch (StringIndexOutOfBoundsException e) {
+					startVonEndDatum = ' ';
+				}
+			   
+				try {
+				   startVonEditDatum = datenTextfields.get(6).trim().charAt(0);
+			   } catch (StringIndexOutOfBoundsException e) {
+				   startVonEditDatum = ' ';
+			   }
+			   String startDatumAusEingabe = datenTextfields.get(3).trim();
+			   String endDatumAusEingabe = datenTextfields.get(4).trim();
+			   String editDatumAusEingabe = datenTextfields.get(6).trim();
+			   /**
+			    * > heißt alle Daten die nach(später) als das EingabeDatum(DatumAusEingabe) sind sollen angezeigt werden
+			    * dazu löscht diese Abfrage aus der vollständigen Liste die jenigen Daten, die vor Dem EingabeDatum liegen
+			    * bei denen also das Eingabedatum in der zukunft liegt
+			    */
+			   if (startVonStartDatum == '>') {
+				   try {
+					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
+					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String startDatumString = daten.get(i).get(3);
+							DateTime startDatumDate;
+							try {
+								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
+							} catch (Exception e) {
+								startDatumDate = new DateTime();
+							}
+				            if (startDatumAusEingabeDate.isAfter(startDatumDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+	//					e.printStackTrace();
+					}
+				   
+			   }
+			   /**
+			    * Hier ist der einzige unterschied eine vertauschung von eingabe und listen Datum um alle zu filtern
+			    * die vor der Eingabe liegen
+			    */
+			   else if (startVonStartDatum == '<') {
+				   try {
+					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
+					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String startDatumString = daten.get(i).get(3);
+							DateTime startDatumDate;
+							try {
+								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
+							} catch (Exception e) {
+								startDatumDate = new DateTime();
+							}
+				            if (startDatumDate.isAfter(startDatumAusEingabeDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+				}
+			   } else {
+				   try {
+					for (int i = 0; i < daten.size(); i++) {
+						String startDatumString = daten.get(i).get(3);
+			            if (startDatumString.matches(".*" + startDatumAusEingabe + ".*") == false) {
+							daten.remove(i);
+							i--;
+						}
+					}
+				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+				}
+			   }
+			   
+			   if (startVonEndDatum == '>') {
+				   try {
+					   endDatumAusEingabe = endDatumAusEingabe.substring(1).trim();
+					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String endDatumString = daten.get(i).get(4);
+							DateTime endDatumDate;
+							try {
+								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
+							} catch (Exception e) {
+								endDatumDate = new DateTime();
+							}
+				            if (endDatumAusEingabeDate.isAfter(endDatumDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+	//					e.printStackTrace();
+					}
+			   }else if (startVonEndDatum == '<') {
+				   try {
+					   endDatumAusEingabe = endDatumAusEingabe.substring(1).trim();
+					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String endDatumString = daten.get(i).get(4);
+							DateTime endDatumDate;
+							try {
+								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
+							} catch (Exception e) {
+								endDatumDate = new DateTime();
+							}
+				            if (endDatumDate.isAfter(endDatumAusEingabeDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+	//					e.printStackTrace();
+					}
+			   } else {
+				   try {
+					for (int i = 0; i < daten.size(); i++) {
+						String endDatumString = daten.get(i).get(4);
+			            if (endDatumString.matches(".*" + endDatumAusEingabe + ".*") == false) {
+							daten.remove(i);
+							i--;
+						}
+					}
+				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+				}
+			   }
+			   
+			   if (startVonEditDatum == '>') {
+				   try {
+					   editDatumAusEingabe = editDatumAusEingabe.substring(1).trim();
+					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String editDatumString = daten.get(i).get(6);
+							DateTime editDatumDate;
+							try {
+								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
+							} catch (Exception e) {
+								editDatumDate = new DateTime();
+							}
+				            if (editDatumAusEingabeDate.isAfter(editDatumDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+	//					e.printStackTrace();
+					}
+			   }else if (startVonEditDatum == '<') {
+				   try {
+					   editDatumAusEingabe = editDatumAusEingabe.substring(1).trim();
+					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String editDatumString = daten.get(i).get(6);
+							DateTime editDatumDate;
+							try {
+								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
+							} catch (Exception e) {
+								editDatumDate = new DateTime();
+							}
+				            if (editDatumDate.isAfter(editDatumAusEingabeDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+	//					e.printStackTrace();
+					}
+			   } else {
+				   try {
+					for (int i = 0; i < daten.size(); i++) {
+						String editDatumString = daten.get(i).get(6);
+			            if (editDatumString.matches(".*" + editDatumAusEingabe + ".*") == false) {
+							daten.remove(i);
+							i--;
+						}
+					}
+				} catch (IllegalArgumentException e) {
+//					e.printStackTrace();
+				}
+			   }
+			   
+			   
+			   
+		   }else {
+			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+				   		+ "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND STARTDATUM LIKE '%" + datenTextfields.get(3) + "%' AND ENDDATUM LIKE '%" + datenTextfields.get(4) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' AND EDIT LIKE '%" + datenTextfields.get(6)
+				   		+ "%' ORDER BY NN;");
+		   }
 		   setDatenPrakt(_control.ArrayListtoArray(daten));
 		   updateTablePrakt();
 	}

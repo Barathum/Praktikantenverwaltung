@@ -8,7 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -388,6 +391,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			    * In eines der Felder wurde < oder > eingegeben
 			    */
 			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+			   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
 			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
 			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");
@@ -422,8 +426,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			    */
 			   if (startVonStartDatum == '>') {
 				   try {
+					   Date startDatumAusEingabeDatesdf = null;
 					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
-					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+					   try {
+						startDatumAusEingabeDatesdf = sdfToDate.parse(startDatumAusEingabe);
+					   } catch (ParseException e1) {
+						
+					   }
+					   DateTime startDatumAusEingabeDate = new DateTime(startDatumAusEingabeDatesdf);
+//					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String startDatumString = daten.get(i).get(3);
 							DateTime startDatumDate;
@@ -448,8 +459,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			    */
 			   else if (startVonStartDatum == '<') {
 				   try {
+					   Date startDatumAusEingabeDatesdf = null;
 					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
-					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+					   try {
+							startDatumAusEingabeDatesdf = sdfToDate.parse(startDatumAusEingabe);
+						   } catch (ParseException e1) {
+							
+						   }
+					   DateTime startDatumAusEingabeDate = new DateTime(startDatumAusEingabeDatesdf);
+//					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String startDatumString = daten.get(i).get(3);
 							DateTime startDatumDate;
@@ -482,8 +500,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			   
 			   if (startVonEndDatum == '>') {
 				   try {
+					   Date endDatumAusEingabeDatesdf = null;
 					   endDatumAusEingabe = endDatumAusEingabe.substring(1).trim();
-					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
+					   try {
+							endDatumAusEingabeDatesdf = sdfToDate.parse(endDatumAusEingabe);
+						   } catch (ParseException e1) {
+							
+						   }
+					   DateTime endDatumAusEingabeDate = new DateTime(endDatumAusEingabeDatesdf);
+//					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String endDatumString = daten.get(i).get(4);
 							DateTime endDatumDate;
@@ -502,8 +527,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					}
 			   }else if (startVonEndDatum == '<') {
 				   try {
+					   Date endDatumAusEingabeDatesdf = null;
 					   endDatumAusEingabe = endDatumAusEingabe.substring(1).trim();
-					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
+					   try {
+							endDatumAusEingabeDatesdf = sdfToDate.parse(endDatumAusEingabe);
+						   } catch (ParseException e1) {
+							
+						   }
+					   DateTime endDatumAusEingabeDate = new DateTime(endDatumAusEingabeDatesdf);
+//					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String endDatumString = daten.get(i).get(4);
 							DateTime endDatumDate;
@@ -536,8 +568,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			   
 			   if (startVonEditDatum == '>') {
 				   try {
+					   Date editDatumAusEingabeDatesdf = null;
 					   editDatumAusEingabe = editDatumAusEingabe.substring(1).trim();
-					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
+					   try {
+							editDatumAusEingabeDatesdf = sdfToDate.parse(editDatumAusEingabe);
+						   } catch (ParseException e1) {
+							
+						   }
+					   DateTime editDatumAusEingabeDate = new DateTime(editDatumAusEingabeDatesdf);
+//					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String editDatumString = daten.get(i).get(6);
 							DateTime editDatumDate;
@@ -556,8 +595,15 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					}
 			   }else if (startVonEditDatum == '<') {
 				   try {
+					   Date editDatumAusEingabeDatesdf = null;
 					   editDatumAusEingabe = editDatumAusEingabe.substring(1).trim();
-					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
+					   try {
+							editDatumAusEingabeDatesdf = sdfToDate.parse(editDatumAusEingabe);
+						   } catch (ParseException e1) {
+							
+						   }
+					   DateTime editDatumAusEingabeDate = new DateTime(editDatumAusEingabeDatesdf);
+//					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String editDatumString = daten.get(i).get(6);
 							DateTime editDatumDate;

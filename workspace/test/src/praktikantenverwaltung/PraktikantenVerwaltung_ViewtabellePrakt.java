@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -38,7 +36,6 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -75,11 +72,11 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private JTextField textFieldAnmerkPrakt;
 	private JTextField textFieldEditPrakt;
 	private JButton button_aktualisieren;
-	private Vector comboBoxNachrichtenItems = new Vector();
+	private Vector<String> comboBoxNachrichtenItems = new Vector<String>();
 	private File f = new File("templates");
 	private String tempFolder = new String("temp");
 	private String templateFolder = new String("templates");
-	private JComboBox comboBox_Nachrichtwahl;
+	private JComboBox<String> comboBox_Nachrichtwahl;
 	ImageIcon iconAktualisieren = new ImageIcon(new ImageIcon("img/aktualisierenIcon.png").getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH));
 	
 	public PraktikantenVerwaltung_ViewtabellePrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege){
@@ -177,7 +174,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		
 		btn_praktNachrichtSchreiben = new JButton("Nachricht erstellen");
 		
-		comboBox_Nachrichtwahl = new JComboBox();
+		comboBox_Nachrichtwahl = new JComboBox<String>();
 		GroupLayout gl_panel_10 = new GroupLayout(panel_10);
 		gl_panel_10.setHorizontalGroup(
 			gl_panel_10.createParallelGroup(Alignment.LEADING)
@@ -434,7 +431,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					   startDatumAusEingabe = startDatumAusEingabe.substring(1).trim();
 					   try {
 						startDatumAusEingabeDatesdf = sdfToDate.parse(startDatumAusEingabe);
-						System.out.println(startDatumAusEingabeDatesdf.toString());
 					   } catch (ParseException e1) {
 						
 					   }
@@ -798,7 +794,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			}
 		}
 	}
-	public void setComboBoxItems_Nachricht(Vector v){
+	public void setComboBoxItems_Nachricht(Vector<String> v){
 		comboBox_Nachrichtwahl.removeAllItems();
 		for (int i = 0; i < v.size(); i++) {
 			comboBox_Nachrichtwahl.addItem(v.get(i));

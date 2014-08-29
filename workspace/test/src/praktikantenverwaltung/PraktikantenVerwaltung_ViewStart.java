@@ -81,8 +81,8 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 					    	try {
 								FileUtils.cleanDirectory(new File(tempFolder));
 							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
+								System.out.println("Der Ordner " + tempFolder + "existiert nicht.");
+//								e1.printStackTrace();
 							}
 					    	System.exit(0);
 //					    }

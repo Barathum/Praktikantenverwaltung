@@ -12,7 +12,7 @@ public class Praktikantenverwaltung_Main {
     } 
 }
 //FIXME Kommentare Sinnvoll
+//FIXME @returns
 //FIXME INterfaces
 //FIXME Codeaufr‰umen
 //FIXME Groﬂ/Kleinschreibung beachten
-//FIXME @returns

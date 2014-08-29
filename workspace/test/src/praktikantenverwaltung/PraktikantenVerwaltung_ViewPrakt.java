@@ -26,12 +26,10 @@ import javax.swing.BorderFactory;
 import javax.swing.GroupLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
@@ -48,12 +46,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
-import org.joda.time.Instant;
-import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-
-import praktikantenverwaltung.PraktikantenVerwaltung_ViewtabellePrakt.NachrichtSendenListener;
 
 import javax.swing.JCheckBox;
 
@@ -152,7 +146,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private ArrayList<String> gradList;
 	private ArrayList<String> anredeList;
 	private ArrayList<String> ansprList;
-	private Vector comboBoxNachrichtenItems = new Vector();
+	private Vector<String> comboBoxNachrichtenItems = new Vector<String>();
 	File f = new File("templates");
 //	private JComboBox comboBox_NachrichtWahl;
 	private SteppedComboBox comboBox_NachrichtWahl;
@@ -522,7 +516,12 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			// invers sequence for parsing to satisfy the year parsing rules
 			        new DateFormat[] {shortFormat, longFormat}) {
 
-			            @Override
+			            /**
+						 * 
+						 */
+						private static final long serialVersionUID = 1L;
+
+						@Override
 			            public String valueToString(Object value) throws ParseException {
 			                if (value == null) return null;
 			                return getFormats()[1].format(value);
@@ -628,14 +627,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			JLabel lblEinsatzort = new JLabel("Einsatzort");
 			lblEinsatzort.setFont(new Font("Tahoma", Font.BOLD, 12));
 			
-			Vector comboBoxItems_nnansprech=new Vector();
-		    comboBoxItems_nnansprech.add("");
-		    comboBoxItems_nnansprech.add("Meier");
-		    comboBoxItems_nnansprech.add("Müller");
-		    comboBoxItems_nnansprech.add("Schröder");
-		    comboBoxItems_nnansprech.add("...");
-		    comboBoxItems_nnansprech.add("5");
-			
 			JLabel lblAnmerkungenZumEinsatzort = new JLabel("Anmerkungen zum Einsatzort");
 			lblAnmerkungenZumEinsatzort.setFont(new Font("Tahoma", Font.BOLD, 12));
 			
@@ -664,7 +655,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			gl_panel_Steckbrief.setHorizontalGroup(
 				gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-						.addGap(43)
+						.addGap(20)
 						.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 								.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
@@ -2587,7 +2578,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				}
 			}
 		}
-		public void setComboBoxItems_Nachricht(Vector v){
+		@SuppressWarnings("unchecked")
+		public void setComboBoxItems_Nachricht(Vector<String> v){
 			comboBox_NachrichtWahl.removeAllItems();
 			for (int i = 0; i < v.size(); i++) {
 				comboBox_NachrichtWahl.addItem(v.get(i));

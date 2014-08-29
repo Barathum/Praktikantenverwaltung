@@ -347,12 +347,8 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		@Override
 	    public void actionPerformed(ActionEvent e)
 	    {
-//	    	try {
-	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		        manager.getFocusOwner().transferFocus();
-//			} catch (Exception e2) {
-//				// TODO: handle exception
-//			}
+	    	KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		    manager.getFocusOwner().transferFocus();
 	    }
 	};
 	public void setInfoAnspr(String inf){

@@ -265,6 +265,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 			textField_tabelleRaum.addActionListener(enterAction);
 			textField_tabelleBlockVon.addActionListener(enterAction);
 			textField_tabelleBlockBis.addActionListener(enterAction);
+			
 			updateTable();
 	}
 	Action enterAction = new AbstractAction()
@@ -331,6 +332,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	        this.textField_tabelleRaum.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockVon.getDocument().addDocumentListener(l);
 	        this.textField_tabelleBlockBis.getDocument().addDocumentListener(l);
+	        this.textField_freiBis.getDocument().addDocumentListener(l);
+	        this.textField_freiVon.getDocument().addDocumentListener(l);
 	}
 	private void setTabelleFilterListenerCheckBox(ActionListener l){
 		this.chckbxEtechnik.addActionListener(l);
@@ -430,19 +433,25 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		   ArrayList<String> datenTextfields = new ArrayList<String>();
 		   datenTextfields = getInhaltSuchFelders();
+		  
+		   String freiVonAusEingabe = datenTextfields.get(11).trim();
+		   String freiBisAusEingabe = datenTextfields.get(12).trim();
+		   
+		   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
+		   Calendar cal = Calendar.getInstance();
+		   cal.add(Calendar.YEAR, -50);
+		   sdfToDate.set2DigitYearStart(cal.getTime());
+		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5)  + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;"); 
+		   
 		   /**
 		    * Hier kommen die if abfragen
 		    */
 		   if (datenTextfields.get(6).trim().startsWith("<") || datenTextfields.get(6).trim().startsWith(">")
 				   || datenTextfields.get(7).trim().startsWith("<") || datenTextfields.get(7).trim().startsWith(">")) {
-			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
-			   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
-			   Calendar cal = Calendar.getInstance();
-			   cal.add(Calendar.YEAR, -50);
-			   sdfToDate.set2DigitYearStart(cal.getTime());
 			   
-			   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5)  + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+			   
 			   char startVonBlockiertVon;
 			   char startVonBlockiertBis;
 			   try {
@@ -470,14 +479,14 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 						} catch (ParseException e1) {
 							
 						}
-						DateTime startDatumAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
+						DateTime blockiertVonAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
 //						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
 						for (int i = 0; i < daten.size(); i++) {
 							String blockierenVonString = daten.get(i).get(6);
 							DateTime blockierenVonDate;
 							try {
 								blockierenVonDate = dateStringFormat.parseDateTime(blockierenVonString);
-								if (startDatumAusEingabeDate.isAfter(blockierenVonDate)) {
+								if (blockiertVonAusEingabeDate.isAfter(blockierenVonDate)) {
 						        	daten.remove(i);
 									i--;
 								}
@@ -607,11 +616,41 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 //						e.printStackTrace();
 					}
 				}
+				
 				 
 			} else {
 				daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
 				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
 				   		+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+				try {
+					Date freiVonAusEingabeDatesdf = null;
+					Date freiBisAusEingabeDatesdf = null;
+					try {
+						freiVonAusEingabeDatesdf = sdfToDate.parse(freiVonAusEingabe);
+						freiBisAusEingabeDatesdf = sdfToDate.parse(freiBisAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String blockiertVonString = daten.get(i).get(6);
+							String blockiertBisString = daten.get(i).get(7);
+							Date blockiertBisDate;
+							Date blockiertVonDate;
+							try {
+								blockiertBisDate = sdfToDate.parse(blockiertBisString);
+								blockiertVonDate = sdfToDate.parse(blockiertVonString);
+								if (!(freiBisAusEingabeDatesdf.compareTo(blockiertVonDate) < 0|| blockiertBisDate.compareTo(freiVonAusEingabeDatesdf) < 0)) {
+						        	daten.remove(i);
+									i--;
+								}
+							} catch (Exception e) {
+							//	e.printStackTrace();
+							}
+						}
+					} catch (ParseException e1) {
+				//		e1.printStackTrace();
+					}
+					
+				} catch (IllegalArgumentException e) {
+					//	e.printStackTrace();
+				}
 			}
 		   
 		   setDatenAnspr(_control.ArrayListtoArray(daten));
@@ -629,29 +668,32 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	}
 	private ArrayList<String> getInhaltSuchFelders(){
 		ArrayList<String> daten = new ArrayList<String>();
-		daten.add(this.textField_tabelleNN.getText());
-		daten.add(this.textField_tabelleVN.getText());
-		daten.add(this.textField_tabelleTele.getText());
-		daten.add(this.textField_tabelleMail.getText());
-		daten.add(this.textField_tabelleAbt.getText());
-		daten.add(this.textField_tabelleRaum.getText());
-		daten.add(this.textField_tabelleBlockVon.getText());
-		daten.add(this.textField_tabelleBlockBis.getText());
+		daten.add(this.textField_tabelleNN.getText());//0
+		daten.add(this.textField_tabelleVN.getText());//1
+		daten.add(this.textField_tabelleTele.getText());//2
+		daten.add(this.textField_tabelleMail.getText());//3
+		daten.add(this.textField_tabelleAbt.getText());//4
+		daten.add(this.textField_tabelleRaum.getText());//5
+		daten.add(this.textField_tabelleBlockVon.getText());//6
+		daten.add(this.textField_tabelleBlockBis.getText());//7
+		
 		if (chckbxEtechnik.isSelected()) {
-			daten.add("1");
+			daten.add("1");//8
 		}else {
 			daten.add("");
 		}
 		if (chckbxKaufmnnisch.isSelected()) {
-			daten.add("1");
+			daten.add("1");//8
 		}else {
 			daten.add("");
 		}
 		if (chckbxInformatik.isSelected()) {
-			daten.add("1");
+			daten.add("1");//10
 		}else {
 			daten.add("");
 		}
+		daten.add(this.textField_freiVon.getText());//11
+		daten.add(this.textField_freiBis.getText());//12
 	    return daten;
 	}
 	public void actionPerformed(ActionEvent evt) {

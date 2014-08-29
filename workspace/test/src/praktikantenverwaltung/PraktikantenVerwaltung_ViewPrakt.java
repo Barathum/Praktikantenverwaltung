@@ -690,7 +690,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 												.addComponent(panel_8, GroupLayout.PREFERRED_SIZE, 254, GroupLayout.PREFERRED_SIZE)))
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
-												.addPreferredGap(ComponentPlacement.RELATED, 89, Short.MAX_VALUE)
+												.addPreferredGap(ComponentPlacement.RELATED, 100, Short.MAX_VALUE)
 												.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 													.addComponent(lblDatenZumPraktikum)
 													.addComponent(panel_7, GroupLayout.PREFERRED_SIZE, 236, GroupLayout.PREFERRED_SIZE))
@@ -706,16 +706,16 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 												.addComponent(btnNachrichtErstellen, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 												.addComponent(btnSpeichern, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE))
 											.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, 155, GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+										.addGap(18)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.LEADING)
 											.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 204, GroupLayout.PREFERRED_SIZE)))
+											.addComponent(scrollPane_5, GroupLayout.PREFERRED_SIZE, 246, GroupLayout.PREFERRED_SIZE)))
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addComponent(lblAnmerkungenZumPraktikum, GroupLayout.PREFERRED_SIZE, 270, GroupLayout.PREFERRED_SIZE)
 										.addGap(112))
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addGap(25)
-										.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 358, Short.MAX_VALUE)
+										.addComponent(panel_1, GroupLayout.PREFERRED_SIZE, 370, Short.MAX_VALUE)
 										.addGap(2)))))
 						.addGap(49))
 			);
@@ -770,7 +770,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 									.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 										.addGap(74)
 										.addComponent(lblStatus_1, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.UNRELATED, 11, Short.MAX_VALUE)
+										.addPreferredGap(ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
 										.addGroup(gl_panel_Steckbrief.createParallelGroup(Alignment.TRAILING)
 											.addGroup(gl_panel_Steckbrief.createSequentialGroup()
 												.addComponent(comboBox_NachrichtWahl, GroupLayout.PREFERRED_SIZE, 31, GroupLayout.PREFERRED_SIZE)
@@ -1227,6 +1227,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			textArea_konsole.setLineWrap(true);
 			textArea_konsole.setEnabled(false);
 			textArea_konsole.setEditable(false);
+			textArea_konsole.setDisabledTextColor(Color.blue);
 			scrollPane_5.setViewportView(textArea_konsole);
 			
 			textArea_anmerkperson = new JTextArea();
@@ -2389,7 +2390,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
 			if (i == 1) {
-				String info = "Daten geupdatet am " + zeit;
+				String info;
+				info = liste.get(30);
+				info = info + "\n" + "Daten geupdatet am " + zeit;
 				setInfoPrakt(info);
 				liste.set(30, info);
 				neuePraktID = liste.get(0);
@@ -2430,7 +2433,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
 			if (i == 1) {
-				String info = "Daten geupdatet am " + zeit;
+				ArrayList<ArrayList<String>> infoAnspr = _model.getData("Select INFO From ANSPRECHPARTNER WHERE ID = '" + liste.get(0) + "';");
+				String info;
+				info = infoAnspr.get(0).get(0);
+				info = info + "\n" + "Daten geupdatet am " + zeit;
 				setInfoAnspr(info);
 				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
 						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + 
@@ -2588,21 +2594,34 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		}
 		private void statusupdate(String nachricht , String id){
 			String sql = "";
+			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+			Timestamp time = new Timestamp(System.currentTimeMillis());
+			String zeit = sdf.format(time);
+			String info;
+			info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ID = '" + id + "';").get(0).get(0);
+			info = info + "\n" + "Nachricht " + nachricht + " erstellt am " + zeit;
 			if (id.startsWith("SP")) {
 				if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Eingangsbescheid")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Praktikumsbestätigung")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Rücksendung_Unterlagen")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Selbstabsage_Vorlage")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Unterlagen_vervollständigen")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig', INFO = '" + info + "' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
-					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage', INFO = '" + info + "' WHERE ID = '" + id + "';";
+					setInfoPrakt(info);
 				}else {
 					sql = "";
 				}
@@ -2611,18 +2630,25 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			
 			if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
 				comboBox_status.setSelectedItem("Absage");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Eingangsbescheid")) {
 				comboBox_status.setSelectedItem("Eingangsbestätigung");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Praktikumsbestätigung")) {
 				comboBox_status.setSelectedItem("abgeschlossen");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Rücksendung_Unterlagen")) {
 				comboBox_status.setSelectedItem("Zusage");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Selbstabsage_Vorlage")) {
 				comboBox_status.setSelectedItem("Selbstabsage");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Unterlagen_vervollständigen")) {
 				comboBox_status.setSelectedItem("Bewerbung unvollständig");
+				setInfoPrakt(info);
 			}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
 				comboBox_status.setSelectedItem("Zusage");
+				setInfoPrakt(info);
 			}else {
 				sql = "";
 				comboBox_status.setSelectedItem("leer");

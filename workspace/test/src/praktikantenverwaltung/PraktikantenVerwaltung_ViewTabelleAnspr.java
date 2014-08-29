@@ -39,6 +39,7 @@ import javax.swing.JCheckBox;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
 import javax.swing.JLabel;
 
 public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
@@ -356,11 +357,20 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	            String sql;
 	            sql = "SELECT ID FROM ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
 	            daten = _model.getData(sql);
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
+	            String info;
+				info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR1 = '" + daten.get(0).get(0) + "';").get(0).get(0);
+				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 1 gelöscht";
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0', INFO = '" + info + "' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
 	            _model.insertUpdateDeleteTable(sql);
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
+	            
+	            info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR2 = '" + daten.get(0).get(0) + "';").get(0).get(0);
+				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 2 gelöscht";
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0', INFO = '" + info + "' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
 	            _model.insertUpdateDeleteTable(sql);
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
+	            
+	            info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR3 = '" + daten.get(0).get(0) + "';").get(0).get(0);
+				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 3 gelöscht";
+	            sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0', INFO = '" + info + "' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
 	            _model.insertUpdateDeleteTable(sql);
 	            sql = loescheEintragAnspr(liste);
 	            _model.insertUpdateDeleteTable(sql);

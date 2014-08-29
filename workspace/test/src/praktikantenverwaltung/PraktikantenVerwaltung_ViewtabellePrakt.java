@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -729,20 +730,26 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	}
 	private void statusupdate(String nachricht , String id){
 		String sql = "";
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+		Timestamp time = new Timestamp(System.currentTimeMillis());
+		String zeit = sdf.format(time);
+		String info;
+		info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ID = '" + id + "';").get(0).get(0);
+		info = info + "\n" + "Nachricht " + nachricht + " erstellt am " + zeit;
 		if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage', INFO = '" + info + "' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Eingangsbescheid")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Eingangsbestätigung', INFO = '" + info + "' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Praktikumsbestätigung")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'abgeschlossen', INFO = '" + info + "' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Rücksendung_Unterlagen")) {
 			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Selbstabsage_Vorlage")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Selbstabsage', INFO = '" + info + "' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Unterlagen_vervollständigen")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Bewerbung unvollständig', INFO = '" + info + "' , UNTERLAGENVOLLST = '0' WHERE ID = '" + id + "';";
 		}else if (nachricht.equals("Zusage") || nachricht.equals("Zusageanschreiben")) {
-			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage' WHERE ID = '" + id + "';";
+			sql = "UPDATE PRAKTIKANTEN set STATUS = 'Zusage', INFO = '" + info + "' WHERE ID = '" + id + "';";
 		}else {
 			sql = "";
 		}

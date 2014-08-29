@@ -24,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.LineBorder;
@@ -320,9 +321,11 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		);
 		
 		textArea_InfoAnspr = new JTextArea();
-		textArea_InfoAnspr.setFont(new Font("Monospaced", Font.PLAIN, 13));
-		textArea_InfoAnspr.setForeground(Color.BLACK);
+		textArea_InfoAnspr.setBackground(UIManager.getColor("Button.background"));
+		textArea_InfoAnspr.setLineWrap(true);
+		textArea_InfoAnspr.setEnabled(false);
 		textArea_InfoAnspr.setEditable(false);
+		textArea_InfoAnspr.setDisabledTextColor(Color.blue);
 		scrollPane_6.setViewportView(textArea_InfoAnspr);
 		
 		textArea_AnmerkOrtBearb = new JTextArea();
@@ -375,10 +378,13 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
 			if (i == 1) {
-				String info = "Daten geupdatet am " + zeit;
+				String info;
+				info = liste.get(8);
+				info = info + "\n" + "Daten geupdatet am " + zeit;
 				setInfoAnspr(info);
+				liste.set(8, info);
 				sql = "UPDATE ANSPRECHPARTNER set NN = '" + liste.get(1) + "', VN = '" + liste.get(2) + "', TELE = '" + liste.get(3) +
-						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + info + 
+						"', MAIL = '" + liste.get(4) + "', ABTEILUNG = '" + liste.get(5) + "', RNR = '" + liste.get(6) + "', ANMERKEINSATZORT = '" + liste.get(7) + "', INFO = '" + liste.get(8) + 
 						 "', BLOCKIERENVON = '" + liste.get(9) + "', BLOCKIERENBIS = '" + liste.get(10) + "', ETECH = '" + liste.get(11) + "', KAUFM = '" + liste.get(12) + "', INF = '" + liste.get(13) +"' WHERE ID = '" + liste.get(0) + "';";
 			
 			} else if (i == 2) {

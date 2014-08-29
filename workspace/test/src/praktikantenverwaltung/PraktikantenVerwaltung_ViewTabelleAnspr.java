@@ -39,6 +39,7 @@ import javax.swing.JCheckBox;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import javax.swing.JLabel;
 
 public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
 	
@@ -183,6 +184,18 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 
 		 chckbxKaufmnnisch = new JCheckBox("Kaufm\u00E4nnisch");
 		 
+		 JLabel lblSucheNachFreien = new JLabel("Freie Betreuer:");
+		 
+		 JLabel lblFreiVon = new JLabel("Von:");
+		 
+		 textField_freiVon = new JTextField();
+		 textField_freiVon.setColumns(10);
+		 
+		 JLabel lblFreiBis = new JLabel("Bis:");
+		 
+		 textField_freiBis = new JTextField();
+		 textField_freiBis.setColumns(10);
+		 
 		 GroupLayout gl_panel_9 = new GroupLayout(panel_9);
 		 gl_panel_9.setHorizontalGroup(
 		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
@@ -192,24 +205,50 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		 			.addGap(18)
 		 			.addComponent(buttonAnsprLoesch, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
 		 			.addGap(73)
-		 			.addComponent(chckbxEtechnik, GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+		 			.addComponent(chckbxEtechnik, GroupLayout.DEFAULT_SIZE, 71, Short.MAX_VALUE)
 		 			.addPreferredGap(ComponentPlacement.RELATED)
-		 			.addComponent(chckbxInformatik, GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)
+		 			.addComponent(chckbxInformatik, GroupLayout.DEFAULT_SIZE, 75, Short.MAX_VALUE)
 		 			.addPreferredGap(ComponentPlacement.RELATED)
-		 			.addComponent(chckbxKaufmnnisch, GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-		 			.addGap(712))
+		 			.addComponent(chckbxKaufmnnisch, GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
+		 			.addGap(248)
+		 			.addComponent(lblSucheNachFreien, GroupLayout.PREFERRED_SIZE, 85, GroupLayout.PREFERRED_SIZE)
+		 			.addGap(27)
+		 			.addComponent(lblFreiVon)
+		 			.addPreferredGap(ComponentPlacement.RELATED)
+		 			.addComponent(textField_freiVon, GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+		 			.addGap(13)
+		 			.addComponent(lblFreiBis)
+		 			.addGap(5)
+		 			.addComponent(textField_freiBis, GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
+		 			.addGap(21))
 		 );
 		 gl_panel_9.setVerticalGroup(
-		 	gl_panel_9.createParallelGroup(Alignment.LEADING)
+		 	gl_panel_9.createParallelGroup(Alignment.TRAILING)
 		 		.addGroup(gl_panel_9.createSequentialGroup()
-		 			.addGap(9)
-		 			.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
-		 				.addComponent(buttonAnsprBearb)
-		 				.addComponent(buttonAnsprLoesch)
-		 				.addComponent(chckbxEtechnik)
-		 				.addComponent(chckbxInformatik)
-		 				.addComponent(chckbxKaufmnnisch))
-		 			.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		 			.addGroup(gl_panel_9.createParallelGroup(Alignment.LEADING)
+		 				.addGroup(gl_panel_9.createSequentialGroup()
+		 					.addGap(18)
+		 					.addComponent(lblFreiBis, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+		 				.addGroup(gl_panel_9.createSequentialGroup()
+		 					.addGap(9)
+		 					.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+		 						.addComponent(buttonAnsprBearb)
+		 						.addComponent(buttonAnsprLoesch)
+		 						.addComponent(chckbxEtechnik)
+		 						.addComponent(chckbxInformatik)
+		 						.addComponent(chckbxKaufmnnisch)
+		 						.addGroup(gl_panel_9.createSequentialGroup()
+		 							.addGap(9)
+		 							.addGroup(gl_panel_9.createParallelGroup(Alignment.BASELINE)
+		 								.addComponent(lblFreiVon, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+		 								.addComponent(lblSucheNachFreien, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+		 						.addGroup(gl_panel_9.createSequentialGroup()
+		 							.addGap(3)
+		 							.addComponent(textField_freiVon))
+		 						.addGroup(gl_panel_9.createSequentialGroup()
+		 							.addGap(3)
+		 							.addComponent(textField_freiBis)))))
+		 			.addContainerGap())
 		 );
 		 panel_9.setLayout(gl_panel_9);
 		 
@@ -235,14 +274,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		@Override
 	    public void actionPerformed(ActionEvent e)
 	    {
-//	    	try {
-	    		KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-		        manager.getFocusOwner().transferFocus();
-//			} catch (Exception e2) {
-//				// TODO: handle exception
-//			}
+	    	KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+		    manager.getFocusOwner().transferFocus();
 	    }
 	};
+	private JTextField textField_freiVon;
+	private JTextField textField_freiBis;
 	public void setDatenAnspr(Object[][] daten){
 		this.datenansprech = daten;
 	}

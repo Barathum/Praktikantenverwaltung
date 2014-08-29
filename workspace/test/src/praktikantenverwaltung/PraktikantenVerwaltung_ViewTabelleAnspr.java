@@ -477,12 +477,11 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 							DateTime blockierenVonDate;
 							try {
 								blockierenVonDate = dateStringFormat.parseDateTime(blockierenVonString);
+								if (startDatumAusEingabeDate.isAfter(blockierenVonDate)) {
+						        	daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								blockierenVonDate = new DateTime();
-							}
-					        if (startDatumAusEingabeDate.isAfter(blockierenVonDate)) {
-					        	daten.remove(i);
-								i--;
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -510,12 +509,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 							DateTime blockiertVonDate;
 							try {
 								blockiertVonDate = dateStringFormat.parseDateTime(blockierenVonString);
+								if (blockiertVonDate.isAfter(blockierenVonAusEingabeDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								blockiertVonDate = new DateTime();
-							}
-					        if (blockiertVonDate.isAfter(blockierenVonAusEingabeDate)) {
-								daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -551,12 +550,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 							DateTime blockierenBisDate;
 							try {
 								blockierenBisDate = dateStringFormat.parseDateTime(blockierenBisString);
+								if (blockiertBisAusEingabeDate.isAfter(blockierenBisDate)) {
+						        	daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								blockierenBisDate = new DateTime();
-							}
-					        if (blockiertBisAusEingabeDate.isAfter(blockierenBisDate)) {
-					        	daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -584,12 +583,12 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 							DateTime blockiertBisDate;
 							try {
 								blockiertBisDate = dateStringFormat.parseDateTime(blockierenBisString);
+								if (blockiertBisDate.isAfter(blockierenBisAusEingabeDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								blockiertBisDate = new DateTime();
-							}
-					        if (blockiertBisDate.isAfter(blockierenBisAusEingabeDate)) {
-								daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {

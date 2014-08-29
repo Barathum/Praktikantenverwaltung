@@ -441,12 +441,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime startDatumDate;
 							try {
 								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
+								if (startDatumAusEingabeDate.isAfter(startDatumDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								startDatumDate = new DateTime();
-							}
-				            if (startDatumAusEingabeDate.isAfter(startDatumDate)) {
-								daten.remove(i);
-								i--;
+								
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -474,12 +474,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime startDatumDate;
 							try {
 								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
+								if (startDatumDate.isAfter(startDatumAusEingabeDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								startDatumDate = new DateTime();
-							}
-				            if (startDatumDate.isAfter(startDatumAusEingabeDate)) {
-								daten.remove(i);
-								i--;
+								
 							}
 						}
 				} catch (IllegalArgumentException e) {
@@ -515,12 +515,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime endDatumDate;
 							try {
 								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
+								if (endDatumAusEingabeDate.isAfter(endDatumDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								endDatumDate = new DateTime();
-							}
-				            if (endDatumAusEingabeDate.isAfter(endDatumDate)) {
-								daten.remove(i);
-								i--;
+								
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -542,12 +542,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime endDatumDate;
 							try {
 								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
+								if (endDatumDate.isAfter(endDatumAusEingabeDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								endDatumDate = new DateTime();
-							}
-				            if (endDatumDate.isAfter(endDatumAusEingabeDate)) {
-								daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -583,12 +583,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime editDatumDate;
 							try {
 								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
+								if (editDatumAusEingabeDate.isAfter(editDatumDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								editDatumDate = new DateTime();
-							}
-				            if (editDatumAusEingabeDate.isAfter(editDatumDate)) {
-								daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {
@@ -610,12 +610,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 							DateTime editDatumDate;
 							try {
 								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
+								if (editDatumDate.isAfter(editDatumAusEingabeDate)) {
+									daten.remove(i);
+									i--;
+								}
 							} catch (Exception e) {
-								editDatumDate = new DateTime();
-							}
-				            if (editDatumDate.isAfter(editDatumAusEingabeDate)) {
-								daten.remove(i);
-								i--;
+
 							}
 						}
 					} catch (IllegalArgumentException e) {

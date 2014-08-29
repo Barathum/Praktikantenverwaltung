@@ -3,7 +3,11 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.KeyboardFocusManager;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -31,6 +35,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JCheckBox;
+
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements ActionListener{
 	
@@ -385,9 +393,191 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		   ArrayList<String> datenTextfields = new ArrayList<String>();
 		   datenTextfields = getInhaltSuchFelders();
-		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-		   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
-		   				+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+		   /**
+		    * Hier kommen die if abfragen
+		    */
+		   if (datenTextfields.get(6).trim().startsWith("<") || datenTextfields.get(6).trim().startsWith(">")
+				   || datenTextfields.get(7).trim().startsWith("<") || datenTextfields.get(7).trim().startsWith(">")) {
+			   DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+			   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
+			   Calendar cal = Calendar.getInstance();
+			   cal.add(Calendar.YEAR, -50);
+			   sdfToDate.set2DigitYearStart(cal.getTime());
+			   
+			   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5)  + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+			   char startVonBlockiertVon;
+			   char startVonBlockiertBis;
+			   try {
+				   startVonBlockiertBis = datenTextfields.get(7).trim().charAt(0);
+				} catch (StringIndexOutOfBoundsException e) {
+					startVonBlockiertBis = ' ';
+				}
+			   
+				try {
+				   startVonBlockiertVon = datenTextfields.get(6).trim().charAt(0);
+				} catch (StringIndexOutOfBoundsException e) {
+					startVonBlockiertVon = ' ';
+				}
+				
+				String blockierenVonAusEingabe = datenTextfields.get(6).trim();
+				String blockierenBisAusEingabe = datenTextfields.get(7).trim();
+				
+				if (startVonBlockiertVon == '>') {
+					try {
+						Date blockierenVonAusEingabeDatesdf = null;
+						blockierenVonAusEingabe = blockierenVonAusEingabe.substring(1).trim();
+						try {
+							blockierenVonAusEingabeDatesdf = sdfToDate.parse(blockierenVonAusEingabe);
+							System.out.println(blockierenVonAusEingabeDatesdf.toString());
+						} catch (ParseException e1) {
+							
+						}
+						DateTime startDatumAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
+//						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenVonString = daten.get(i).get(6);
+							DateTime blockierenVonDate;
+							try {
+								blockierenVonDate = dateStringFormat.parseDateTime(blockierenVonString);
+							} catch (Exception e) {
+								blockierenVonDate = new DateTime();
+							}
+					        if (startDatumAusEingabeDate.isAfter(blockierenVonDate)) {
+					        	daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+		//					e.printStackTrace();
+					}
+					   
+				}
+				   /**
+				    * Hier ist der einzige unterschied eine vertauschung von eingabe und listen Datum um alle zu filtern
+				    * die vor der Eingabe liegen
+				    */
+				else if (startVonBlockiertVon == '<') {
+					try {
+						Date blockierenVonAusEingabeDatesdf = null;
+						blockierenVonAusEingabe = blockierenVonAusEingabe.substring(1).trim();
+						try {
+							blockierenVonAusEingabeDatesdf = sdfToDate.parse(blockierenVonAusEingabe);
+						} catch (ParseException e1) {
+								
+						}
+						DateTime blockierenVonAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
+//						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenVonString = daten.get(i).get(6);
+							DateTime blockiertVonDate;
+							try {
+								blockiertVonDate = dateStringFormat.parseDateTime(blockierenVonString);
+							} catch (Exception e) {
+								blockiertVonDate = new DateTime();
+							}
+					        if (blockiertVonDate.isAfter(blockierenVonAusEingabeDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+//						e.printStackTrace();
+					}
+				} else {
+					try {
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenVonString = daten.get(i).get(6);
+				            if (blockierenVonString.matches(".*" + blockierenVonAusEingabe + ".*") == false) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+//						e.printStackTrace();
+					}
+				}
+				if (startVonBlockiertBis == '>') {
+					try {
+						Date blockierenBisAusEingabeDatesdf = null;
+						blockierenBisAusEingabe = blockierenBisAusEingabe.substring(1).trim();
+						try {
+							blockierenBisAusEingabeDatesdf = sdfToDate.parse(blockierenBisAusEingabe);
+							System.out.println(blockierenBisAusEingabeDatesdf.toString());
+						} catch (ParseException e1) {
+							
+						}
+						DateTime blockiertBisAusEingabeDate = new DateTime(blockierenBisAusEingabeDatesdf);
+//						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenBisString = daten.get(i).get(7);
+							DateTime blockierenBisDate;
+							try {
+								blockierenBisDate = dateStringFormat.parseDateTime(blockierenBisString);
+							} catch (Exception e) {
+								blockierenBisDate = new DateTime();
+							}
+					        if (blockiertBisAusEingabeDate.isAfter(blockierenBisDate)) {
+					        	daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+		//					e.printStackTrace();
+					}
+					   
+				}
+				   /**
+				    * Hier ist der einzige unterschied eine vertauschung von eingabe und listen Datum um alle zu filtern
+				    * die vor der Eingabe liegen
+				    */
+				else if (startVonBlockiertBis == '<') {
+					try {
+						Date blockierenBisAusEingabeDatesdf = null;
+						blockierenBisAusEingabe = blockierenBisAusEingabe.substring(1).trim();
+						try {
+							blockierenBisAusEingabeDatesdf = sdfToDate.parse(blockierenBisAusEingabe);
+						} catch (ParseException e1) {
+								
+						}
+						DateTime blockierenBisAusEingabeDate = new DateTime(blockierenBisAusEingabeDatesdf);
+//						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenBisString = daten.get(i).get(7);
+							DateTime blockiertBisDate;
+							try {
+								blockiertBisDate = dateStringFormat.parseDateTime(blockierenBisString);
+							} catch (Exception e) {
+								blockiertBisDate = new DateTime();
+							}
+					        if (blockiertBisDate.isAfter(blockierenBisAusEingabeDate)) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+//						e.printStackTrace();
+					}
+				} else {
+					try {
+						for (int i = 0; i < daten.size(); i++) {
+							String blockierenBisString = daten.get(i).get(7);
+				            if (blockierenBisString.matches(".*" + blockierenBisAusEingabe + ".*") == false) {
+								daten.remove(i);
+								i--;
+							}
+						}
+					} catch (IllegalArgumentException e) {
+//						e.printStackTrace();
+					}
+				}
+				 
+			} else {
+				daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
+				   		+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+			}
+		   
 		   setDatenAnspr(_control.ArrayListtoArray(daten));
 		   updateTable();
 	}

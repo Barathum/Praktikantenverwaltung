@@ -2,6 +2,7 @@ package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -140,7 +141,13 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				}
 			});
 		    
-		    updateTableTodos();
+		    button_aktualisieren.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					filterTodos();
+				}
+			});
+		    filterTodos();
 	}
 	public void setNeuerPraktListener(ActionListener l){ 
         this.menuNeuerPraktikant.addActionListener(l); 
@@ -210,10 +217,50 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		this.datentodos = daten;
 	}
 	public void filterTodos() { 
-		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			   daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
-			   System.out.println(daten.toString());
-		   setDatenTodos(_control.ArrayListtoArray(daten));
+		DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
+		   Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.YEAR, -50);
+			sdfToDate.set2DigitYearStart(cal.getTime());
+		ArrayList<ArrayList<String>> daten_komplett = new ArrayList<ArrayList<String>>();
+		daten_komplett = _model.getData("SELECT * FROM PRAKTIKANTEN ORDER BY NN;");
+		   ArrayList<ArrayList<String>> daten_table = new ArrayList<ArrayList<String>>();
+//			daten_table = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
+			/**
+			 * Hier Rauslöschen der Daten die nicht den Todos entsprechen
+			 */
+		   DateTime aktuelleZeit = new DateTime();
+		   for (int i = 0; i < daten_komplett.size(); i++) {
+				String antwortFristString = daten_komplett.get(i).get(33);
+				DateTime antwortFristDate;
+				try {
+					antwortFristDate = dateStringFormat.parseDateTime(antwortFristString);
+					if (aktuelleZeit.plusDays(3).isAfter(antwortFristDate) && daten_komplett.get(i).get(32).equals("0")) {
+						ArrayList<String> datensatzgekürzt = new ArrayList<String>();
+						datensatzgekürzt.add(daten_komplett.get(i).get(0));
+						datensatzgekürzt.add(daten_komplett.get(i).get(2));
+						datensatzgekürzt.add(daten_komplett.get(i).get(3));
+						/**
+						 * Das ist der Individuelle Hinweis für das Todo
+						 */
+						datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist bald abgelaufen");
+						daten_table.add(datensatzgekürzt);
+					}
+				} catch (Exception e) {
+					
+				}
+			}
+		   
+		   
+//			for (int i = 0; i < daten_komplett.size(); i++) {
+//				ArrayList<String> datensatzgekürzt = new ArrayList<String>();
+//				datensatzgekürzt.add(daten_komplett.get(i).get(0));
+//				datensatzgekürzt.add(daten_komplett.get(i).get(2));
+//				datensatzgekürzt.add(daten_komplett.get(i).get(3));
+//				datensatzgekürzt.add(daten_komplett.get(i).get(31));
+//				daten_table.add(datensatzgekürzt);
+//			}
+		   setDatenTodos(_control.ArrayListtoArray(daten_table));
 		   updateTableTodos();
 	}
 }

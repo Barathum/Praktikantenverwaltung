@@ -1712,6 +1712,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public void setInfoPrakt(String inf){
 		this.textArea_konsole.setText(inf);
 	}
+	public String getInfoPrakt(){
+		return this.textArea_konsole.getText();
+	}
 	public void setInfoAnspr(String inf){
 //		this.textArea_InfoAnspr.setText(inf);
 	}
@@ -2408,11 +2411,15 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}else if (i == 4) {
 				sql = "DELETE from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
 			}else if (i == 2){
+				String info;
 				hoechstePraktID = _control.getHoechstePraktID();
 				hoechstePraktID++;
 				neuePraktID = "SP" + hoechstePraktID.toString();
-				
-				String info = "Daten gespeichert am " + zeit;
+				if (getInfoPrakt().equals("")) {
+					info = "Daten gespeichert am " + zeit;
+				} else {
+					info = getInfoPrakt() + "\n" + "Daten gespeichert am " + zeit;
+				}
 				setInfoPrakt(info);
 				liste.set(30, info);
 				sql = "INSERT INTO PRAKTIKANTEN " +
@@ -2598,9 +2605,14 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
 			String info;
-			info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ID = '" + id + "';").get(0).get(0);
-			info = info + "\n" + "Nachricht " + nachricht + " erstellt am " + zeit;
+			if (getInfoPrakt().equals("")) {
+				info = "Nachricht " + nachricht + " erstellt am " + zeit;
+			} else {
+				info = getInfoPrakt() + "\n" + "Nachricht " + nachricht + " erstellt am " + zeit;
+			}
 			if (id.startsWith("SP")) {
+				info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ID = '" + id + "';").get(0).get(0);
+				info = info + "\n" + "Nachricht " + nachricht + " erstellt am " + zeit;
 				if (nachricht.equals("Absage_freiwilliges_Praktikum") || nachricht.equals("Absage_Vorlage")) {
 					sql = "UPDATE PRAKTIKANTEN set STATUS = 'Absage', INFO = '" + info + "' WHERE ID = '" + id + "';";
 					setInfoPrakt(info);

@@ -336,7 +336,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
             }
          } 
 	   }
-	public String getEintragPrakt(ArrayList<String> liste){
+	private String getEintragPrakt(ArrayList<String> liste){
 		String sql;
 		sql = "SELECT * from PRAKTIKANTEN where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND STATUS ='" + liste.get(2) + "';";
 		return sql;

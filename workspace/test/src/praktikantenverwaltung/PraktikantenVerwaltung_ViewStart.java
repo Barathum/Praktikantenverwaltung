@@ -3,20 +3,39 @@ package praktikantenverwaltung;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.WindowConstants;
 
 import org.apache.commons.io.FileUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JButton;
+import javax.swing.Icon;
+import javax.swing.BorderFactory;
 
 public class PraktikantenVerwaltung_ViewStart extends JFrame {
 
@@ -27,15 +46,30 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	 */
 	private JPanel mainPanel;
 	private String tempFolder = new String("temp");
+	private JTable table_todos = new JTable();
+	private String[] spaltennamentodos = {
+			"ID",
+            "Nachname",
+            "Vorname",
+            "Hinweis"};
+	private Object[][] datentodos;
 	JMenuItem menuNeuerPraktikant = new JMenuItem("Neuer Praktikant");
 	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Ansprechpartner");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige Praktikantentabelle");
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige Ansprechpartnertabelle");
+	private JScrollPane scrollPane;
+	private PraktikantenVerwaltung_Modell _model;
+	private PraktikantenVerwaltung_Control _control;
+	ImageIcon iconAktualisieren = new ImageIcon(new ImageIcon("img/aktualisierenIcon.png").getImage().getScaledInstance(29, 29, java.awt.Image.SCALE_SMOOTH));
+	private JButton button_aktualisieren;
 
 	/**
 	 * Create the frame.
 	 */
-	public PraktikantenVerwaltung_ViewStart() {
+	public PraktikantenVerwaltung_ViewStart(PraktikantenVerwaltung_Modell model , PraktikantenVerwaltung_Control control , ArrayList<ArrayList<String>> Tabellen_Eintraege) {
+		this._model = model;
+		this._control = control;
+		setDatenTodos(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setBounds(5, 5, 1280, 720);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -47,6 +81,16 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		JPanel panel_Start = new JPanel();
 		panel_Start.setLayout(null);
 		mainPanel.add(panel_Start, "card_3");
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setBounds(0, 37, 1264, 624);
+		panel_Start.add(scrollPane);
+		
+		button_aktualisieren = new JButton(iconAktualisieren);
+		button_aktualisieren.setBorder(BorderFactory.createEmptyBorder());
+		button_aktualisieren.setBounds(1226, 2, 33, 33);
+		panel_Start.add(button_aktualisieren);
 		
 		 /**
 		 * Anfügen der Menüeinträge in das Startmenu
@@ -95,6 +139,8 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				public void windowActivated(WindowEvent e) {
 				}
 			});
+		    
+		    updateTableTodos();
 	}
 	public void setNeuerPraktListener(ActionListener l){ 
         this.menuNeuerPraktikant.addActionListener(l); 
@@ -108,5 +154,66 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	public void setTabelleAnsprListener(ActionListener l){ 
         this.menuAlleAnsprechpartner.addActionListener(l); 
 	}
-
+	
+	public void updateTableTodos(){
+		table_todos = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamentodos, datentodos));
+		table_todos.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table_todos.getColumnModel().getColumn(1).setPreferredWidth(50);
+		table_todos.getColumnModel().getColumn(2).setPreferredWidth(50);
+		table_todos.getColumnModel().getColumn(3).setPreferredWidth(700);
+		table_todos.addMouseListener(new MouseAdapter() {
+			   public void mouseClicked(MouseEvent e) {
+			      if (e.getClickCount() == 2) {
+			    	  refresh();
+			         JTable target = getTable();
+			         ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			            int markierteReiheNR =  target.getSelectedRow();
+			            ArrayList<String> liste = new ArrayList<String>();
+			            if(markierteReiheNR >= 0){
+			            	String id = (String) target.getValueAt(markierteReiheNR, 0);
+			                liste.add(id);
+			                String sql;
+			                sql = getEintragPrakt(liste);
+			                daten = _model.getData(sql);
+			                try {
+			                	PraktikantenVerwaltung_ViewPrakt _viewprakt = null;
+			                    _viewprakt = new PraktikantenVerwaltung_ViewPrakt(_control, _model , daten);
+			                    _viewprakt.setVisible(true);
+							} catch (IndexOutOfBoundsException e2) {
+								return;
+							}
+			            }
+			         }
+			   }
+			});
+		scrollPane.setViewportView(table_todos);
+	}
+	private JTable getTable(){
+		return table_todos;
+	}
+	private void refresh(){
+		ListSelectionModel model = getTable().getSelectionModel();
+		int[] rows = getTable().getSelectedRows();
+		model.clearSelection();
+//		filterPrakt();
+		for (int i = 0; i < rows.length; i++) {
+			model.addSelectionInterval(rows[i], rows[i]);
+		}
+		table_todos.setSelectionModel(model);
+	}
+	private String getEintragPrakt(ArrayList<String> liste){
+		String sql;
+		sql = "SELECT * from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
+		return sql;
+	}
+	private void setDatenTodos(Object[][] daten){
+		this.datentodos = daten;
+	}
+	public void filterTodos() { 
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			   daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
+			   System.out.println(daten.toString());
+		   setDatenTodos(_control.ArrayListtoArray(daten));
+		   updateTableTodos();
+	}
 }

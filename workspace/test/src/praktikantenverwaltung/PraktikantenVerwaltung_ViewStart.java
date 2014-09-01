@@ -202,7 +202,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		ListSelectionModel model = getTable().getSelectionModel();
 		int[] rows = getTable().getSelectedRows();
 		model.clearSelection();
-//		filterPrakt();
+		filterTodos();
 		for (int i = 0; i < rows.length; i++) {
 			model.addSelectionInterval(rows[i], rows[i]);
 		}
@@ -233,6 +233,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		   for (int i = 0; i < daten_komplett.size(); i++) {
 				String antwortFristString = daten_komplett.get(i).get(33);
 				DateTime antwortFristDate;
+				
+				String endDatum = daten_komplett.get(i).get(24);
+				DateTime endDatumDate;
 				try {
 					antwortFristDate = dateStringFormat.parseDateTime(antwortFristString);
 					if (aktuelleZeit.plusDays(3).isAfter(antwortFristDate) && daten_komplett.get(i).get(32).equals("0")) {
@@ -243,9 +246,33 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 						/**
 						 * Das ist der Individuelle Hinweis für das Todo
 						 */
-						datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist bald abgelaufen");
+						if(aktuelleZeit.isAfter(antwortFristDate)){
+							datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist ist an "+antwortFristString+" abgelaufen");
+						}else{
+							datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist wird am "+antwortFristString+" ablaufen");
+						}
+							
 						daten_table.add(datensatzgekürzt);
 					}
+					
+					endDatumDate = dateStringFormat.parseDateTime(endDatum);
+					if(aktuelleZeit.plusDays(3).isAfter(endDatumDate) && !(daten_komplett.get(i).get(25).equals("abgeschlossen"))){
+						ArrayList<String> datensatzgekürzt = new ArrayList<String>();
+						datensatzgekürzt.add(daten_komplett.get(i).get(0));
+						datensatzgekürzt.add(daten_komplett.get(i).get(2));
+						datensatzgekürzt.add(daten_komplett.get(i).get(3));
+						/**
+						 * Das ist der Individuelle Hinweis für das Todo
+						 */
+						if(aktuelleZeit.isAfter(endDatumDate)){
+							datensatzgekürzt.add("Praktikum wurde am "+endDatum+" beendet und Status ist noch nicht abgeschlossen");
+						}else{
+							datensatzgekürzt.add("Praktikum endet am "+endDatum);
+						}
+							
+						daten_table.add(datensatzgekürzt);
+					}
+					
 				} catch (Exception e) {
 					
 				}

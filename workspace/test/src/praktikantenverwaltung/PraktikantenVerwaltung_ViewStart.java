@@ -29,6 +29,7 @@ import javax.swing.WindowConstants;
 
 import org.apache.commons.io.FileUtils;
 import org.joda.time.DateTime;
+import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -247,7 +248,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 						 * Das ist der Individuelle Hinweis für das Todo
 						 */
 						if(aktuelleZeit.isAfter(antwortFristDate)){
-							datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist ist an "+antwortFristString+" abgelaufen");
+							datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist ist am "+antwortFristString+" abgelaufen");
 						}else{
 							datensatzgekürzt.add("Unterlagen unvollständig und Antwortfrist wird am "+antwortFristString+" ablaufen");
 						}
@@ -289,5 +290,37 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 //			}
 		   setDatenTodos(_control.ArrayListtoArray(daten_table));
 		   updateTableTodos();
+		   anwesenheitSetter();
+	}
+	private void anwesenheitSetter(){
+		DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
+		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.YEAR, -50);
+		sdfToDate.set2DigitYearStart(cal.getTime());
+		ArrayList<ArrayList<String>> daten_komplett = new ArrayList<ArrayList<String>>();
+		daten_komplett = _model.getData("SELECT * FROM PRAKTIKANTEN ORDER BY NN;");
+		
+		DateTime aktuelleZeit = new DateTime();
+		
+		for (int i = 0; i < daten_komplett.size(); i++) {
+			String startDatum = daten_komplett.get(i).get(23);
+			DateTime startDatumDate;
+			
+			String endDatum = daten_komplett.get(i).get(24);
+			DateTime endDatumDate;
+			try {
+				startDatumDate = dateStringFormat.parseDateTime(startDatum);
+				endDatumDate = dateStringFormat.parseDateTime(endDatum);
+				Interval dauer = new Interval(startDatumDate, endDatumDate);
+				if (dauer.contains(aktuelleZeit) && daten_komplett.get(i).get(25).equals("Zusage")) {
+					_model.insertUpdateDeleteTable("UPDATE PRAKTIKANTEN set STATUS = 'anwesend' WHERE ID = '" + daten_komplett.get(i).get(0) + "';");
+				}
+				
+				
+			} catch (Exception e) {
+				
+			}
+		}
 	}
 }

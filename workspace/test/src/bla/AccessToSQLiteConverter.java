@@ -12,6 +12,8 @@ public class AccessToSQLiteConverter
     public static void main(String[] args)
     {
     	_model = new PraktikantenVerwaltung_Modell();
+    	_model.insertUpdateDeleteTable("DELETE FROM PRAKTIKANTEN");
+    	_model.insertUpdateDeleteTable("DELETE FROM ANSPRECHPARTNER");
     	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     	SimpleDateFormat sdfold = new SimpleDateFormat("yyyy-MM-dd");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -25,7 +27,7 @@ public class AccessToSQLiteConverter
     	
     	ArrayList<ArrayList<String>> daten_praktika = new ArrayList<ArrayList<String>>();
     	daten_praktika = getData("SELECT [PraktikantenID] , [Startdatum] , [Enddatum] , [StatusID]"
-    			+ " , [Anmerkung] FROM [Praktika]");
+    			+ " , [Anmerkung] , [ID] FROM [Praktika]");
     	
     	ArrayList<ArrayList<String>> daten_status = new ArrayList<ArrayList<String>>();
     	daten_status = getData("SELECT [ID] , [Bezeichnung] FROM [Status]");
@@ -33,15 +35,43 @@ public class AccessToSQLiteConverter
     	ArrayList<ArrayList<String>> daten_schule = new ArrayList<ArrayList<String>>();
     	daten_schule = getData("SELECT [ID] , [Schulname] , [Schultyp] , [Siemenspartnerschule] , "
     			+ "[Anmerkung] FROM [Schulen]");
+    	ArrayList<ArrayList<String>> daten_einsatzorte = new ArrayList<ArrayList<String>>();
+    	daten_einsatzorte = getData("SELECT [PraktikumID] , [EinsatzortID] , [Woche] FROM [EinsatzorteImPraktikum]");
     	
-//    	UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
-//				"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
-//				"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
-//				"', GNN = '" + liste.get(14) + "', GVN = '" + liste.get(15) + "', SCHULE = '" + liste.get(16) + "', SCHULFORM = '" + liste.get(17) + "', PARTNERS = '" + liste.get(18) +
-//				"', ANMERKSCHULE = '" + liste.get(19) + "', MIKI = '" + liste.get(20) + "', GRAD = '" + liste.get(21) + "', ANMERKPERSON = '" + liste.get(22) + "', STARTDATUM = '" + liste.get(23) +
-//				"', ENDDATUM = '" + liste.get(24) + "', STATUS = '" + liste.get(25) + "', ANMERKPRAKT = '" + liste.get(26) + "', ANSPR1 = '" + liste.get(27) + "', ANSPR2 = '" + liste.get(28) +
-//				"', ANSPR3 = '" + liste.get(29) + "', INFO = '" + liste.get(30) + "', EDIT = '" + liste.get(31) +"', UNTERLAGENVOLLST = '" + liste.get(32) + "', ANTWORTBIS = '" + liste.get(33) +
-//				"' WHERE ID = '" + liste.get(0) + "';"
+    	ArrayList<ArrayList<String>> daten_ansprech = new ArrayList<ArrayList<String>>();
+    	daten_ansprech = getData("SELECT [ID] , [Nachname] , [Vorname] , [Telefonnummer] , [EMail]"
+    			+ " , [Abteilung] , [Raumnummer] , [Anmerkung] FROM [Einsatzorte]");
+    	
+    	for (int i = 0; i < daten_ansprech.size(); i++) {
+			ArrayList<String> liste = new ArrayList<String>();
+			
+			for (int j = 0; j < 14; j++) {
+				liste.add("");
+			}
+			
+			if (daten_ansprech.get(i).get(0).matches("..")) {
+				liste.set(0, "1000" + daten_ansprech.get(i).get(0));//AnsprId1
+			}else if (daten_ansprech.get(i).get(0).matches("...")) {
+				liste.set(0, "100" + daten_ansprech.get(i).get(0));//AnsprId1
+			}
+			liste.set(1, daten_ansprech.get(i).get(1));
+			liste.set(2, daten_ansprech.get(i).get(2));
+			liste.set(3, daten_ansprech.get(i).get(3));
+			liste.set(4, daten_ansprech.get(i).get(4));
+			liste.set(5, daten_ansprech.get(i).get(5));
+			liste.set(6, daten_ansprech.get(i).get(6));
+			liste.set(7, daten_ansprech.get(i).get(7));
+			
+
+			liste.set(11, "0");
+			liste.set(12, "0");
+			liste.set(13, "0");
+			
+			_model.insertUpdateDeleteTable("INSERT INTO ANSPRECHPARTNER " +
+						"VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
+		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + liste.get(8) +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "','" + liste.get(13) +"');");
+			
+		}
     	for (int i = 0; i < daten_praktikanten.size(); i++) {
     		ArrayList<String> liste = new ArrayList<String>();
     		for (int j = 0; j < 34; j++) {
@@ -106,7 +136,6 @@ public class AccessToSQLiteConverter
     					// TODO Auto-generated catch block
     					e.printStackTrace();
     				}
-    	    		System.out.println(sdf.format(startOld));
     				liste.set(23, sdf.format(startOld));//Startdatum
     	    		liste.set(24, sdf.format(endOld));//Enddatum
     	    		liste.set(25, "leer");//Status
@@ -118,9 +147,39 @@ public class AccessToSQLiteConverter
     	    		liste.set(26, daten_praktika.get(j).get(4));//Anmerkprakt
     			}
 			}
-    		liste.set(27, "0");//AnsprId1
-    		liste.set(28, "0");//AnsprId2
-    		liste.set(29, "0");//AnsprId3
+    		//setzt defaultwerte
+    			liste.set(27, "0");//AnsprId1
+        		liste.set(28, "0");//AnsprId2
+        		liste.set(29, "0");//AnsprId3
+    		for (int j = 0; j < daten_praktika.size(); j++) {
+    			if (daten_praktika.get(j).get(0).equals(daten_praktikanten.get(i).get(0))) {
+    				for (int k = 0; k < daten_einsatzorte.size(); k++) {
+						if (daten_praktika.get(j).get(5).equals(daten_einsatzorte.get(k).get(0))) {
+							if(daten_einsatzorte.get(k).get(2).equals("1")){
+								if (daten_einsatzorte.get(k).get(1).matches("..")) {
+									liste.set(27, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}else if (daten_einsatzorte.get(k).get(1).matches("...")) {
+									liste.set(27, "100" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}
+							}else if(daten_einsatzorte.get(k).get(2).equals("2")){
+								if (daten_einsatzorte.get(k).get(1).matches("..")) {
+									liste.set(28, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}else if (daten_einsatzorte.get(k).get(1).matches("...")) {
+									liste.set(28, "100" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}
+							}else if(daten_einsatzorte.get(k).get(2).equals("3")){
+								if (daten_einsatzorte.get(k).get(1).matches("..")) {
+									liste.set(29, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}else if (daten_einsatzorte.get(k).get(1).matches("...")) {
+									liste.set(29, "100" + daten_einsatzorte.get(k).get(1));//AnsprId1
+								}
+							}
+						}
+					}
+    				
+    			}
+    				
+			}
 //    		liste.set(30, daten.get(i).get(1));//Info
     		liste.set(31, zeit);//Edit
     		liste.set(32, "0");//Unterlagen

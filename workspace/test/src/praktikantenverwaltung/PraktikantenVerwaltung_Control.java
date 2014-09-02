@@ -25,6 +25,7 @@ public class PraktikantenVerwaltung_Control {
 	 */
 	public PraktikantenVerwaltung_Control(){
 		this._model = new PraktikantenVerwaltung_Modell(); 
+//		_model.createTables();
 		this._control = this;
 		ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");

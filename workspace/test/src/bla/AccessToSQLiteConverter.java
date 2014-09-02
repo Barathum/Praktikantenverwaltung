@@ -30,6 +30,10 @@ public class AccessToSQLiteConverter
     	ArrayList<ArrayList<String>> daten_status = new ArrayList<ArrayList<String>>();
     	daten_status = getData("SELECT [ID] , [Bezeichnung] FROM [Status]");
     	
+    	ArrayList<ArrayList<String>> daten_schule = new ArrayList<ArrayList<String>>();
+    	daten_schule = getData("SELECT [ID] , [Schulname] , [Schultyp] , [Siemenspartnerschule] , "
+    			+ "[Anmerkung] FROM [Schulen]");
+    	
 //    	UPDATE PRAKTIKANTEN set ANREDE = '" + liste.get(1) + "', NN = '" + liste.get(2) + "', VN = '" + liste.get(3) +
 //				"', GB = '" + liste.get(4) + "', GO = '" + liste.get(5) + "', STR = '" + liste.get(6) + "', PLZ = '" + liste.get(7) + "', LAND = '" + liste.get(8) + 
 //				"', TELE = '" + liste.get(9) + "', MAIL = '" + liste.get(10) + "', MOBIL = '" + liste.get(11) + "', HAUSNR = '" + liste.get(12) + "', ORT = '" + liste.get(13) +
@@ -71,10 +75,19 @@ public class AccessToSQLiteConverter
     		liste.set(13, daten_praktikanten.get(i).get(9));//Ort
     		liste.set(14, daten_praktikanten.get(i).get(17));//GNN
     		liste.set(15, daten_praktikanten.get(i).get(18));//GVN
-    		liste.set(16, daten_praktikanten.get(i).get(14));//Schule
-//    		liste.set(17, daten.get(i).get(1));//Schulform
-//    		liste.set(18, daten.get(i).get(1));//Partnerschule
-//    		liste.set(19, daten.get(i).get(1));//AnmerkSchule
+    		for (int j = 0; j < daten_schule.size(); j++) {
+    			if(daten_schule.get(j).get(0).equals(daten_praktikanten.get(i).get(14))){
+    				liste.set(16, daten_schule.get(j).get(1));//Schule
+    	    		liste.set(17, daten_schule.get(j).get(2));//Schulform
+    	    		if (daten_schule.get(j).get(3).equals("TRUE")) {
+    	    			liste.set(18, "Ja");
+    				} else {
+    					liste.set(18, "Nein");
+    				}
+    	    		liste.set(19, daten_schule.get(j).get(4));//AnmerkSchule
+    			}
+    		}
+    		
     		if (daten_praktikanten.get(i).get(15).equals("TRUE")) {
     			liste.set(20, "Ja");
 			} else {
@@ -109,7 +122,6 @@ public class AccessToSQLiteConverter
     		liste.set(28, "0");//AnsprId2
     		liste.set(29, "0");//AnsprId3
 //    		liste.set(30, daten.get(i).get(1));//Info
-//    		liste.set(31, daten.get(i).get(1));//Edit
     		liste.set(31, zeit);//Edit
     		liste.set(32, "0");//Unterlagen
     		liste.set(33, zeit);//AntwortFrist

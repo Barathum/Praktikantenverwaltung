@@ -257,7 +257,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 					}
 					
 					endDatumDate = dateStringFormat.parseDateTime(endDatum);
-					if(aktuelleZeit.plusDays(3).isAfter(endDatumDate) && !(daten_komplett.get(i).get(25).equals("abgeschlossen"))){
+					if(aktuelleZeit.plusDays(3).isAfter(endDatumDate) && (daten_komplett.get(i).get(25).equals("Zusage")||daten_komplett.get(i).get(25).equals("anwesend"))){
 						ArrayList<String> datensatzgekürzt = new ArrayList<String>();
 						datensatzgekürzt.add(daten_komplett.get(i).get(0));
 						datensatzgekürzt.add(daten_komplett.get(i).get(2));

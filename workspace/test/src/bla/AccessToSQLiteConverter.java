@@ -73,6 +73,8 @@ public class AccessToSQLiteConverter
 			
 		}
     	for (int i = 0; i < daten_praktikanten.size(); i++) {
+    		java.util.Date startOld = new java.util.Date();
+			java.util.Date endOld = new java.util.Date();
     		ArrayList<String> liste = new ArrayList<String>();
     		for (int j = 0; j < 34; j++) {
 				liste.add("");
@@ -127,8 +129,7 @@ public class AccessToSQLiteConverter
     		liste.set(22, daten_praktikanten.get(i).get(19));//Anmerkperson
     		for (int j = 0; j < daten_praktika.size(); j++) {
     			if (daten_praktika.get(j).get(0).equals(daten_praktikanten.get(i).get(0))) {
-    				java.util.Date startOld = new java.util.Date();
-    				java.util.Date endOld = new java.util.Date();
+    				
     	    		try {
     					startOld = sdfold.parse(daten_praktika.get(j).get(1));
     					endOld = sdfold.parse(daten_praktika.get(j).get(2));
@@ -163,15 +164,15 @@ public class AccessToSQLiteConverter
 								}
 							}else if(daten_einsatzorte.get(k).get(2).equals("2")){
 								if (daten_einsatzorte.get(k).get(1).matches("..")) {
-									liste.set(28, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId1
+									liste.set(28, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId2
 								}else if (daten_einsatzorte.get(k).get(1).matches("...")) {
-									liste.set(28, "100" + daten_einsatzorte.get(k).get(1));//AnsprId1
+									liste.set(28, "100" + daten_einsatzorte.get(k).get(1));//AnsprId2
 								}
 							}else if(daten_einsatzorte.get(k).get(2).equals("3")){
 								if (daten_einsatzorte.get(k).get(1).matches("..")) {
-									liste.set(29, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId1
+									liste.set(29, "1000" + daten_einsatzorte.get(k).get(1));//AnsprId3
 								}else if (daten_einsatzorte.get(k).get(1).matches("...")) {
-									liste.set(29, "100" + daten_einsatzorte.get(k).get(1));//AnsprId1
+									liste.set(29, "100" + daten_einsatzorte.get(k).get(1));//AnsprId3
 								}
 							}
 						}
@@ -182,7 +183,12 @@ public class AccessToSQLiteConverter
 			}
 //    		liste.set(30, daten.get(i).get(1));//Info
     		liste.set(31, zeit);//Edit
-    		liste.set(32, "0");//Unterlagen
+    		if(startOld.before(time)){
+    			liste.set(32, "1");//Unterlagen
+    		}else{
+    			liste.set(32, "0");//Unterlagen
+    		}
+    		
     		liste.set(33, zeit);//AntwortFrist
     		_model.insertUpdateDeleteTable("INSERT INTO PRAKTIKANTEN " +
 		                   "VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 

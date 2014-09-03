@@ -1,4 +1,6 @@
 package praktikantenverwaltung;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -6,12 +8,10 @@ import java.util.ArrayList;
 
 public class AccessToSQLiteConverter
 {
-	private static PraktikantenVerwaltung_Modell _model;
     public static void main(String[] args)
     {
-    	_model = new PraktikantenVerwaltung_Modell();
-    	_model.insertUpdateDeleteTable("DELETE FROM PRAKTIKANTEN");
-    	_model.insertUpdateDeleteTable("DELETE FROM ANSPRECHPARTNER");
+    	insertUpdateDeleteTable("DELETE FROM PRAKTIKANTEN");
+    	insertUpdateDeleteTable("DELETE FROM ANSPRECHPARTNER");
     	SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
     	SimpleDateFormat sdfold = new SimpleDateFormat("yyyy-MM-dd");
 		Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -65,7 +65,7 @@ public class AccessToSQLiteConverter
 			liste.set(12, "0");
 			liste.set(13, "0");
 			
-			_model.insertUpdateDeleteTable("INSERT INTO ANSPRECHPARTNER " +
+			insertUpdateDeleteTable("INSERT INTO ANSPRECHPARTNER " +
 						"VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
 		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','" + liste.get(8) +"','" + liste.get(9) +"','" + liste.get(10) +"','" + liste.get(11) +"','" + liste.get(12) + "','" + liste.get(13) +"');");
 			
@@ -188,7 +188,7 @@ public class AccessToSQLiteConverter
     		}
     		
     		liste.set(33, zeit);//AntwortFrist
-    		_model.insertUpdateDeleteTable("INSERT INTO PRAKTIKANTEN " +
+    		insertUpdateDeleteTable("INSERT INTO PRAKTIKANTEN " +
 		                   "VALUES ('" + liste.get(0) +"','"+ liste.get(1) +"','"+ liste.get(2) +"','"+ liste.get(3) +"','"+ liste.get(4) +"','"+ liste.get(5) 
 		                   +"','"+ liste.get(6) +"','"+ liste.get(7) +"','"+ liste.get(8) +"','"+ liste.get(9) +"','"+ liste.get(10) +"','"+ liste.get(11) +"','"+ liste.get(12)
 		                   +"','"+ liste.get(13) +"','"+ liste.get(14) +"','"+ liste.get(15) +"','"+ liste.get(16) +"','"+ liste.get(17) +"','"+ liste.get(18) +"','"+ liste.get(19)
@@ -197,6 +197,41 @@ public class AccessToSQLiteConverter
 		}
 //    	System.out.println(daten_praktikanten.toString());
     }
+    public static Connection connectToDatabase(String d)
+	  {
+	    Connection c = null;
+	    try {
+	      Class.forName("org.sqlite.JDBC");
+	      c = DriverManager.getConnection(d);
+	      return c;
+	    } catch ( Exception e ) {
+	      e.printStackTrace();
+	      System.exit(0);
+	    }
+//	    System.out.println("Datenbank verbunden");
+	    return c;
+	  }
+    public static void insertUpdateDeleteTable(String sql){
+		 {
+			    Connection c = null;
+			    Statement stmt = null;
+			    try {
+			      c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db");
+			      c.setAutoCommit(false);
+			      
+			      stmt = c.createStatement();
+			      stmt.executeUpdate(sql);
+			      stmt.close();
+			      c.commit();
+			      c.close();
+			    } catch ( Exception e ) {
+			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			      System.exit(0);
+			    }
+//			    System.out.println("Daten erfolgreich eingefügt/geändert/gelöscht");
+			  }
+
+	 }
     public static ArrayList<ArrayList<String>> getData(String sql){
     	ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
         try

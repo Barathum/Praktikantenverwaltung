@@ -1,10 +1,8 @@
-package bla;
+package praktikantenverwaltung;
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
-import praktikantenverwaltung.PraktikantenVerwaltung_Modell;
 
 public class AccessToSQLiteConverter
 {

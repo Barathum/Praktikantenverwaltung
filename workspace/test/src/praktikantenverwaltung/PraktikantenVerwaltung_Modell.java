@@ -1,15 +1,25 @@
 package praktikantenverwaltung;
 
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FileUtils;
+
 public class PraktikantenVerwaltung_Modell {
 	
 	
-//	 public void main( String args[] )
+private String passwort;
+private Cryptor _crypt;
+	public PraktikantenVerwaltung_Modell(Cryptor _crypt) {
+		this._crypt = _crypt;
+	}
+	//	 public void main( String args[] )
 //	  {
 //	    connectToDatabase("jdbc:sqlite:test.db");
 ////	    String sql = "CREATE TABLE PRAKTIKANTEN " +
@@ -30,20 +40,55 @@ public class PraktikantenVerwaltung_Modell {
 	 * @param d
 	 * @return
 	 */
-	 public Connection connectToDatabase(String d)
+	 public Connection connectToDatabase(String d , String pw)
 	  {
+		 try {
+			this._crypt.decryptFile(d.substring(12), pw);
+		} catch (GeneralSecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 
 	    Connection c = null;
 	    try {
 	      Class.forName("org.sqlite.JDBC");
-	      c = DriverManager.getConnection(d);
+	      c = DriverManager.getConnection(d + ".decrypted.db");
 	      return c;
 	    } catch ( Exception e ) {
-	      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+	      e.printStackTrace();
 	      System.exit(0);
 	    }
 //	    System.out.println("Datenbank verbunden");
 	    return c;
 	  }
+	 
+	 public void disconnectFromDatabase(String d , String pw)
+	  {
+		 try {
+			this._crypt.encryptFile(d.substring(12), pw);
+		} catch (GeneralSecurityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		 
+		 try {
+			FileUtils.forceDelete(new File(d.substring(12) + ".decrypted.db"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	  }
+	 
+	 
+	 protected void setPasswort(String pw){
+		 passwort = pw;
+	 }
 	 /**
 	  * Erstellt Tabellen Praktikante und Ansprechpartner
 	  */
@@ -51,7 +96,7 @@ public class PraktikantenVerwaltung_Modell {
 		    Connection c = null;
 		    Statement stmt = null;
 		    try {
-		      c = connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+		      c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 		      stmt = c.createStatement();
 		      String sql = "CREATE TABLE PRAKTIKANTEN " +
 	                   "(ID TEXT," +
@@ -107,8 +152,9 @@ public class PraktikantenVerwaltung_Modell {
 		      stmt.executeUpdate(sql);
 		      stmt.close();
 		      c.close();
+		      disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 		    } catch ( Exception e ) {
-		      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+		      e.printStackTrace();
 		      System.exit(0);
 		    }
 //		    System.out.println("Tabelle erfolgreich erstellt");
@@ -122,7 +168,7 @@ public class PraktikantenVerwaltung_Modell {
 			    Connection c = null;
 			    Statement stmt = null;
 			    try {
-			      c = connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+			      c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 			      c.setAutoCommit(false);
 			      
 			      stmt = c.createStatement();
@@ -130,6 +176,7 @@ public class PraktikantenVerwaltung_Modell {
 			      stmt.close();
 			      c.commit();
 			      c.close();
+			      disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 			    } catch ( Exception e ) {
 			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 			      System.exit(0);
@@ -149,7 +196,7 @@ public class PraktikantenVerwaltung_Modell {
 			    Statement stmt = null;
 			    ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			    try {
-				  c = connectToDatabase("jdbc:sqlite:PraktikantenDB.db");
+				  c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 			      c.setAutoCommit(false);
 			      
 			      stmt = c.createStatement();
@@ -166,8 +213,9 @@ public class PraktikantenVerwaltung_Modell {
 			      rs.close();
 			      stmt.close();
 			      c.close();
+			      disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 			    } catch ( Exception e ) {
-			      System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+			      e.printStackTrace();
 			      System.exit(0);
 			    }
 //			    System.out.println("Daten geholt");

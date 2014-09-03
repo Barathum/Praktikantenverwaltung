@@ -2,9 +2,20 @@ package praktikantenverwaltung;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+
+import org.apache.commons.io.FileUtils;
 
 public class PraktikantenVerwaltung_Control {
 	/**
@@ -17,20 +28,67 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
+	private Cryptor _crypt;
 	private Integer hoechstePraktID = 100000;
 	private Integer hoechsteAnsprID = 100000;
 	private String neuePraktID = "";
+	private String passwort = "";
 	/**
 	 * Konstruktor der Modell und View Initialisiert und die Listener anfügt
 	 */
 	public PraktikantenVerwaltung_Control(){
-		this._model = new PraktikantenVerwaltung_Modell(); 
+		this._crypt = new Cryptor();
+		this._model = new PraktikantenVerwaltung_Modell(_crypt); 
 //		_model.createTables();
 		this._control = this;
-		ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-		daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
-		this._viewStart = new PraktikantenVerwaltung_ViewStart(this._model , this._control , daten);
-		addListener();
+		passWortPromptBeforeStart();
+//		System.out.println(passwort);
+	}
+	private void passWortPromptBeforeStart(){
+		JPanel panelpw = new JPanel();
+		JLabel labelpw = new JLabel("Passwort eingeben:");
+		JPasswordField pass = new JPasswordField(10);
+		panelpw.add(labelpw);
+		panelpw.add(pass);
+		String[] options = new String[]{"OK", "Schließen"};
+		int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
+		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+		                         null, options, options[0]);
+		char[] password = null;
+		if(option == 0) // pressing OK button
+		{
+			password = pass.getPassword();
+			try {
+				/**
+				 * Versucht die Datenbank zu entschlüsseln
+				 */
+				_crypt.decryptFile( "db/PraktikantenDB.db", new String(password) );
+				_model.disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , new String(password));
+				passwort = new String(password);
+				_model.setPasswort(passwort);
+				ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+				daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
+				this._viewStart = new PraktikantenVerwaltung_ViewStart(this._model , this._control , daten);
+				addListener();
+			} catch (GeneralSecurityException e) {
+				/**
+				 * Das Passwort war falsch
+				 */
+				System.out.println("Passwort Falsch!");
+				passWortPromptBeforeStart();
+			} catch (IOException e) {
+				/**
+				 * Die Datei mit .encrypted ist nicht vorhanden
+				 */
+				System.out.println("Datei nicht gefunden!");
+				System.exit(0);
+			}
+		}else {
+			System.exit(0);
+		}
+	}
+	protected String getPasswort() {
+		return this.passwort;
 	}
 	/**
 	 * Zeigt den View an

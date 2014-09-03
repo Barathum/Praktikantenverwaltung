@@ -105,6 +105,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		    start.add(menuAlleAnsprechpartner);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
+		    
 		    this.addWindowListener(new WindowAdapter() {
 				@Override
 				public void windowOpened(WindowEvent e) {
@@ -163,6 +164,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
         this.menuAlleAnsprechpartner.addActionListener(l); 
 	}
 	
+	
 	public void updateTableTodos(){
 		table_todos = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltennamentodos, datentodos));
 		table_todos.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -199,6 +201,10 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	private JTable getTable(){
 		return table_todos;
 	}
+	
+	/*
+	 * Funktion um die Todo-Tabelle zu aktualisieren
+	 */
 	private void refresh(){
 		ListSelectionModel model = getTable().getSelectionModel();
 		int[] rows = getTable().getSelectedRows();
@@ -209,6 +215,10 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		}
 		table_todos.setSelectionModel(model);
 	}
+	/*
+	 * Funktion, die als Rückgabewert den sql-Befehl hat, um die Daten des Praktikanten 
+	 * anhand der in der übergebenen ArrayList enthaltenen ID aus der SQLite Datenbank zu laden
+	 */
 	private String getEintragPrakt(ArrayList<String> liste){
 		String sql;
 		sql = "SELECT * from PRAKTIKANTEN where ID='" + liste.get(0) + "';";
@@ -217,6 +227,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	private void setDatenTodos(Object[][] daten){
 		this.datentodos = daten;
 	}
+	/*
+	 * Funktion, die die in der Datenbank gespeicherten Praktikanten auf TODOs überprüft
+	 */
 	public void filterTodos() { 
 		DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
@@ -239,7 +252,8 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				DateTime endDatumDate;
 				try {
 					antwortFristDate = dateStringFormat.parseDateTime(antwortFristString);
-					if (aktuelleZeit.plusDays(3).isAfter(antwortFristDate) && daten_komplett.get(i).get(32).equals("0")) {
+					//Überprüfung ob die Daten unvollständig sind und wenn dann überprüfung ob Antwortfrist abgelaufen ist/innerhalb der nächsten 3 Tage ablaufen
+					if (daten_komplett.get(i).get(32).equals("0") && aktuelleZeit.plusDays(3).isAfter(antwortFristDate)) {
 						ArrayList<String> datensatzgekürzt = new ArrayList<String>();
 						datensatzgekürzt.add(daten_komplett.get(i).get(0));
 						datensatzgekürzt.add(daten_komplett.get(i).get(2));
@@ -257,7 +271,10 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 					}
 					
 					endDatumDate = dateStringFormat.parseDateTime(endDatum);
-					if(aktuelleZeit.plusDays(3).isAfter(endDatumDate) && (daten_komplett.get(i).get(25).equals("Zusage")||daten_komplett.get(i).get(25).equals("anwesend"))){
+					/**
+					 * Überprüft od das Praktikum beendet wurde/ in den nächsten Tagen beendet wird, wenn der Status auf "Zusage" oder "anwesend" ist
+					 */
+					if((daten_komplett.get(i).get(25).equals("Zusage")||daten_komplett.get(i).get(25).equals("anwesend")) && aktuelleZeit.plusDays(3).isAfter(endDatumDate)){
 						ArrayList<String> datensatzgekürzt = new ArrayList<String>();
 						datensatzgekürzt.add(daten_komplett.get(i).get(0));
 						datensatzgekürzt.add(daten_komplett.get(i).get(2));
@@ -279,19 +296,13 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				}
 			}
 		   
-		   
-//			for (int i = 0; i < daten_komplett.size(); i++) {
-//				ArrayList<String> datensatzgekürzt = new ArrayList<String>();
-//				datensatzgekürzt.add(daten_komplett.get(i).get(0));
-//				datensatzgekürzt.add(daten_komplett.get(i).get(2));
-//				datensatzgekürzt.add(daten_komplett.get(i).get(3));
-//				datensatzgekürzt.add(daten_komplett.get(i).get(31));
-//				daten_table.add(datensatzgekürzt);
-//			}
 		   setDatenTodos(_control.ArrayListtoArray(daten_table));
 		   updateTableTodos();
 		   anwesenheitSetter();
 	}
+	/**
+	 * Funktion, die bei den momentan anwesenden Praktikanten automatisch den Status auf anwesend setzt
+	 */
 	private void anwesenheitSetter(){
 		DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
@@ -313,7 +324,12 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 				startDatumDate = dateStringFormat.parseDateTime(startDatum);
 				endDatumDate = dateStringFormat.parseDateTime(endDatum);
 				Interval dauer = new Interval(startDatumDate, endDatumDate);
-				if (dauer.contains(aktuelleZeit) && daten_komplett.get(i).get(25).equals("Zusage")) {
+				/*
+				 * Überprüft ob der Status des Praktikanten auf "Zusage" ist und 
+				 * ob sich das aktuelle Datum zwischen Start und Enddatum des Praktikums befindet
+				 * wenn beides der Fall ist wird der Status zu anwesend aktualisiert
+				 */
+				if (daten_komplett.get(i).get(25).equals("Zusage") && dauer.contains(aktuelleZeit)) {
 					_model.insertUpdateDeleteTable("UPDATE PRAKTIKANTEN set STATUS = 'anwesend' WHERE ID = '" + daten_komplett.get(i).get(0) + "';");
 				}
 				

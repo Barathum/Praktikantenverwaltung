@@ -203,6 +203,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		);
 		panel_10.setLayout(gl_panel_10);
 		
+		/*
+		 * Listener werden hinzugefügt
+		 */
 		this.setTabelleFilterListener(new TabelleFilterListener());
 		this.setLoeschenListener(new PraktLoeschenListener());
 		this.setBearbeitenListener(new PraktBearbeitenListener());
@@ -215,10 +218,12 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		textFieldEndPrakt.addActionListener(enterAction);
 		textFieldAnmerkPrakt.addActionListener(enterAction);
 		textFieldEditPrakt.addActionListener(enterAction);
+		
 		getDocx(f);
 		setComboBoxItems_Nachricht(comboBoxNachrichtenItems);
 		updateTablePrakt();
 	}
+	//Sorgt dafür das beim Drücken der Enter-Taste weiter geschalten wird(neues Feld)
 	Action enterAction = new AbstractAction()
 	{
 		private static final long serialVersionUID = 1L;
@@ -728,6 +733,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	        }
 		}
 	}
+/*
+ * Funktion, die den Status des Praktikanten (input string id), an den die Nachricht (input string nachricht) gesandt wird, entsprechend anpasst
+ */
 	private void statusupdate(String nachricht , String id){
 		String sql = "";
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
@@ -756,6 +764,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		
 		_model.insertUpdateDeleteTable(sql);
 	}
+	
 	private ArrayList<String> getInhaltAnspr(String id , ArrayList<String> platzhalter){
 		String sql;
 		ArrayList<String> liste = new ArrayList<String>();

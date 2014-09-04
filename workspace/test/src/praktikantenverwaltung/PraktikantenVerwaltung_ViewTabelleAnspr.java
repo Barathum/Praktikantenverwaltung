@@ -342,7 +342,9 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		this.chckbxKaufmnnisch.addActionListener(l);
 	}
 	class AnsprLoeschenListener implements ActionListener{ 
-        public void actionPerformed(ActionEvent e) { 
+        private ArrayList<ArrayList<String>> infoListe;
+
+		public void actionPerformed(ActionEvent e) { 
      	   JTable table = getTable();
      	   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
             int[] markierteReiheNR =  table.getSelectedRows();
@@ -357,21 +359,44 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	            String sql;
 	            sql = "SELECT ID FROM ANSPRECHPARTNER where NN='" + liste.get(0) + "' AND VN ='" + liste.get(1) + "' AND TELE ='" + liste.get(2) + "';";
 	            daten = _model.getData(sql);
-	            String info;
-				info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR1 = '" + daten.get(0).get(0) + "';").get(0).get(0);
-				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 1 gelöscht";
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0', INFO = '" + info + "' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
-	            _model.insertUpdateDeleteTable(sql);
 	            
-	            info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR2 = '" + daten.get(0).get(0) + "';").get(0).get(0);
-				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 2 gelöscht";
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0', INFO = '" + info + "' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
-	            _model.insertUpdateDeleteTable(sql);
+	            infoListe = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR1 = '" + daten.get(0).get(0) + "';");
+	            for (int j = 0; j < infoListe.size(); j++) {
+	            	try {
+		            	String info;
+						info = infoListe.get(i).get(0);
+						info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 1 gelöscht";
+						sql = "UPDATE PRAKTIKANTEN set ANSPR1 = '0', INFO = '" + info + "' WHERE ANSPR1 = '" + daten.get(0).get(0) + "';";
+			            _model.insertUpdateDeleteTable(sql);
+		            } catch (IndexOutOfBoundsException e2) {
+						e2.printStackTrace();
+					}
+				}
+	            infoListe = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR2 = '" + daten.get(0).get(0) + "';");
+	            for (int j = 0; j < infoListe.size(); j++) {
+	            	try {
+		            	String info;
+						info = infoListe.get(i).get(0);
+						info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 2 gelöscht";
+						sql = "UPDATE PRAKTIKANTEN set ANSPR2 = '0', INFO = '" + info + "' WHERE ANSPR2 = '" + daten.get(0).get(0) + "';";
+			            _model.insertUpdateDeleteTable(sql);
+		            } catch (IndexOutOfBoundsException e2) {
+						e2.printStackTrace();
+					}
+				}
+	            infoListe = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR3 = '" + daten.get(0).get(0) + "';");
+	            for (int j = 0; j < infoListe.size(); j++) {
+	            	try {
+		            	String info;
+						info = infoListe.get(i).get(0);
+						info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 3 gelöscht";
+						sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0', INFO = '" + info + "' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
+			            _model.insertUpdateDeleteTable(sql);
+		            } catch (IndexOutOfBoundsException e2) {
+						e2.printStackTrace();
+					}
+				}
 	            
-	            info = _model.getData("Select INFO From PRAKTIKANTEN WHERE ANSPR3 = '" + daten.get(0).get(0) + "';").get(0).get(0);
-				info = info + "\n" + "Ansprechpartner " + vn + " " + nn + " für Woche 3 gelöscht";
-	            sql = "UPDATE PRAKTIKANTEN set ANSPR3 = '0', INFO = '" + info + "' WHERE ANSPR3 = '" + daten.get(0).get(0) + "';";
-	            _model.insertUpdateDeleteTable(sql);
 	            sql = loescheEintragAnspr(liste);
 	            _model.insertUpdateDeleteTable(sql);
 			}

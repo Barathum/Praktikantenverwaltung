@@ -13,7 +13,10 @@ import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -43,6 +46,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.JTextComponent;
 
+import org.apache.commons.io.FileUtils;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
@@ -1352,9 +1356,36 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			panel.setLayout(gl_panel);
 			panel_Steckbrief.setLayout(gl_panel_Steckbrief);
 			
+			
 			/**
 			 * Hier werden die Listener gesetzt
 			 */
+			this.addWindowListener(new WindowAdapter() {
+				@Override
+				public void windowOpened(WindowEvent e) {
+					textfield_anrede.requestFocus();
+				}
+				@Override
+				public void windowIconified(WindowEvent e) {
+				}
+				@Override
+				public void windowDeiconified(WindowEvent e) {
+				}
+				@Override
+				public void windowDeactivated(WindowEvent e) {
+				}
+				@Override
+				public void windowClosing(WindowEvent e) {
+				}
+				@Override
+				public void windowClosed(WindowEvent e) {
+					
+				}
+				@Override
+				public void windowActivated(WindowEvent e) {
+//					textfield_anrede.requestFocus();
+				}
+			});
 			this.setPraktSpeichernListener(new PraktSpeichernListener());
 			this.setAnsprAusfuellListener1(new AnsprAusfuellListener1());
 			
@@ -1511,24 +1542,39 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 				if (e.getSource() == textfield_NameAnsprWoch1) {
 					if (getEditAnspr1() == false) {
-						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
-						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
-						textfield_NameAnsprWoch2.requestFocus();
-						button_woche1.setBackground(null);
-						button_woche2.setBackground(coolBlue);
-						button_woche3.setBackground(null);
+						if(textField_VornameAnsprWoch1.isEditable()){
+							textField_VornameAnsprWoch1.requestFocus();
+						}else{
+							CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+							cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
+							textfield_NameAnsprWoch2.requestFocus();
+							button_woche1.setBackground(null);
+							button_woche2.setBackground(coolBlue);
+							button_woche3.setBackground(null);
+						}
 					}else{
 						KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 				        manager.getFocusOwner().transferFocus();
 					}
 				}else if (e.getSource() == textfield_NameAnsprWoch2) {
 					if (getEditAnspr2() == false) {
-						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
-						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
-						textfield_NameAnsprWoch3.requestFocus();
-						button_woche1.setBackground(null);
-						button_woche2.setBackground(null);
-						button_woche3.setBackground(coolBlue);
+						if(textField_VornameAnsprWoch2.isEditable()){
+							textField_VornameAnsprWoch2.requestFocus();
+						}else{
+							CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+							cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
+							textfield_NameAnsprWoch3.requestFocus();
+							button_woche1.setBackground(null);
+							button_woche2.setBackground(null);
+							button_woche3.setBackground(coolBlue);
+						}
+					}else{
+						KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+				        manager.getFocusOwner().transferFocus();
+					}
+				}else if (e.getSource() == textfield_NameAnsprWoch3) {
+					if (getEditAnspr3() == false && textField_VornameAnsprWoch3.isEditable()) {
+							textField_VornameAnsprWoch3.requestFocus();
 					}else{
 						KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 				        manager.getFocusOwner().transferFocus();
@@ -1563,6 +1609,30 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textfield_schule.requestFocus();
 				}else if (e.getSource() == datePicker_enddatum) {
 					datePicker_Antwortfrist.requestFocus();
+				}else if (e.getSource() == textField_VornameAnsprWoch1) {
+					if(textField_TelAnsprWoch1.isEditable()){
+						textField_TelAnsprWoch1.requestFocus();
+					}else{
+						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche2");
+						textfield_NameAnsprWoch2.requestFocus();
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(coolBlue);
+						button_woche3.setBackground(null);
+					}
+				}else if (e.getSource() == textField_VornameAnsprWoch2) {
+					if(textField_TelAnsprWoch2.isEditable()){
+						textField_TelAnsprWoch2.requestFocus();
+					}else{
+						CardLayout cardLayoutAnspr = (CardLayout) panel_ansprechPartner.getLayout();
+						cardLayoutAnspr.show(panel_ansprechPartner,"card_woche3");
+						textfield_NameAnsprWoch3.requestFocus();
+						button_woche1.setBackground(null);
+						button_woche2.setBackground(null);
+						button_woche3.setBackground(coolBlue);
+					}
+				}else if (e.getSource() == textField_VornameAnsprWoch3 && textField_TelAnsprWoch3.isEditable()) {
+						textField_TelAnsprWoch3.requestFocus();
 				}else{
 					KeyboardFocusManager manager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
 			        manager.getFocusOwner().transferFocus();

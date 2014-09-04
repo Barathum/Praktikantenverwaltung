@@ -56,7 +56,7 @@ public class PraktikantenVerwaltung_Control {
 		String[] options = new String[]{"OK", "Schlieﬂen"};
 		int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
 		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-		                         null, options, options[0]);
+		                         null, options, pass);
 		char[] password = null;
 		if(option == 0) // pressing OK button
 		{

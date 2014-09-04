@@ -8,14 +8,23 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import org.apache.commons.io.FileUtils;
 
+/**
+ * 
+ * @author Barathum
+ * Das Modell ermöglicht verbindungsaufbau mit der Datenbank und Befehle auf ihr auszuführen
+ * Außerdem wird hier das ver- und entschlüsseln durchgeführt
+ */
 public class PraktikantenVerwaltung_Modell {
 	
 	
 private String passwort;
 private Cryptor _crypt;
+	/**
+	 * Kontruktor der die verschlüsselungsklasse setzt
+	 * @param _crypt die klasse die für die verschlüsselung zuständig ist
+	 */
 	public PraktikantenVerwaltung_Modell(Cryptor _crypt) {
 		this._crypt = _crypt;
 	}
@@ -36,11 +45,12 @@ private Cryptor _crypt;
 //	    
 //	  }
 	/**
-	 * Beut verbindung mit Datenbank d auf
-	 * @param d
-	 * @return
+	 * Entschlüsselt die Datenbank und Baut verbindung mit Datenbank d auf
+	 * @param d Pfad zur Datenbank ohne bestimmte Endungen also "name.db"
+	 * @param pw Das Passwort welches zum entschlüsseln genutzt werden soll
+	 * @return gibt die aufgebaute Verbindung zurück
 	 */
-	 public Connection connectToDatabase(String d , String pw)
+	 private Connection connectToDatabase(String d , String pw)
 	  {
 		 try {
 			this._crypt.decryptFile(d.substring(12), pw);
@@ -65,7 +75,12 @@ private Cryptor _crypt;
 	    return c;
 	  }
 	 
-	 public void disconnectFromDatabase(String d , String pw)
+	 /**
+	  * Verschlüsselt die Datei wieder und löscht die unverschlüsselte
+	  * @param d Pfad zur Datenbank ohne bestimmte Endungen also "name.db"
+	  * @param pw das Passwort mit welchem die Datenbank verschlüsselt werden soll
+	  */
+	 protected void disconnectFromDatabase(String d , String pw)
 	  {
 		 try {
 			this._crypt.encryptFile(d.substring(12), pw);
@@ -85,14 +100,18 @@ private Cryptor _crypt;
 		}
 	  }
 	 
-	 
+	 /**
+	  * Setzt das Passwort
+	  * @param pw Das Passwort für die Datenbankverschlüsselung in Stringform
+	  */
 	 protected void setPasswort(String pw){
 		 passwort = pw;
 	 }
 	 /**
-	  * Erstellt Tabellen Praktikante und Ansprechpartner
+	  * Erstellt Tabellen Praktikanten und Ansprechpartner
+	  * nur benötigt, wenn die Datenbank nicht existiert
 	  */
-	 public void createTables(){
+	 private void createTables(){
 		    Connection c = null;
 		    Statement stmt = null;
 		    try {
@@ -160,10 +179,12 @@ private Cryptor _crypt;
 //		    System.out.println("Tabelle erfolgreich erstellt");
 	 }
 	 /**
-	  * Führt den SQL Befehl sql aus
-	  * @param sql
+	  * Baut verbindung auf und für das Statement definiert durch den String sql auf der Datenbank aus
+	  * Insert Update oder Delete Befehle
+	  * Disconnected dann von der Datenbank
+	  * @param sql Der auszuführende Befehl
 	  */
-	 public void insertUpdateDeleteTable(String sql){
+	 protected void insertUpdateDeleteTable(String sql){
 		 {
 			    Connection c = null;
 			    Statement stmt = null;
@@ -186,11 +207,15 @@ private Cryptor _crypt;
 
 	 }
 	 /**
-	  * Führt den Befehl sql aus und schreibt das Ergebnis in 2DArraylist
-	  * @param sql
-	  * @return
+	  * Baut Verbindung auf und holt die Daten laut dem sql Befehl aus der Datenbank
+	  * SELECT-Befehle
+	  * Disconnected dann von der Datenbank
+	  * gibt als Ergebnis eine 2D ArrayList vom Typ String zurück in der die zweite Dimension die Datensätze und die
+	  * erste Dimension die Einträge pro Datensatz wiederspiegelt
+	  * @param sql Der auszuführende Select Befehl
+	  * @return 2D ArrayList der Daten; return.get(0) = Datensatz 1; return.get(0).get(0) = Datensatz 1 Eintrag 1
 	  */
-	 public ArrayList<ArrayList<String>> getData(String sql){
+	 protected ArrayList<ArrayList<String>> getData(String sql){
 		  {
 			    Connection c = null;
 			    Statement stmt = null;

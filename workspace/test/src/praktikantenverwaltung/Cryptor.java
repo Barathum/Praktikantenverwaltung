@@ -11,29 +11,29 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-
+/**
+ * 
+ * @author Barathum
+ * Klasse zum ver- und entschlüsseln Der SQLITE Datenbank
+ */
 public class Cryptor {
 
-//    public static void main( String[] args ) {
-//
-//        try {
-//            encryptFile( "test.db", "yolo" );
-//            decryptFile( "test.db", "swag" );
-//        } catch (IOException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (GeneralSecurityException e) {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//    }
-
+	/**
+	 * Der Salt der zum verschlüsseln genutzt wird
+	 */
     //Arbitrarily selected 8-byte salt sequence:
     private static final byte[] salt = {
         (byte) 0x43, (byte) 0x76, (byte) 0x95, (byte) 0xc7,
         (byte) 0x5b, (byte) 0xd7, (byte) 0x45, (byte) 0x17 
     };
-
+    
+    /**
+     * Methode die Algorithmus definiert um ver- bzw. entschlüsselung durchzuführen
+     * @param pass Das Passwort der Verschlüsselung
+     * @param decryptMode True = Algorithmus zum Verschlüsseln False = Entschlüsseln
+     * @return Der generierte Algorithmus
+     * @throws GeneralSecurityException
+     */
     private static Cipher makeCipher(String pass, Boolean decryptMode) throws GeneralSecurityException{
 
         //Use a KeyFactory to derive the corresponding key from the passphrase:
@@ -62,6 +62,14 @@ public class Cryptor {
 
 
     /**Encrypts one file to a second file using a key derived from a passphrase:**/
+    /**
+     * Verschlüsselt die Datei filename mit der Endung .decrypted.db zu einer Datei filename + .encrypted
+     * Die erstellte Datei ist danach nicht mehr lesbar außer man kann das zum verschlüsseln eingesetzte passwort pass
+     * @param fileName Pfad zur zu verschlüsselnden Datei und zur verschlüsselten Datei
+     * @param pass Das gewünschte Passwort auf dessen Basis verschlüsselt wird
+     * @throws IOException Die Datei kann nicht gefunden werden
+     * @throws GeneralSecurityException Keine Rechte auf original Datei zuzugreifen
+     */
     public void encryptFile(String fileName, String pass)
                                 throws IOException, GeneralSecurityException{
         byte[] decData;
@@ -104,6 +112,14 @@ public class Cryptor {
 
 
     /**Decrypts one file to a second file using a key derived from a passphrase:**/
+    /**
+     * Entschlüsselt die Datei filename mit der Endung .encrypted zu einer Datei filename + .decrypted.db
+     * Die erstellte Datei ist danach wieder lesbar solange das Passwort pass stimmt
+     * @param fileName Pfad zur entschlüsselten Datei und zur verschlüsselten
+     * @param pass Das Passwort
+     * @throws GeneralSecurityException Das Passwort ist falsch oder keine Zugriffsrechte
+     * @throws IOException Die Datei kann nicht gefunden werden
+     */
     public void decryptFile(String fileName, String pass)
                             throws GeneralSecurityException, IOException{
         byte[] encData;

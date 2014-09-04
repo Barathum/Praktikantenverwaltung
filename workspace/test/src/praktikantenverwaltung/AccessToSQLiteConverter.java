@@ -5,9 +5,18 @@ import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
+/**
+ * 
+ * @author Barathum
+ * Klasse zum konvertieren der alten Access Datenbank in SQLite Format
+ */
 public class AccessToSQLiteConverter
 {
+	/**
+	 * Main Methode
+	 * Nutzt andere Methoden um die Daten aus Access zu lesen und in die neue Datenbank zu schreiben
+	 * @param args
+	 */
     public static void main(String[] args)
     {
     	insertUpdateDeleteTable("DELETE FROM PRAKTIKANTEN");
@@ -197,7 +206,12 @@ public class AccessToSQLiteConverter
 		}
 //    	System.out.println(daten_praktikanten.toString());
     }
-    public static Connection connectToDatabase(String d)
+    /**
+     * Methode die eine Verbindung zur SQLITE Datenbank aufbaut
+     * @param d Pfad der neuen Datenbank
+     * @return Verbindung über die dann Statements übergeben werden können
+     */
+    private static Connection connectToDatabase(String d)
 	  {
 	    Connection c = null;
 	    try {
@@ -211,7 +225,11 @@ public class AccessToSQLiteConverter
 //	    System.out.println("Datenbank verbunden");
 	    return c;
 	  }
-    public static void insertUpdateDeleteTable(String sql){
+    /**
+     * Führt den in sql übergebenen Befehl über die Connection auf die SQLite Datenbank aus
+     * @param sql Der auszuführende SQL Befehl
+     */
+    private static void insertUpdateDeleteTable(String sql){
 		 {
 			    Connection c = null;
 			    Statement stmt = null;
@@ -232,7 +250,13 @@ public class AccessToSQLiteConverter
 			  }
 
 	 }
-    public static ArrayList<ArrayList<String>> getData(String sql){
+    /**
+     * Holt Daten , die in sql definiert sind , aus der Access Datenbank und gibt das Resultat als 2D-ArrayList
+     * vom Typ String zurück
+     * @param sql Der Select Befehl für die gewünschten Daten
+     * @return 2D-ArrayList mit den Datensätzen und den dazugehörigen Daten return.get(0) = Datensatz return.get(0).get(0) Daten von Datensatz
+     */
+    private static ArrayList<ArrayList<String>> getData(String sql){
     	ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
         try
         {

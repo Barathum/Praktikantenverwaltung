@@ -2,7 +2,12 @@ package praktikantenverwaltung;
 
 import javax.swing.table.AbstractTableModel;
 
-
+/**
+ * 
+ * @author Barathum
+ * Klasse die das Normale TableModel erweitert
+ * nötig für bessere Anpassung
+ */
 class DefaultTableModel_PraktikantenVerwaltung extends AbstractTableModel {
 	/**
 	 * 

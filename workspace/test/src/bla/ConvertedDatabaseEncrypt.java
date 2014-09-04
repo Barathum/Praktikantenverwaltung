@@ -12,7 +12,7 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-public class sqlitetest {
+public class ConvertedDatabaseEncrypt {
 
     public static void main( String[] args ) {
 
@@ -68,7 +68,7 @@ public class sqlitetest {
         byte[] encData;
         File inFile = new File(fileName);
         //Generate the cipher using pass:
-        Cipher cipher = sqlitetest.makeCipher(pass, true);
+        Cipher cipher = ConvertedDatabaseEncrypt.makeCipher(pass, true);
 
         //Read in the file:
         FileInputStream inStream = new FileInputStream(inFile);
@@ -111,7 +111,7 @@ public class sqlitetest {
         File inFile = new File(fileName+ ".encrypted");
 
         //Generate the cipher using pass:
-        Cipher cipher = sqlitetest.makeCipher(pass, false);
+        Cipher cipher = ConvertedDatabaseEncrypt.makeCipher(pass, false);
 
         //Read in the file:
         FileInputStream inStream = new FileInputStream(inFile );

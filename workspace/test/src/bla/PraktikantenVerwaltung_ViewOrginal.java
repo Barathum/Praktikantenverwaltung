@@ -1,3 +1,4 @@
+package bla;
 //package praktikantenverwaltung;
 //
 //import java.awt.BorderLayout;

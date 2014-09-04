@@ -35,14 +35,16 @@ import org.jdesktop.swingx.calendar.DatePickerFormatter;
 
 import javax.swing.JCheckBox;
 
+/**
+ * 
+ * @author Barathum
+ * Klasse die für das Ansprechpartner Fenster zuständig ist
+ */
 public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	/**
 	 * erstellen der Fields
 	 */
+	private static final long serialVersionUID = 1L;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
 	private JPanel mainPanel;
@@ -66,7 +68,9 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private JCheckBox chckbxInf;
 
 	/**
-	 * Create the frame.
+	 * Kontruktor ohne Daten für einen neuen Ansprechpartner
+	 * @param control Die mitgebene Control, damit keine neue erstellt werden muss
+	 * @param model Das mitgebene Modell damit kein neues erstellt werden muss
 	 */
 	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
 		this._model = model;
@@ -75,6 +79,13 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		viewKontrukt();
 		
 	}
+	/**
+	 * Konstruktor mit Daten als mitgabe Wert für einen zubearbeitenden Ansprechpartner
+	 * @param control Die mitgebene Control, damit keine neue erstellt werden muss
+	 * @param model Das mitgebene Modell damit kein neues erstellt werden muss
+	 * @param Ansprechpartnereintrag Die Daten des zubearbeitenden Eintrags für die Felder im Fenster
+	 * @throws IndexOutOfBoundsException Daten zu lang oder kurz
+	 */
 	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Ansprechpartnereintrag) throws IndexOutOfBoundsException{
 		this._model = model;
 		this._control = control;
@@ -82,6 +93,9 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		viewKontrukt();
 		setInhaltAnsprBearb(Ansprechpartnereintrag);
 	}
+	/**
+	 * Der gekapselte Konstruktor für die eingabefelder etc.
+	 */
 	private void viewKontrukt(){
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -343,7 +357,10 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		datePicker_blockierenBis.addActionListener(enterAction);
 		
 	}
-	Action enterAction = new AbstractAction()
+	/**
+	 * verwaltet die Sprünge zum nächsten eingabefeld mit der ENTER Taste
+	 */
+	private Action enterAction = new AbstractAction()
 	{
 		private static final long serialVersionUID = 1L;
 
@@ -354,17 +371,27 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		    manager.getFocusOwner().transferFocus();
 	    }
 	};
-	public void setInfoAnspr(String inf){
+	/**
+	 * Setter für das Ansprechpartner Info Feld/Konsole
+	 * @param inf Der Text für die Info
+	 */
+	protected void setInfoAnspr(String inf){
 		this.textArea_InfoAnspr.setText(inf);
 	}
 	/**
 	 * Setzt einen Listener auf den Speicher Button in der Ansprechpartner erstellen Ansicht
 	 * @param l Listener der übergeben wird
 	 */
-	public void setAnsprSpeichernListener(ActionListener l){
+	private void setAnsprSpeichernListener(ActionListener l){
 		this.button_SpeichernAnspr.addActionListener(l);
 	}
-	   class AnsprSpeichernListener implements ActionListener{ 
+	/**
+	 * 
+	 * @author Barathum
+	 * Der Speichern Listener für den Ansprechpartner
+	 * ruft schreibeEintrag mit den Daten aus den Eingabefeldern auf
+	 */
+	   private class AnsprSpeichernListener implements ActionListener{ 
 		public void actionPerformed(ActionEvent e) { 
 			   ArrayList<String> datensatzAnspr = getInhaltAnspr();
                String sql;
@@ -372,6 +399,13 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
                _model.insertUpdateDeleteTable(sql);
            }  
 	   }
+	   /**
+	    * Methode die die Daten aus der Liste in einen sql Update oder Insert Befehl wandelt der 
+	    * dann auf die Datenbank angewandt werden kann
+	    * @param i Insert = 2; Update = 1
+	    * @param liste Die Liste die die Daten enthällt die eingefügt werden sollen
+	    * @return der fertige SQL Befehl der nurnoch auf die Datenbank ausgeführt werden muss
+	    */
 	   private String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
 			String sql;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
@@ -402,6 +436,11 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			}
 			return sql;
 		}
+	   /**
+	    * Getter für die Inhalte des Fensters
+	    * Schneidet unnötige leerzeichen und Tabs weg
+	    * @return 1D ArrayList vom Typ String mit den Inhalten aus den Textfields
+	    */
 	   private ArrayList<String> getInhaltAnspr(){
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			ArrayList<String> liste = new ArrayList<String>();
@@ -441,6 +480,11 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 			}
 		return liste;
 		}
+	   /**
+	    * Setter für die Inhalte der Eingabefelder
+	    * @param daten Die zu setzenden Daten
+	    * @throws IndexOutOfBoundsException Daten zu wenig = Liste zu kurz
+	    */
 	   private void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			neueAnsprID = daten.get(0).get(0);

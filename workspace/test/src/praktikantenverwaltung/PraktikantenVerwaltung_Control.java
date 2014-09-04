@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -29,6 +31,7 @@ public class PraktikantenVerwaltung_Control {
 	private Integer hoechstePraktID = 100000;
 	private Integer hoechsteAnsprID = 100000;
 	private String passwort = "";
+	private JPasswordField pass;
 	/**
 	 * Konstruktor der das Modell Initialisiert und die Listener anfügt
 	 * außerdem wird die Methode PasswortPrompt aufgerufen
@@ -50,44 +53,44 @@ public class PraktikantenVerwaltung_Control {
 	private void passWortPromptBeforeStart(){
 		JPanel panelpw = new JPanel();
 		JLabel labelpw = new JLabel("Passwort eingeben:");
-		JPasswordField pass = new JPasswordField(10);
+		pass = new JPasswordField(10);
 		panelpw.add(labelpw);
 		panelpw.add(pass);
 		String[] options = new String[]{"OK", "Schließen"};
 		int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
-		                         JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
-		                         null, options, pass);
+		JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+		null, options, options[0]);
 		char[] password = null;
 		if(option == 0) // pressing OK button
 		{
-			password = pass.getPassword();
-			try {
-				/**
-				 * Versucht die Datenbank zu entschlüsseln
-				 */
-				_crypt.decryptFile( "db/PraktikantenDB.db", new String(password) );
-				_model.disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , new String(password));
-				passwort = new String(password);
-				_model.setPasswort(passwort);
-				ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-				daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
-				this._viewStart = new PraktikantenVerwaltung_ViewStart(this._model , this._control , daten);
-				addListener();
-			} catch (GeneralSecurityException e) {
-				/**
-				 * Das Passwort war falsch
-				 */
-				System.out.println("Passwort Falsch!");
-				passWortPromptBeforeStart();
-			} catch (IOException e) {
-				/**
-				 * Die Datei mit .encrypted ist nicht vorhanden
-				 */
-				System.out.println("Datei nicht gefunden!");
-				System.exit(0);
-			}
+		password = pass.getPassword();
+		try {
+		/**
+		* Versucht die Datenbank zu entschlüsseln
+		*/
+		_crypt.decryptFile( "db/PraktikantenDB.db", new String(password) );
+		_model.disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , new String(password));
+		passwort = new String(password);
+		_model.setPasswort(passwort);
+		ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
+		this._viewStart = new PraktikantenVerwaltung_ViewStart(this._model , this._control , daten);
+		addListener();
+		} catch (GeneralSecurityException e) {
+		/**
+		* Das Passwort war falsch
+		*/
+		System.out.println("Passwort Falsch!");
+		passWortPromptBeforeStart();
+		} catch (IOException e) {
+		/**
+		* Die Datei mit .encrypted ist nicht vorhanden
+		*/
+		System.out.println("Datei nicht gefunden!");
+		System.exit(0);
+		}
 		}else {
-			System.exit(0);
+		System.exit(0);
 		}
 	}
 	/**

@@ -55,10 +55,10 @@ private Cryptor _crypt;
 		 try {
 			this._crypt.decryptFile(d.substring(12), pw);
 		} catch (GeneralSecurityException e1) {
-			// TODO Auto-generated catch block
+			// Passwort falsch
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			// Datei nicht gefunden
 			e1.printStackTrace();
 		}
 		 
@@ -85,17 +85,17 @@ private Cryptor _crypt;
 		 try {
 			this._crypt.encryptFile(d.substring(12), pw);
 		} catch (GeneralSecurityException e1) {
-			// TODO Auto-generated catch block
+			// Keine Rechte dazu
 			e1.printStackTrace();
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
+			// Datei nicht gefunden
 			e1.printStackTrace();
 		}
 		 
 		 try {
 			FileUtils.forceDelete(new File(d.substring(12) + ".decrypted.db"));
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// Datei konnte nicht gefunden werden
 			e.printStackTrace();
 		}
 	  }

@@ -38,7 +38,11 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
 import javax.swing.Icon;
 import javax.swing.BorderFactory;
-
+/**
+ * Das Startfenster der Praktikantenverwaltung
+ * @author Barathum
+ *
+ */
 public class PraktikantenVerwaltung_ViewStart extends JFrame {
 
 	

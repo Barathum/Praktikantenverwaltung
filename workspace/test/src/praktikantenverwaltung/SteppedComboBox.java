@@ -2,9 +2,11 @@ package praktikantenverwaltung;
 import java.awt.*;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.plaf.metal.*;
-import javax.swing.plaf.basic.*;
-
+/**
+ * 
+ * @author Barathum
+ *
+ */
 public class SteppedComboBox extends JComboBox {
 	  protected int popupWidth;
 	  

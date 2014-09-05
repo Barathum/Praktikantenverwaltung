@@ -6,6 +6,11 @@ import javax.swing.plaf.basic.*;
 /**
  * @version 1.0 12/12/98
  */
+/**
+ * Spezielle Combobox die die Größe individuell an die Items anpasst
+ * @author 
+ *
+ */
 class SteppedComboBoxUI extends MetalComboBoxUI {
   protected ComboPopup createPopup() {
     BasicComboPopup popup = new BasicComboPopup( comboBox ) {

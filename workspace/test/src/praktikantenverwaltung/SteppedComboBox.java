@@ -3,8 +3,8 @@ import java.awt.*;
 import java.util.*;
 import javax.swing.*;
 /**
- * 
- * @author Barathum
+ * Spezielle Combobox die die Größe individuell an die Items anpasst
+ * @author 
  *
  */
 public class SteppedComboBox extends JComboBox {

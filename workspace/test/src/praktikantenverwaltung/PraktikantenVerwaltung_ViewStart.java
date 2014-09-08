@@ -328,7 +328,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 			try {
 				startDatumDate = dateStringFormat.parseDateTime(startDatum);
 				endDatumDate = dateStringFormat.parseDateTime(endDatum);
-				Interval dauer = new Interval(startDatumDate, endDatumDate);
+				Interval dauer = new Interval(startDatumDate, endDatumDate.plusDays(1));
 				/*
 				 * Überprüft ob der Status des Praktikanten auf "Zusage" ist und 
 				 * ob sich das aktuelle Datum zwischen Start und Enddatum des Praktikums befindet

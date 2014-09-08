@@ -2157,7 +2157,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				public void focusLost(FocusEvent e) {
 					
 				}
-				   
 			   }
 		   /**
 		    * Getter für die Daten des Ansprechpartners aus der Datenbank

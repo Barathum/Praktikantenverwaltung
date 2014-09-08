@@ -1897,10 +1897,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
 	   public void Anspr1Ausfuellen (){
+		   if (getEditAnspr1()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY NN;");
-			 if (datenid.size() == 1) {
+			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch1.setEditable(false);
 				 try {
 					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
@@ -1912,6 +1913,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				textField_VornameAnsprWoch1.setEditable(true);
 				setInhaltAnspr1(0 , new ArrayList<ArrayList<String>>());
 			}
+		   }
 		}
 	   /**
 	    * Listener für das Vornamen Textfield
@@ -1936,15 +1938,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Füllt die Felder entsprechend Vor und Nachname
 	    */
 		   public void Anspr1AusfuellenVN (){
-				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' AND VN LIKE '" + getNameAnspr1().get(1) + "%' ORDER BY NN;");
-				 try {
-					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-				} catch (Exception e) {
-					daten.add(new ArrayList<String>());
-				}
-				 setInhaltAnspr1(-1 , daten);
+			   if (getEditAnspr1()==false) {
+				   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+					 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+					 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' AND VN LIKE '" + getNameAnspr1().get(1) + "%' ORDER BY NN;");
+					 try {
+						 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+					} catch (Exception e) {
+						daten.add(new ArrayList<String>());
+					}
+					 setInhaltAnspr1(-1 , daten);
+			   }
 			}
 		   /**
 		    * Listener für den Focus auf das Vornamen Feld
@@ -1998,10 +2002,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
 	   public void Anspr2Ausfuellen (){
+		   if (getEditAnspr2()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY NN;");
-			 if (datenid.size() == 1) {
+			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch2.setEditable(false);
 			 try {
 				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
@@ -2013,6 +2018,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textField_VornameAnsprWoch2.setEditable(true);
 					setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
 				}
+		   }
 		}
 	   class AnsprAusfuellListener2VN implements DocumentListener{ 
 			@Override
@@ -2029,6 +2035,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}  
 		   }
 		   public void Anspr2AusfuellenVN (){
+			   if (getEditAnspr2()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' AND VN LIKE '" + getNameAnspr2().get(1) + "%' ORDER BY NN;");
@@ -2038,6 +2045,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					daten.add(new ArrayList<String>());
 				}
 				 setInhaltAnspr2(-1 , daten);
+			   }
 			}
 		   class VN2FocusListener implements FocusListener{
 
@@ -2085,10 +2093,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
 	   public void Anspr3Ausfuellen (){
+		   if (getEditAnspr3()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY NN;");
-			 if (datenid.size() == 1) {
+			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch3.setEditable(false);
 			 try {
 				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
@@ -2100,6 +2109,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					textField_VornameAnsprWoch3.setEditable(true);
 					setInhaltAnspr3(0 , new ArrayList<ArrayList<String>>());
 				}
+		   }
 		}
 	   class AnsprAusfuellListener3VN implements DocumentListener{ 
 			@Override
@@ -2116,6 +2126,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}  
 		   }
 		   public void Anspr3AusfuellenVN (){
+			   if (getEditAnspr3()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
 				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' AND VN LIKE '" + getNameAnspr3().get(1) + "%' ORDER BY NN;");
@@ -2125,6 +2136,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					daten.add(new ArrayList<String>());
 				}
 				 setInhaltAnspr3(-1 , daten);
+			   }
 			}
 		   class VN3FocusListener implements FocusListener{
 

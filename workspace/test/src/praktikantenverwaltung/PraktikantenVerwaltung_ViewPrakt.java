@@ -154,6 +154,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private ArrayList<String> gradList;
 	private ArrayList<String> anredeList;
 	private ArrayList<String> ansprList;
+	private ArrayList<ArrayList<String>> alleAnsprDaten = new ArrayList<ArrayList<String>>();
+	private ArrayList<ArrayList<String>> allePraktDaten = new ArrayList<ArrayList<String>>();
 	private Vector<String> comboBoxNachrichtenItems = new Vector<String>();
 	File f = new File("templates");
 	private SteppedComboBox comboBox_NachrichtWahl;
@@ -173,6 +175,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  this._control = control;
 		  updateOrInsert = 2;
 		  viewKontrukt();
+		  allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
+		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
 	}
 	/**
@@ -187,6 +191,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  this._control = control;
 		  updateOrInsert = 1;
 		  viewKontrukt();
+		  allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
+		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
 		  setInhaltPrakt(Praktikanteneintrag);
 	}
@@ -1896,15 +1902,53 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
+//	   public void Anspr1Ausfuellen (){
+//		   if (getEditAnspr1()==false) {
+//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY NN;");
+//			 if (datenid.size() == 1 || datenid.size() == 0) {
+//				 textField_VornameAnsprWoch1.setEditable(false);
+//				 try {
+//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//				} catch (Exception e) {
+//					daten.add(new ArrayList<String>());
+//				}
+//				 setInhaltAnspr1(0 , daten);
+//			} else {
+//				textField_VornameAnsprWoch1.setEditable(true);
+//				setInhaltAnspr1(0 , new ArrayList<ArrayList<String>>());
+//			}
+//		   }
+//		}
+	   /**
+	    * alternative für interne Daten
+	    */
 	   public void Anspr1Ausfuellen (){
 		   if (getEditAnspr1()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY NN;");
+			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+			 for (int i = 0; i < datenid.size(); i++) {
+				if (!(datenid.get(i).get(1).matches(getNameAnspr1().get(0) + ".*"))) {
+					datenid.remove(i);
+					i--;
+				}
+			}
 			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch1.setEditable(false);
 				 try {
-					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+					 for (int i = 0; i < datenid.size(); i++) {
+						 ArrayList<String> daten1d = new ArrayList<String>();
+						 daten1d.add(datenid.get(i).get(0));
+						 daten1d.add(datenid.get(i).get(1));
+						 daten1d.add(datenid.get(i).get(2));
+						 daten1d.add(datenid.get(i).get(3));
+						 daten1d.add(datenid.get(i).get(4));
+						 daten1d.add(datenid.get(i).get(5));
+						 daten1d.add(datenid.get(i).get(6));
+						 daten1d.add(datenid.get(i).get(7));
+						 daten.add(daten1d);
+					}
 				} catch (Exception e) {
 					daten.add(new ArrayList<String>());
 				}
@@ -1937,13 +1981,42 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	   /**
 	    * Füllt die Felder entsprechend Vor und Nachname
 	    */
+//	   public void Anspr1AusfuellenVN (){
+//		   if (getEditAnspr1()==false) {
+//			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' AND VN LIKE '" + getNameAnspr1().get(1) + "%' ORDER BY NN;");
+//				 try {
+//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//				} catch (Exception e) {
+//					daten.add(new ArrayList<String>());
+//				}
+//				 setInhaltAnspr1(-1 , daten);
+//		   }
+//		}
 		   public void Anspr1AusfuellenVN (){
 			   if (getEditAnspr1()==false) {
-				   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-					 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-					 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' AND VN LIKE '" + getNameAnspr1().get(1) + "%' ORDER BY NN;");
+					 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+					 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+					 for (int i = 0; i < datenid.size(); i++) {
+						if (!(datenid.get(i).get(1).matches(getNameAnspr1().get(0) + ".*")) ||!(datenid.get(i).get(2).matches(getNameAnspr1().get(1))) ) {
+							datenid.remove(i);
+							i--;
+						}
+					}
 					 try {
-						 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+						 for (int i = 0; i < datenid.size(); i++) {
+							 ArrayList<String> daten1d = new ArrayList<String>();
+							 daten1d.add(datenid.get(i).get(0));
+							 daten1d.add(datenid.get(i).get(1));
+							 daten1d.add(datenid.get(i).get(2));
+							 daten1d.add(datenid.get(i).get(3));
+							 daten1d.add(datenid.get(i).get(4));
+							 daten1d.add(datenid.get(i).get(5));
+							 daten1d.add(datenid.get(i).get(6));
+							 daten1d.add(datenid.get(i).get(7));
+							 daten.add(daten1d);
+						}
 					} catch (Exception e) {
 						daten.add(new ArrayList<String>());
 					}
@@ -1961,11 +2034,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			@Override
 			public void focusGained(FocusEvent e) {
 				if (getEditAnspr1() == false) {
-					ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>();
-					datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY VN;");
+					ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+					for (int i = 0; i < datenvn.size(); i++) {
+						if (!(datenvn.get(i).get(1).matches(getNameAnspr1().get(0) + ".*"))) {
+							datenvn.remove(i);
+							i--;
+						}
+					}
+//					datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY VN;");
 		       	   ArrayList<String> Liste_DatenVN = new ArrayList<String>();
 		    	   for (int i = 0; i < datenvn.size(); i++) {
-		    		   Liste_DatenVN.add(datenvn.get(i).get(0));
+		    		   Liste_DatenVN.add(datenvn.get(i).get(2));
 			    	   }
 					AutoCompleteDecorator.decorate(textField_VornameAnsprWoch1, Liste_DatenVN, false);
 				}
@@ -2001,23 +2080,58 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
+//	   public void Anspr2Ausfuellen (){
+//		   if (getEditAnspr2()==false) {
+//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY NN;");
+//			 if (datenid.size() == 1 || datenid.size() == 0) {
+//				 textField_VornameAnsprWoch2.setEditable(false);
+//			 try {
+//				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//			} catch (Exception e) {
+//				daten.add(new ArrayList<String>());
+//			}
+//			 setInhaltAnspr2(0 , daten);
+//			 } else {
+//					textField_VornameAnsprWoch2.setEditable(true);
+//					setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
+//				}
+//		   }
+//		}
 	   public void Anspr2Ausfuellen (){
 		   if (getEditAnspr2()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY NN;");
+			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+			 for (int i = 0; i < datenid.size(); i++) {
+				if (!(datenid.get(i).get(1).matches(getNameAnspr2().get(0) + ".*"))) {
+					datenid.remove(i);
+					i--;
+				}
+			}
 			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch2.setEditable(false);
-			 try {
-				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-			} catch (Exception e) {
-				daten.add(new ArrayList<String>());
-			}
-			 setInhaltAnspr2(0 , daten);
-			 } else {
-					textField_VornameAnsprWoch2.setEditable(true);
-					setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
+				 try {
+					 for (int i = 0; i < datenid.size(); i++) {
+						 ArrayList<String> daten1d = new ArrayList<String>();
+						 daten1d.add(datenid.get(i).get(0));
+						 daten1d.add(datenid.get(i).get(1));
+						 daten1d.add(datenid.get(i).get(2));
+						 daten1d.add(datenid.get(i).get(3));
+						 daten1d.add(datenid.get(i).get(4));
+						 daten1d.add(datenid.get(i).get(5));
+						 daten1d.add(datenid.get(i).get(6));
+						 daten1d.add(datenid.get(i).get(7));
+						 daten.add(daten1d);
+					}
+				} catch (Exception e) {
+					daten.add(new ArrayList<String>());
 				}
+				 setInhaltAnspr2(0 , daten);
+			} else {
+				textField_VornameAnsprWoch2.setEditable(true);
+				setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
+			}
 		   }
 		}
 	   class AnsprAusfuellListener2VN implements DocumentListener{ 
@@ -2034,40 +2148,75 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				Anspr2AusfuellenVN();
 			}  
 		   }
-		   public void Anspr2AusfuellenVN (){
-			   if (getEditAnspr2()==false) {
+//		   public void Anspr2AusfuellenVN (){
+//			   if (getEditAnspr2()==false) {
+//				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' AND VN LIKE '" + getNameAnspr2().get(1) + "%' ORDER BY NN;");
+//				 try {
+//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//				} catch (Exception e) {
+//					daten.add(new ArrayList<String>());
+//				}
+//				 setInhaltAnspr2(-1 , daten);
+//			   }
+//			}
+	   public void Anspr2AusfuellenVN (){
+		   if (getEditAnspr2()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' AND VN LIKE '" + getNameAnspr2().get(1) + "%' ORDER BY NN;");
+				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+				 for (int i = 0; i < datenid.size(); i++) {
+					if (!(datenid.get(i).get(1).matches(getNameAnspr2().get(0) + ".*")) ||!(datenid.get(i).get(2).matches(getNameAnspr2().get(1))) ) {
+						datenid.remove(i);
+						i--;
+					}
+				}
 				 try {
-					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+					 for (int i = 0; i < datenid.size(); i++) {
+						 ArrayList<String> daten1d = new ArrayList<String>();
+						 daten1d.add(datenid.get(i).get(0));
+						 daten1d.add(datenid.get(i).get(1));
+						 daten1d.add(datenid.get(i).get(2));
+						 daten1d.add(datenid.get(i).get(3));
+						 daten1d.add(datenid.get(i).get(4));
+						 daten1d.add(datenid.get(i).get(5));
+						 daten1d.add(datenid.get(i).get(6));
+						 daten1d.add(datenid.get(i).get(7));
+						 daten.add(daten1d);
+					}
 				} catch (Exception e) {
 					daten.add(new ArrayList<String>());
 				}
 				 setInhaltAnspr2(-1 , daten);
-			   }
-			}
-		   class VN2FocusListener implements FocusListener{
+		   }
+		}
+	   class VN2FocusListener implements FocusListener{
 
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (getEditAnspr2() == false) {
-						ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>();
-						datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY VN;");
-			       	   ArrayList<String> Liste_DatenVN = new ArrayList<String>();
-			    	   for (int i = 0; i < datenvn.size(); i++) {
-			    		   Liste_DatenVN.add(datenvn.get(i).get(0));
-				    	   }
-						AutoCompleteDecorator.decorate(textField_VornameAnsprWoch2, Liste_DatenVN, false);
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (getEditAnspr2() == false) {
+					ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+					for (int i = 0; i < datenvn.size(); i++) {
+						if (!(datenvn.get(i).get(1).matches(getNameAnspr2().get(0) + ".*"))) {
+							datenvn.remove(i);
+							i--;
+						}
 					}
+//					datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY VN;");
+		       	   ArrayList<String> Liste_DatenVN = new ArrayList<String>();
+		    	   for (int i = 0; i < datenvn.size(); i++) {
+		    		   Liste_DatenVN.add(datenvn.get(i).get(2));
+			    	   }
+					AutoCompleteDecorator.decorate(textField_VornameAnsprWoch2, Liste_DatenVN, false);
 				}
+			}
 
-				@Override
-				public void focusLost(FocusEvent e) {
-					
-				}
-				   
-			   }
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			   
+		   }
 	   /**
 	    * Innere Klasse für das Ausfüllen der Ansprechpartner Felder von Anspr 3
 	    * @author Barathum
@@ -2092,23 +2241,58 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
+//	   public void Anspr3Ausfuellen (){
+//		   if (getEditAnspr3()==false) {
+//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY NN;");
+//			 if (datenid.size() == 1 || datenid.size() == 0) {
+//				 textField_VornameAnsprWoch3.setEditable(false);
+//			 try {
+//				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//			} catch (Exception e) {
+//				daten.add(new ArrayList<String>());
+//			}
+//			 setInhaltAnspr3(0 , daten);
+//			 } else {
+//					textField_VornameAnsprWoch3.setEditable(true);
+//					setInhaltAnspr3(0 , new ArrayList<ArrayList<String>>());
+//				}
+//		   }
+//		}
 	   public void Anspr3Ausfuellen (){
 		   if (getEditAnspr3()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY NN;");
+			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+			 for (int i = 0; i < datenid.size(); i++) {
+				if (!(datenid.get(i).get(1).matches(getNameAnspr3().get(0) + ".*"))) {
+					datenid.remove(i);
+					i--;
+				}
+			}
 			 if (datenid.size() == 1 || datenid.size() == 0) {
 				 textField_VornameAnsprWoch3.setEditable(false);
-			 try {
-				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-			} catch (Exception e) {
-				daten.add(new ArrayList<String>());
-			}
-			 setInhaltAnspr3(0 , daten);
-			 } else {
-					textField_VornameAnsprWoch3.setEditable(true);
-					setInhaltAnspr3(0 , new ArrayList<ArrayList<String>>());
+				 try {
+					 for (int i = 0; i < datenid.size(); i++) {
+						 ArrayList<String> daten1d = new ArrayList<String>();
+						 daten1d.add(datenid.get(i).get(0));
+						 daten1d.add(datenid.get(i).get(1));
+						 daten1d.add(datenid.get(i).get(2));
+						 daten1d.add(datenid.get(i).get(3));
+						 daten1d.add(datenid.get(i).get(4));
+						 daten1d.add(datenid.get(i).get(5));
+						 daten1d.add(datenid.get(i).get(6));
+						 daten1d.add(datenid.get(i).get(7));
+						 daten.add(daten1d);
+					}
+				} catch (Exception e) {
+					daten.add(new ArrayList<String>());
 				}
+				 setInhaltAnspr2(0 , daten);
+			} else {
+				textField_VornameAnsprWoch3.setEditable(true);
+				setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
+			}
 		   }
 		}
 	   class AnsprAusfuellListener3VN implements DocumentListener{ 
@@ -2125,39 +2309,76 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				Anspr3AusfuellenVN();
 			}  
 		   }
-		   public void Anspr3AusfuellenVN (){
-			   if (getEditAnspr3()==false) {
+//		   public void Anspr3AusfuellenVN (){
+//			   if (getEditAnspr3()==false) {
+//				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
+//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' AND VN LIKE '" + getNameAnspr3().get(1) + "%' ORDER BY NN;");
+//				 try {
+//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+//				} catch (Exception e) {
+//					daten.add(new ArrayList<String>());
+//				}
+//				 setInhaltAnspr3(-1 , daten);
+//			   }
+//			}
+	   public void Anspr3AusfuellenVN (){
+		   if (getEditAnspr3()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' AND VN LIKE '" + getNameAnspr3().get(1) + "%' ORDER BY NN;");
+				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+				 for (int i = 0; i < datenid.size(); i++) {
+					if (!(datenid.get(i).get(1).matches(getNameAnspr3().get(0) + ".*")) ||!(datenid.get(i).get(2).matches(getNameAnspr3().get(1))) ) {
+						datenid.remove(i);
+						i--;
+					}
+				}
 				 try {
-					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
+					 for (int i = 0; i < datenid.size(); i++) {
+						 ArrayList<String> daten1d = new ArrayList<String>();
+						 daten1d.add(datenid.get(i).get(0));
+						 daten1d.add(datenid.get(i).get(1));
+						 daten1d.add(datenid.get(i).get(2));
+						 daten1d.add(datenid.get(i).get(3));
+						 daten1d.add(datenid.get(i).get(4));
+						 daten1d.add(datenid.get(i).get(5));
+						 daten1d.add(datenid.get(i).get(6));
+						 daten1d.add(datenid.get(i).get(7));
+						 daten.add(daten1d);
+					}
 				} catch (Exception e) {
 					daten.add(new ArrayList<String>());
 				}
 				 setInhaltAnspr3(-1 , daten);
-			   }
-			}
-		   class VN3FocusListener implements FocusListener{
+		   }
+		}
+	   class VN3FocusListener implements FocusListener{
 
-				@Override
-				public void focusGained(FocusEvent e) {
-					if (getEditAnspr3() == false) {
-						ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>();
-						datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY VN;");
-			       	   ArrayList<String> Liste_DatenVN = new ArrayList<String>();
-			    	   for (int i = 0; i < datenvn.size(); i++) {
-			    		   Liste_DatenVN.add(datenvn.get(i).get(0));
-				    	   }
-						AutoCompleteDecorator.decorate(textField_VornameAnsprWoch3, Liste_DatenVN, false);
+			@Override
+			public void focusGained(FocusEvent e) {
+				if (getEditAnspr3() == false) {
+					ArrayList<ArrayList<String>> datenvn = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+					for (int i = 0; i < datenvn.size(); i++) {
+						if (!(datenvn.get(i).get(1).matches(getNameAnspr3().get(0) + ".*"))) {
+							datenvn.remove(i);
+							i--;
+						}
 					}
+//					datenvn = _model.getData("SELECT VN FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY VN;");
+		       	   ArrayList<String> Liste_DatenVN = new ArrayList<String>();
+		    	   for (int i = 0; i < datenvn.size(); i++) {
+		    		   Liste_DatenVN.add(datenvn.get(i).get(2));
+			    	   }
+		    	   System.out.println(Liste_DatenVN.toString());
+					AutoCompleteDecorator.decorate(textField_VornameAnsprWoch3, Liste_DatenVN, false);
 				}
+			}
 
-				@Override
-				public void focusLost(FocusEvent e) {
-					
-				}
-			   }
+			@Override
+			public void focusLost(FocusEvent e) {
+				
+			}
+			   
+		   }
 		   /**
 		    * Getter für die Daten des Ansprechpartners aus der Datenbank
 		    * @param id ID des Ansprechpartners
@@ -2165,7 +2386,25 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		    */
 	   public ArrayList<ArrayList<String>> getAnsprDaten(String id){
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-		   daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + id + "%' ORDER BY NN;");
+		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+			 for (int i = 0; i < datenid.size(); i++) {
+				if (!(datenid.get(i).get(0).matches(id + ".*")) ) {
+					datenid.remove(i);
+					i--;
+				}
+			}
+		   for (int i = 0; i < datenid.size(); i++) {
+				 ArrayList<String> daten1d = new ArrayList<String>();
+				 daten1d.add(datenid.get(i).get(0));
+				 daten1d.add(datenid.get(i).get(1));
+				 daten1d.add(datenid.get(i).get(2));
+				 daten1d.add(datenid.get(i).get(3));
+				 daten1d.add(datenid.get(i).get(4));
+				 daten1d.add(datenid.get(i).get(5));
+				 daten1d.add(datenid.get(i).get(6));
+				 daten1d.add(datenid.get(i).get(7));
+				 daten.add(daten1d);
+			}
 		   return daten;
 	   }
 	   
@@ -2265,10 +2504,31 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 			   ArrayList<String> sname = new ArrayList<String>();
 			   sname = getNameSchule();
-     			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
-     			setInhaltSchulform(daten);
-     			daten = _model.getData("SELECT PARTNERS FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND PARTNERS IS NOT NULL AND PARTNERS <> '' AND PARTNERS <> 'null';");
-     			setInhaltPartners(daten);
+			   ArrayList<ArrayList<String>> datenschule = new ArrayList<ArrayList<String>>(allePraktDaten);
+				 for (int i = 0; i < datenschule.size(); i++) {
+					if (!(datenschule.get(i).get(16).matches(sname.get(0) + ".*")) ) {
+						datenschule.remove(i);
+						i--;
+					}
+				}
+			   for (int i = 0; i < datenschule.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 daten1d.add(datenschule.get(i).get(17));
+					 daten1d.add(datenschule.get(i).get(18));
+					 daten.add(daten1d);
+				}
+//     			daten = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND SCHULFORM IS NOT NULL AND SCHULFORM <> '' AND SCHULFORM <> 'null';");
+     			try {
+     				setInhaltSchulform(daten.get(daten.size()-1));
+				} catch (Exception e) {
+					textfield_schulform.setText("");
+				}
+//     			daten = _model.getData("SELECT PARTNERS FROM PRAKTIKANTEN WHERE SCHULE LIKE '" + sname.get(0) + "' AND PARTNERS IS NOT NULL AND PARTNERS <> '' AND PARTNERS <> 'null';");
+     			try{
+     				setInhaltPartners(daten.get(daten.size()-1));
+    			} catch (Exception e) {
+    				textfield_partners.setText("Nein");
+    			}
 		}
 		/**
 		 * Getter für den Schulnamen
@@ -2283,9 +2543,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		 * Setter für das Schulform Textfield
 		 * @param liste Der zu setzende Inhalt
 		 */
-		public void setInhaltSchulform(ArrayList<ArrayList<String>> liste){
+		public void setInhaltSchulform(ArrayList<String> liste){
 			try {
-				textfield_schulform.setText(liste.get(liste.size() - 1).get(0));
+				textfield_schulform.setText(liste.get(0));
 			} catch (Exception e) {
 				textfield_schulform.setText("");
 			}
@@ -2294,9 +2554,9 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		 * Setter für das Partnerschule Textfield
 		 * @param liste Der zu setzende Inhalt
 		 */
-		public void setInhaltPartners(ArrayList<ArrayList<String>> liste){
+		public void setInhaltPartners(ArrayList<String> liste){
 			try{
-				textfield_partners.setText(liste.get(liste.size() - 1).get(0));
+				textfield_partners.setText(liste.get(1));
 			} catch (Exception e) {
 				textfield_partners.setText("Nein");
 			}
@@ -2730,13 +2990,31 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		 * Methode die die Daten fürs Autocomplete setzt
 		 */
 		 private void comboBox_autocomplete(){
+			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>(allePraktDaten);
+			 for (int i = 0; i < daten.size(); i++) {
+				if (!(daten.get(i).get(13).matches(".*")) ) {
+					daten.remove(i);
+					i--;
+				}else {
+					
+				}
+			}
 			   /**
 			    * Wohnort
 			    */
 	       	   ArrayList<ArrayList<String>> daten_ListItemsWohnort = new ArrayList<ArrayList<String>>();
 	       	   ArrayList<String> Liste_DatenWohnort = new ArrayList<String>();
-	    	   daten_ListItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' AND ORT <> '' GROUP BY ORT");
-	    	   for (int i = 0; i < daten_ListItemsWohnort.size(); i++) {
+		   for (int i = 0; i < daten.size(); i++) {
+				 ArrayList<String> daten1d = new ArrayList<String>();
+				 try {
+					 daten1d.add(daten.get(i).get(13));
+					 daten_ListItemsWohnort.add(daten1d);
+				} catch (Exception e) {
+					daten_ListItemsWohnort.add(new ArrayList<String>());
+				}
+			}
+//	    	   daten_ListItemsWohnort = _model.getData("SELECT ORT FROM PRAKTIKANTEN WHERE ORT IS NOT NULL AND ORT <> 'null' AND ORT <> '' GROUP BY ORT");
+		   for (int i = 0; i < daten_ListItemsWohnort.size(); i++) {
 	    		   Liste_DatenWohnort.add(daten_ListItemsWohnort.get(i).get(0));
 		    	   }
 	    	   setListItems_wohn(Liste_DatenWohnort);
@@ -2746,7 +3024,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    	    */
 	    	   ArrayList<ArrayList<String>> daten_ListItemsStr= new ArrayList<ArrayList<String>>();
 	    	   ArrayList<String> Liste_DatenStrasse = new ArrayList<String>();
-	    	   daten_ListItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' AND STR <> '' GROUP BY STR");
+	    	   
+	    	   for (int i = 0; i < daten.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 try {
+						 daten1d.add(daten.get(i).get(6));
+						 daten_ListItemsStr.add(daten1d);
+					} catch (Exception e) {
+						daten_ListItemsStr.add(new ArrayList<String>());
+					}
+				}
+//	    	   daten_ListItemsStr = _model.getData("SELECT STR FROM PRAKTIKANTEN WHERE STR IS NOT NULL AND STR <> 'null' AND STR <> '' GROUP BY STR");
 	    	   for (int i = 0; i < daten_ListItemsStr.size(); i++) {
 	    		   Liste_DatenStrasse.add(daten_ListItemsStr.get(i).get(0));
 		    	   }
@@ -2757,7 +3045,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    	    */
 	    	   ArrayList<ArrayList<String>> daten_ListItemsGeburtsort= new ArrayList<ArrayList<String>>();
 	    	   ArrayList<String> Liste_DatenGeburtsort = new ArrayList<String>();
-	    	   daten_ListItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' AND GO <> '' GROUP BY GO");
+	    	   
+	    	   for (int i = 0; i < daten.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 try {
+						 daten1d.add(daten.get(i).get(5));
+						 daten_ListItemsGeburtsort.add(daten1d);
+					} catch (Exception e) {
+						daten_ListItemsGeburtsort.add(new ArrayList<String>());
+					}
+				}
+//	    	   daten_ListItemsGeburtsort = _model.getData("SELECT GO FROM PRAKTIKANTEN WHERE GO IS NOT NULL AND GO <> 'null' AND GO <> '' GROUP BY GO");
 	    	   for (int i = 0; i < daten_ListItemsGeburtsort.size(); i++) {
 				Liste_DatenGeburtsort.add(daten_ListItemsGeburtsort.get(i).get(0));
 	    	   }
@@ -2768,7 +3066,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    	    */
 	    	   ArrayList<ArrayList<String>> daten_ListItemsSchule= new ArrayList<ArrayList<String>>();
 	    	   ArrayList<String> Liste_DatenSchule = new ArrayList<String>();
-	    	   daten_ListItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' AND SCHULE <> '' GROUP BY SCHULE");
+	    	   
+	    	   for (int i = 0; i < daten.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 try {
+						 daten1d.add(daten.get(i).get(16));
+						 daten_ListItemsSchule.add(daten1d);
+					} catch (Exception e) {
+						daten_ListItemsSchule.add(new ArrayList<String>());
+					}
+				}
+//	    	   daten_ListItemsSchule = _model.getData("SELECT SCHULE FROM PRAKTIKANTEN WHERE SCHULE IS NOT NULL AND SCHULE <> 'null' AND SCHULE <> '' GROUP BY SCHULE");
 	  			for (int i = 0; i < daten_ListItemsSchule.size(); i++) {
 	  				Liste_DatenSchule.add(daten_ListItemsSchule.get(i).get(0));
 		    	   }
@@ -2779,7 +3087,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    	    */
 	    	   ArrayList<ArrayList<String>> daten_ListItemsSchulform= new ArrayList<ArrayList<String>>();
 	    	   ArrayList<String> Liste_DatenSchulform = new ArrayList<String>();
-	    	   daten_ListItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' AND SCHULFORM <> '' GROUP BY SCHULFORM");
+	    	   
+	    	   for (int i = 0; i < daten.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 try {
+						 daten1d.add(daten.get(i).get(17));
+						 daten_ListItemsSchulform.add(daten1d);
+					} catch (Exception e) {
+						daten_ListItemsSchulform.add(new ArrayList<String>());
+					}
+				}
+//	    	   daten_ListItemsSchulform = _model.getData("SELECT SCHULFORM FROM PRAKTIKANTEN WHERE SCHULFORM IS NOT NULL AND SCHULFORM <> 'null' AND SCHULFORM <> '' GROUP BY SCHULFORM");
 	    	   for (int i = 0; i < daten_ListItemsSchulform.size(); i++) {
 	    		   Liste_DatenSchulform.add(daten_ListItemsSchulform.get(i).get(0));
 		    	   }
@@ -2788,9 +3106,29 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	  			/**
 	  			 * Nachname Ansprechpartner
 	  			 */
+	    	   daten = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+				 for (int i = 0; i < daten.size(); i++) {
+					if (!(daten.get(i).get(13).matches(".*")) ) {
+						daten.remove(i);
+						i--;
+					}else {
+						
+					}
+				}
+				 
 	  			ArrayList<ArrayList<String>> daten_ListItemsNameAnspr= new ArrayList<ArrayList<String>>();
 	  			ArrayList<String> Liste_DatenAnspr = new ArrayList<String>();
-	  			daten_ListItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' AND NN <> '' ORDER BY NN");
+	  			
+	  			for (int i = 0; i < daten.size(); i++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 try {
+						 daten1d.add(daten.get(i).get(1));
+						 daten_ListItemsNameAnspr.add(daten1d);
+					} catch (Exception e) {
+						daten_ListItemsNameAnspr.add(new ArrayList<String>());
+					}
+				}
+//	  			daten_ListItemsNameAnspr = _model.getData("SELECT NN FROM ANSPRECHPARTNER WHERE NN IS NOT NULL AND NN <> 'null' AND NN <> '' ORDER BY NN");
 	   			for (int i = 0; i < daten_ListItemsNameAnspr.size(); i++) {
 	   				Liste_DatenAnspr.add(daten_ListItemsNameAnspr.get(i).get(0));
 			    }
@@ -2912,8 +3250,22 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());
 			String zeit = sdf.format(time);
+			
+			ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+			 for (int j = 0; j < daten.size(); j++) {
+				if (!(daten.get(j).get(13).matches(liste.get(0))) ) {
+					daten.remove(j);
+					j--;
+				}
+			}
+			 ArrayList<ArrayList<String>> infoAnspr = new ArrayList<ArrayList<String>>();
+			 for (int j = 0; j < daten.size(); j++) {
+				 ArrayList<String> daten1d = new ArrayList<String>();
+				 daten1d.add(daten.get(j).get(8));
+				 infoAnspr.add(daten1d);
+			}
 			if (i == 1) {
-				ArrayList<ArrayList<String>> infoAnspr = _model.getData("Select INFO From ANSPRECHPARTNER WHERE ID = '" + liste.get(0) + "';");
+//				ArrayList<ArrayList<String>> infoAnspr = _model.getData("Select INFO From ANSPRECHPARTNER WHERE ID = '" + liste.get(0) + "';");
 				String info;
 				info = infoAnspr.get(0).get(0);
 				info = info + "\n" + "Daten geupdatet am " + zeit;

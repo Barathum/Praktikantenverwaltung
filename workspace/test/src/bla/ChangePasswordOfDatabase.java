@@ -13,8 +13,8 @@ public class ChangePasswordOfDatabase {
 	public static void main( String[] args ) {
 
         try {
-        	_crypt.decryptFile( "db/PraktikantenDB.db", "1234" );
-            _crypt.encryptFile( "db/PraktikantenDB.db", "Bacard1" );
+        	_crypt.decryptFile( "db/PraktikantenDB.db", "Bacard1" );
+            _crypt.encryptFile( "db/PraktikantenDB.db", "" );
             FileUtils.forceDelete(new File("db/PraktikantenDB.db.decrypted.db"));
         } catch (IOException e) {
             // TODO Auto-generated catch block

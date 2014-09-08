@@ -215,8 +215,11 @@ private Cryptor _crypt;
 	  * @param sql Der auszuführende Select Befehl
 	  * @return 2D ArrayList der Daten; return.get(0) = Datensatz 1; return.get(0).get(0) = Datensatz 1 Eintrag 1
 	  */
+	 private int data;
 	 protected ArrayList<ArrayList<String>> getData(String sql){
 		  {
+			  data++;
+			  System.out.println("getData " + data);
 			    Connection c = null;
 			    Statement stmt = null;
 			    ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();

@@ -251,7 +251,6 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		   for (int i = 0; i < daten_komplett.size(); i++) {
 				String antwortFristString = daten_komplett.get(i).get(33);
 				DateTime antwortFristDate;
-				
 				String endDatum = daten_komplett.get(i).get(24);
 				DateTime endDatumDate;
 				try {
@@ -273,7 +272,10 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 							
 						daten_table.add(datensatzgekürzt);
 					}
-					
+				} catch (Exception e) {
+				}
+				
+				try {
 					endDatumDate = dateStringFormat.parseDateTime(endDatum);
 					/**
 					 * Überprüft od das Praktikum beendet wurde/ in den nächsten Tagen beendet wird, wenn der Status auf "Zusage" oder "anwesend" ist
@@ -296,7 +298,6 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 					}
 					
 				} catch (Exception e) {
-					
 				}
 			}
 		   

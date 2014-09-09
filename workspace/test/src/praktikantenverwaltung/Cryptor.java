@@ -70,11 +70,16 @@ public class Cryptor {
      * @throws IOException Die Datei kann nicht gefunden werden
      * @throws GeneralSecurityException Keine Rechte auf original Datei zuzugreifen
      */
-    public void encryptFile(String fileName, String pass)
+    public void encryptFile(String fileName, String pass , Boolean text)
                                 throws IOException, GeneralSecurityException{
         byte[] decData;
         byte[] encData;
-        File inFile = new File(fileName+ ".decrypted.db");
+        File inFile;
+        if (text == false) {
+        	inFile = new File(fileName+ ".decrypted.db");
+		}else {
+			inFile = new File(fileName);
+		}
         //Generate the cipher using pass:
         Cipher cipher = Cryptor.makeCipher(pass, true);
 
@@ -120,7 +125,7 @@ public class Cryptor {
      * @throws GeneralSecurityException Das Passwort ist falsch oder keine Zugriffsrechte
      * @throws IOException Die Datei kann nicht gefunden werden
      */
-    public void decryptFile(String fileName, String pass)
+    public void decryptFile(String fileName, String pass , Boolean text)
                             throws GeneralSecurityException, IOException{
         byte[] encData;
         byte[] decData;
@@ -151,10 +156,15 @@ public class Cryptor {
         //Write the decrypted data to a new file:
 
 
-
-        FileOutputStream target = new FileOutputStream(new File(fileName + ".decrypted.db"));
-        target.write(decData);
-        target.close();
+        if (text == false) {
+        	FileOutputStream target = new FileOutputStream(new File(fileName + ".decrypted.db"));
+            target.write(decData);
+            target.close();
+		}else {
+			FileOutputStream target = new FileOutputStream(new File(fileName + ".decrypted.txt"));
+            target.write(decData);
+            target.close();
+		}
     }
 
 //    /**Record the key to a text file for testing:**/

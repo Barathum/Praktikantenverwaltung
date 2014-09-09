@@ -11,6 +11,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+
+import bla.SHAtoTXTFile;
 /**
  * 
  * @author Barathum
@@ -24,6 +26,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewtabellePrakt _viewprakttabelle;
 	private PraktikantenVerwaltung_ViewTabelleAnspr _viewansprtabelle;
 	private PraktikantenVerwaltung_ViewAnspr _viewanspr;
+	private PraktikantenVerwaltung_AuslastDiagramme _viewAuslast;
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
@@ -32,6 +35,7 @@ public class PraktikantenVerwaltung_Control {
 	private Integer hoechsteAnsprID = 100000;
 	private String passwort = "";
 	private JPasswordField pass;
+	private SHAtoTXTFile _sha = new SHAtoTXTFile();
 	/**
 	 * Konstruktor der das Modell Initialisiert und die Listener anfügt
 	 * außerdem wird die Methode PasswortPrompt aufgerufen
@@ -68,15 +72,22 @@ public class PraktikantenVerwaltung_Control {
 		/**
 		* Versucht die Datenbank zu entschlüsseln
 		*/
-		_crypt.decryptFile( "db/PraktikantenDB.db", new String(password) );
-		_model.disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , new String(password));
-		passwort = new String(password);
+		_crypt.decryptFile( "db/PraktikantenDB.db", _sha.generateHash(new String(password)) , false );
+		passwort = _sha.generateHash(new String(password));
+		_model.disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
 		_model.setPasswort(passwort);
 		ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		daten = _model.getData("SELECT ID , NN , VN , EDIT FROM PRAKTIKANTEN ORDER BY NN;");
 		this._viewStart = new PraktikantenVerwaltung_ViewStart(this._model , this._control , daten);
 		addListener();
 		} catch (GeneralSecurityException e) {
+			try {
+				_crypt.decryptFile( "db/keyfile.txt", new String(password) , true );
+			} catch (GeneralSecurityException e3) {
+				
+			} catch (IOException e3){
+				System.out.println("KeyFile fehlt!");
+			}
 		/**
 		* Das Passwort war falsch
 		*/
@@ -144,7 +155,14 @@ public class PraktikantenVerwaltung_Control {
 		            this._viewStart.setNeuerAnsprListener(new NeuerAnsprListener());
 		            this._viewStart.setTabellePraktListener(new TabellePraktListener());
 		            this._viewStart.setTabelleAnsprListener(new TabelleAnsprListener());
+		            this._viewStart.setAuslastListener(new AuslastListener());
 	   } 
+	   private class AuslastListener implements ActionListener{ 
+           public void actionPerformed(ActionEvent e) { 
+                _viewAuslast = new PraktikantenVerwaltung_AuslastDiagramme(_control, _model);
+                _viewAuslast.setVisible(true);
+            } 
+	   }
 	   /**
 	    * 
 	    * @author Barathum

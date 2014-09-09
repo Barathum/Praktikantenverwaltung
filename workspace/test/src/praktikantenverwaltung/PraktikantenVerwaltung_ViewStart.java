@@ -63,6 +63,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	JMenuItem menuNeuerAnsprechpartner = new JMenuItem("Neuer Ansprechpartner");
 	JMenuItem menuAllePraktikanten = new JMenuItem("Zeige Praktikantentabelle");
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige Ansprechpartnertabelle");
+	JMenuItem menuAuslastungsdiagramm = new JMenuItem("Auslastungsdiagramm");
 	private JScrollPane scrollPane;
 	private PraktikantenVerwaltung_Modell _model;
 	private PraktikantenVerwaltung_Control _control;
@@ -107,6 +108,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		    start.add(menuNeuerAnsprechpartner);
 		    start.add(menuAllePraktikanten);
 		    start.add(menuAlleAnsprechpartner);
+		    start.add(menuAuslastungsdiagramm);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
 		    
@@ -166,6 +168,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	}
 	public void setTabelleAnsprListener(ActionListener l){ 
         this.menuAlleAnsprechpartner.addActionListener(l); 
+	}
+	public void setAuslastListener(ActionListener l){ 
+        this.menuAuslastungsdiagramm.addActionListener(l); 
 	}
 	
 	

@@ -53,7 +53,7 @@ private Cryptor _crypt;
 	 private Connection connectToDatabase(String d , String pw)
 	  {
 		 try {
-			this._crypt.decryptFile(d.substring(12), pw);
+			this._crypt.decryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
 			// Passwort falsch
 			e1.printStackTrace();
@@ -83,7 +83,7 @@ private Cryptor _crypt;
 	 protected void disconnectFromDatabase(String d , String pw)
 	  {
 		 try {
-			this._crypt.encryptFile(d.substring(12), pw);
+			this._crypt.encryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
 			// Keine Rechte dazu
 			e1.printStackTrace();

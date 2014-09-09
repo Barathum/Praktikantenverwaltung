@@ -169,6 +169,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	 * Kontruktor ohne Daten für einen Neuen Praktikanten
 	 * @param control Die mitgegebene Control
 	 * @param model Das Modell welches mitgegeben wird
+	 * @wbp.parser.constructor
 	 */
 	public PraktikantenVerwaltung_ViewPrakt(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model){
 		  this._model = model;

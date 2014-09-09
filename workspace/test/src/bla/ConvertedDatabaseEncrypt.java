@@ -13,11 +13,11 @@ import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
 public class ConvertedDatabaseEncrypt {
-
+	private static SHAtoTXTFile _sha = new SHAtoTXTFile();
     public static void main( String[] args ) {
 
         try {
-            encryptFile( "db/PraktikantenDB.db", "yolo" );
+            encryptFile( "db/PraktikantenDB.db", _sha.getHash("db/keyfile.txt") );
 //            decryptFile( "test.db", "swag" );
         } catch (IOException e) {
             // TODO Auto-generated catch block

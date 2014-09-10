@@ -187,26 +187,21 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
         				textArea.setText("Passwort erfolgreich geändert");
         			} catch (GeneralSecurityException e2) {
         				// TODO Auto-generated catch block
-        				System.out.println("Master Passwort falsch");
         				textArea.setText("Master Passwort falsch");
         			} catch (IOException e2) {
 						// TODO: handle exception
-        				System.out.println("Datei KeyFile fehlt");
         				textArea.setText("Datei KeyFile fehlt");
 					}
         	          FileUtils.forceDelete(new File("db/keyfile.txt.decrypted.txt"));
         	          FileUtils.forceDelete(new File("db/keyfile.txt"));
                 } catch (IOException e1) {
                     // TODO Auto-generated catch block
-                    System.out.println("Datenbank nicht gefunden");
                     textArea.setText("Datenbank nicht gefunden");
                 } catch (GeneralSecurityException e1) {
                     // TODO Auto-generated catch block
-                    System.out.println("Altes Passwort ist falsch");
                     textArea.setText("Altes Passwort ist falsch");
                 }
 			}else {
-				System.out.println("Neues Passwort stimmt nicht überein");
 				textArea.setText("Neues Passwort stimmt nicht überein");
 			}
          } 

@@ -30,6 +30,7 @@ public class PraktikantenVerwaltung_Control {
 	private PraktikantenVerwaltung_ViewStart _viewStart;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
+	private PraktikantenVerwaltung_ViewPasswortaendern _viewPasswortaendern;
 	private Cryptor _crypt;
 	private Integer hoechstePraktID = 100000;
 	private Integer hoechsteAnsprID = 100000;
@@ -156,7 +157,16 @@ public class PraktikantenVerwaltung_Control {
 		            this._viewStart.setTabellePraktListener(new TabellePraktListener());
 		            this._viewStart.setTabelleAnsprListener(new TabelleAnsprListener());
 		            this._viewStart.setAuslastListener(new AuslastListener());
+		            this._viewStart.setPasswortAendernListener(new passwortAendernListerner());
 	   } 
+	   
+	   private class passwortAendernListerner implements ActionListener{
+		   public void actionPerformed(ActionEvent e) { 
+               _viewPasswortaendern = new PraktikantenVerwaltung_ViewPasswortaendern(_control, _model);
+               _viewPasswortaendern.setVisible(true);
+           } 
+	   }
+	   
 	   private class AuslastListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewAuslast = new PraktikantenVerwaltung_AuslastDiagramme(_control, _model);

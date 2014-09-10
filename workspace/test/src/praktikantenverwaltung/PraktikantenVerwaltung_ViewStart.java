@@ -65,6 +65,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	JMenuItem menuAlleAnsprechpartner = new JMenuItem("Zeige Ansprechpartnertabelle");
 	JMenuItem menuAuslastungsdiagramm = new JMenuItem("Auslastungsdiagramm");
 	JMenuItem menuPasswortaendern = new JMenuItem("Passwort ändern");
+	JMenuItem menuDatenbankExport = new JMenuItem("Datenbank exportieren");
 	private JScrollPane scrollPane;
 	private PraktikantenVerwaltung_Modell _model;
 	private PraktikantenVerwaltung_Control _control;
@@ -111,6 +112,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		    start.add(menuAlleAnsprechpartner);
 		    start.add(menuAuslastungsdiagramm);
 		    start.add(menuPasswortaendern);
+		    start.add(menuDatenbankExport);
 		    menu.add(start);
 		    getContentPane().add(menu, BorderLayout.NORTH);
 		    
@@ -176,6 +178,9 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	}
 	public void setPasswortAendernListener(ActionListener l){ 
         this.menuPasswortaendern.addActionListener(l); 
+	}
+	public void setDatabaseExportListener(ActionListener l){ 
+        this.menuDatenbankExport.addActionListener(l); 
 	}
 	
 	

@@ -62,7 +62,7 @@ public class PraktikantenVerwaltung_Control {
 		panelpw.add(labelpw);
 		panelpw.add(pass);
 		String[] options = new String[]{"OK", "Schließen"};
-		int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
+		int option = JOptionPane.showOptionDialog(null, panelpw, "Passworteingabe",
 		JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 		null, options, options[0]);
 		char[] password = null;
@@ -158,7 +158,41 @@ public class PraktikantenVerwaltung_Control {
 		            this._viewStart.setTabelleAnsprListener(new TabelleAnsprListener());
 		            this._viewStart.setAuslastListener(new AuslastListener());
 		            this._viewStart.setPasswortAendernListener(new passwortAendernListerner());
+		            this._viewStart.setDatabaseExportListener(new datenbankExportListener());
 	   } 
+	   
+	   private class datenbankExportListener implements ActionListener{
+		   public void actionPerformed(ActionEvent e) { 
+			   JPanel panelpw = new JPanel();
+				JLabel labelpw = new JLabel("Wollen Sie die Datenbank wirklich exportieren? Diese liegt dann offen im Ordner DB");
+				panelpw.add(labelpw);
+				String[] options = new String[]{"Ja", "Nein"};
+				int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
+				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
+				null, options, options[1]);
+				char[] password = null;
+				if(option == 0) // pressing OK button
+				{
+				try {
+				/**
+				* Versucht die Datenbank zu entschlüsseln
+				*/
+				_crypt.decryptFile("db/PraktikantenDB.db", getPasswort(), false);
+				} catch (GeneralSecurityException e2) {
+				/**
+				* Das Passwort war falsch
+				*/
+				System.out.println("Passwort Falsch!");
+				passWortPromptBeforeStart();
+				} catch (IOException e2) {
+				/**
+				* Die Datei mit .encrypted ist nicht vorhanden
+				*/
+				System.out.println("Datei nicht gefunden!");
+				}
+				}
+           } 
+	   }
 	   
 	   private class passwortAendernListerner implements ActionListener{
 		   public void actionPerformed(ActionEvent e) { 

@@ -6,10 +6,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
@@ -17,18 +19,31 @@ import javax.swing.JLabel;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
-public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame {
+import org.apache.commons.io.FileUtils;
+
+import bla.SHAtoTXTFile;
+import jdk.nashorn.internal.runtime.linker.JavaAdapterFactory;
+
+public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
-	private JTextField textField_altesPasswort;
-	private JTextField textField_neuesPasswort1;
-	private JTextField textField_neuesPasswort2;
+	private JPasswordField textField_altesPasswort;
+	private JPasswordField textField_neuesPasswort1;
+	private JPasswordField textField_neuesPasswort2;
 	private PraktikantenVerwaltung_Modell _model; 
-	private PraktikantenVerwaltung_Control _control; 
+	private PraktikantenVerwaltung_Control _control;
+	private JButton btnSpeichern;
+	private JButton btnAbbrechen;
+	private JTextArea textArea; 
 
 	
 
@@ -49,22 +64,22 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame {
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		
-		textField_altesPasswort = new JTextField();
+		textField_altesPasswort = new JPasswordField();
 		textField_altesPasswort.setColumns(10);
 		
-		textField_neuesPasswort1 = new JTextField();
+		textField_neuesPasswort1 = new JPasswordField();
 		textField_neuesPasswort1.setColumns(10);
 		
-		textField_neuesPasswort2 = new JTextField();
+		textField_neuesPasswort2 = new JPasswordField();
 		textField_neuesPasswort2.setColumns(10);
 		
-		JButton btnSpeichern = new JButton("Speichern");
+		btnSpeichern = new JButton("Speichern");
 		btnSpeichern.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		
-		JButton btnAbbrechen = new JButton("Abbrechen");
+		btnAbbrechen = new JButton("Abbrechen");
 		btnAbbrechen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -130,7 +145,8 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		
-		JTextArea textArea = new JTextArea();
+		textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setForeground(Color.BLUE);
 		textArea.setBackground(UIManager.getColor("Button.background"));
 		textArea.setEnabled(false);
@@ -146,5 +162,60 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame {
 		);
 		panel_1.setLayout(gl_panel_1);
 		panel.setLayout(gl_panel);
+		setSpeichernListener(new SpeichernListener());
+		btnAbbrechen.addActionListener(this);
+	}
+	private void setSpeichernListener(ActionListener l){
+		this.btnSpeichern.addActionListener(l);
+	}
+	
+	class SpeichernListener implements ActionListener{ 
+		private Cryptor _crypt = new Cryptor();
+    	private SHAtoTXTFile _sha = new SHAtoTXTFile();
+        public void actionPerformed(ActionEvent e) { 
+        	if (Arrays.equals(textField_neuesPasswort1.getPassword(), textField_neuesPasswort2.getPassword())) {
+        		try {
+        			String oldpw = _sha.generateHash(new String(textField_altesPasswort.getPassword()));
+        			String newpw = _sha.generateHash(new String(textField_neuesPasswort1.getPassword()));
+                	_crypt.decryptFile( "db/PraktikantenDB.db", oldpw  , false);
+                    _crypt.encryptFile( "db/PraktikantenDB.db", newpw , false);
+                    FileUtils.forceDelete(new File("db/PraktikantenDB.db.decrypted.db"));
+        	          try {
+        	        	 _crypt.decryptFile("db/keyfile.txt", "123", true);
+        	        	 _sha.keyToFile(_sha.generateHash(newpw));
+        				_crypt.encryptFile( "db/keyfile.txt", "123" , true);
+        				textArea.setText("Passwort erfolgreich geändert");
+        			} catch (GeneralSecurityException e2) {
+        				// TODO Auto-generated catch block
+        				System.out.println("Master Passwort falsch");
+        				textArea.setText("Master Passwort falsch");
+        			} catch (IOException e2) {
+						// TODO: handle exception
+        				System.out.println("Datei KeyFile fehlt");
+        				textArea.setText("Datei KeyFile fehlt");
+					}
+        	          FileUtils.forceDelete(new File("db/keyfile.txt.decrypted.txt"));
+        	          FileUtils.forceDelete(new File("db/keyfile.txt"));
+                } catch (IOException e1) {
+                    // TODO Auto-generated catch block
+                    System.out.println("Datenbank nicht gefunden");
+                    textArea.setText("Datenbank nicht gefunden");
+                } catch (GeneralSecurityException e1) {
+                    // TODO Auto-generated catch block
+                    System.out.println("Altes Passwort ist falsch");
+                    textArea.setText("Altes Passwort ist falsch");
+                }
+			}else {
+				System.out.println("Neues Passwort stimmt nicht überein");
+				textArea.setText("Neues Passwort stimmt nicht überein");
+			}
+         } 
+	   }
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource().equals(btnAbbrechen)) {
+			this.dispose();
+		}
 	}
 }

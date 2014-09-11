@@ -45,6 +45,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	 * erstellen der Fields
 	 */
 	private static final long serialVersionUID = 1L;
+	private JFrame fenster=this;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
 	private JPanel mainPanel;
@@ -56,7 +57,6 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private JTextField textField_NameAnsprBearb;
 	private JTextArea textArea_InfoAnspr;
 	private JTextArea textArea_AnmerkOrtBearb;
-	private JLabel lblBearbeiteAnsprechpartner;
 	private JButton button_SpeichernAnspr;
 	private JXDatePicker datePicker_blockierenVon;
 	private JXDatePicker datePicker_blockierenBis;
@@ -71,12 +71,14 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	 * Kontruktor ohne Daten für einen neuen Ansprechpartner
 	 * @param control Die mitgebene Control, damit keine neue erstellt werden muss
 	 * @param model Das mitgebene Modell damit kein neues erstellt werden muss
+	 * @wbp.parser.constructor
 	 */
 	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
 		this._model = model;
 		this._control = control;
 		updateorinsert = 2;
 		viewKontrukt();
+		this.setTitle("Neuer Ansprechpartner");
 		
 	}
 	/**
@@ -92,6 +94,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		updateorinsert = 1;
 		viewKontrukt();
 		setInhaltAnsprBearb(Ansprechpartnereintrag);
+		this.setTitle(Ansprechpartnereintrag.get(0).get(2)+" "+Ansprechpartnereintrag.get(0).get(1)+" bearbeiten");
 	}
 	/**
 	 * Der gekapselte Konstruktor für die eingabefelder etc.
@@ -99,8 +102,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	private void viewKontrukt(){
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(20, 20, 958, 556);
-		
+		setBounds(20, 20, 958, 466);
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -275,9 +277,6 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		JLabel label_10 = new JLabel("Anmerkungen zum Einsatzort");
 		label_10.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		lblBearbeiteAnsprechpartner = new JLabel("Bearbeite  Ansprechpartner");
-		lblBearbeiteAnsprechpartner.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
 		button_SpeichernAnspr = new JButton("Speichern");
 		
 		JScrollPane scrollPane_6 = new JScrollPane();
@@ -285,53 +284,45 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		JLabel lblInfo = new JLabel("Info");
 		GroupLayout gl_panel_ansprbearb = new GroupLayout(panel_ansprbearb);
 		gl_panel_ansprbearb.setHorizontalGroup(
-			gl_panel_ansprbearb.createParallelGroup(Alignment.TRAILING)
+			gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-					.addGap(45)
-					.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 538, GroupLayout.PREFERRED_SIZE)
-					.addGap(32)
 					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
-						.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
-						.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
+							.addGap(41)
+							.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 538, GroupLayout.PREFERRED_SIZE)
+							.addGap(36)
+							.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 296, GroupLayout.PREFERRED_SIZE)
+								.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 211, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
+							.addGap(260)
+							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
+							.addGap(34)
+							.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
+								.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblInfo, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE))))
 					.addContainerGap(31, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, gl_panel_ansprbearb.createSequentialGroup()
-					.addGap(261)
-					.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 146, GroupLayout.PREFERRED_SIZE)
-					.addGap(33)
-					.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 308, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(194, Short.MAX_VALUE))
-				.addGroup(Alignment.LEADING, gl_panel_ansprbearb.createSequentialGroup()
-					.addGap(441)
-					.addComponent(lblInfo, GroupLayout.PREFERRED_SIZE, 44, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(457, Short.MAX_VALUE))
-				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-					.addContainerGap(395, Short.MAX_VALUE)
-					.addComponent(lblBearbeiteAnsprechpartner, GroupLayout.PREFERRED_SIZE, 216, GroupLayout.PREFERRED_SIZE)
-					.addGap(331))
 		);
 		gl_panel_ansprbearb.setVerticalGroup(
 			gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-					.addGap(35)
-					.addComponent(lblBearbeiteAnsprechpartner)
-					.addGap(47)
+					.addGap(29)
 					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
 							.addComponent(label_10, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGap(18)
 							.addComponent(scrollPane_3, GroupLayout.PREFERRED_SIZE, 135, GroupLayout.PREFERRED_SIZE))
 						.addComponent(panel_2, GroupLayout.PREFERRED_SIZE, 282, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblInfo)
 					.addGroup(gl_panel_ansprbearb.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
-							.addGap(21)
-							.addComponent(lblInfo)
-							.addGap(8)
-							.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
-						.addGroup(Alignment.TRAILING, gl_panel_ansprbearb.createSequentialGroup()
+							.addGap(18)
+							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_ansprbearb.createSequentialGroup()
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(button_SpeichernAnspr, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
-							.addGap(45))))
+							.addComponent(scrollPane_6, GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)))
+					.addGap(104))
 		);
 		
 		textArea_InfoAnspr = new JTextArea();
@@ -394,6 +385,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	   private class AnsprSpeichernListener implements ActionListener{ 
 		public void actionPerformed(ActionEvent e) { 
 			   ArrayList<String> datensatzAnspr = getInhaltAnspr();
+			   fenster.setTitle(datensatzAnspr.get(2)+" "+datensatzAnspr.get(1)+" bearbeiten");
                String sql;
                sql = schreibeEintragAnsprsql(updateorinsert, datensatzAnspr);
                _model.insertUpdateDeleteTable(sql);

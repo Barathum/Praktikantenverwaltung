@@ -165,7 +165,7 @@ public class PraktikantenVerwaltung_Control {
 				JLabel labelpw = new JLabel("Wollen Sie die Datenbank wirklich exportieren? Diese liegt dann offen im Ordner DB");
 				panelpw.add(labelpw);
 				String[] options = new String[]{"Ja", "Nein"};
-				int option = JOptionPane.showOptionDialog(null, panelpw, "The title",
+				int option = JOptionPane.showOptionDialog(null, panelpw, "",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 				null, options, options[1]);
 				char[] password = null;

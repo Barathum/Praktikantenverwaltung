@@ -87,6 +87,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(20, 20, 1280, 720);
+		this.setTitle("Ansprechpartnertabelle");
 		
 		
 		mainPanel = new JPanel();

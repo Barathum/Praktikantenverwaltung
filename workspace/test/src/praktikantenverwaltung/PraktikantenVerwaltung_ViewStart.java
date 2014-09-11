@@ -82,6 +82,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 		setResizable(true);
 		setBounds(5, 5, 1280, 720);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		this.setTitle("Praktikantenverwaltung");
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);

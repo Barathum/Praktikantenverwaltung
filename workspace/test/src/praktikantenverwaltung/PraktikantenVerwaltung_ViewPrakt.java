@@ -69,6 +69,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	private static final long serialVersionUID = 1L;
 	private PraktikantenVerwaltung_Modell _model; 
 	private PraktikantenVerwaltung_Control _control; 
+	private JFrame fenster=this;
 	private PlatzhalterReplacerUndDokumentWriter _replacer;
 	private JPanel mainPanel;
 	private JTextField textField_id;
@@ -179,6 +180,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
 		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
+		  this.setTitle("Neuer Praktikant");
 	}
 	/**
 	 * Kontruktor mit Daten um einen Praktikanten zu bearbeiten
@@ -196,6 +198,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
 		  setInhaltPrakt(Praktikanteneintrag);
+		  this.setTitle(Praktikanteneintrag.get(0).get(3) + " " + Praktikanteneintrag.get(0).get(2) + " bearbeiten");
 	}
 	/**
 	 * Der gekapselte Kontruktor, der Alle Felder Anlegt und positioniert
@@ -208,7 +211,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			setResizable(true);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(20, 20, 1280, 720);
-			
 			
 			mainPanel = new JPanel();
 			getContentPane().add(mainPanel, BorderLayout.CENTER);
@@ -2865,6 +2867,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			} catch (IllegalArgumentException e2) {
 				
 			}
+            fenster.setTitle(datensatz.get(3) + " " + datensatz.get(2) + " bearbeiten");
             
             sql = schreibeEintragPraktsql(updateOrInsert, datensatz);
             _model.insertUpdateDeleteTable(sql);

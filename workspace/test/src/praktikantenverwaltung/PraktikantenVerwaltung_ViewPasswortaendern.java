@@ -60,6 +60,7 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		this.setTitle("Passwort ändern");
 		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);

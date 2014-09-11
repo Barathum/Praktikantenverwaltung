@@ -29,7 +29,7 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(20, 20, 1280, 720);
-		
+		this.setTitle("Auslastungsdiagramm");
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);

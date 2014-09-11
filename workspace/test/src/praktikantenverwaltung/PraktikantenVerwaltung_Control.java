@@ -11,8 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-
-import bla.SHAtoTXTFile;
 /**
  * 
  * @author Barathum

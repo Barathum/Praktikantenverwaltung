@@ -7,6 +7,7 @@ import java.security.GeneralSecurityException;
 import org.apache.commons.io.FileUtils;
 
 import praktikantenverwaltung.Cryptor;
+import praktikantenverwaltung.SHAtoTXTFile;
 
 public class ChangePasswordOfDatabase {
 	private static Cryptor _crypt = new Cryptor();

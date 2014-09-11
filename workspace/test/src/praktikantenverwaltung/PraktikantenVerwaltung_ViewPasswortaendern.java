@@ -2,17 +2,13 @@ package praktikantenverwaltung;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,7 +18,6 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import javax.swing.JTextArea;
@@ -30,11 +25,14 @@ import javax.swing.border.LineBorder;
 
 import org.apache.commons.io.FileUtils;
 
-import bla.SHAtoTXTFile;
-import jdk.nashorn.internal.runtime.linker.JavaAdapterFactory;
-
+/**
+ * Klasse für das Passwortändern Fenster
+ * @author Barathum
+ *
+ */
 public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JPasswordField textField_altesPasswort;
 	private JPasswordField textField_neuesPasswort1;
@@ -44,6 +42,7 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	private JButton btnSpeichern;
 	private JButton btnAbbrechen;
 	private JTextArea textArea; 
+	private JFrame fenster;
 
 	
 
@@ -51,6 +50,7 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	 * Create the frame.
 	 */
 	public PraktikantenVerwaltung_ViewPasswortaendern(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
+		fenster = this;
 		this._model = model;
 		this._control = control;
 		
@@ -165,42 +165,52 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 		setSpeichernListener(new SpeichernListener());
 		btnAbbrechen.addActionListener(this);
 	}
+	/**
+	 * Setzt den Actionlistener l auf den Speichern Button im Passwortändern Fenster
+	 * @param l
+	 */
 	private void setSpeichernListener(ActionListener l){
 		this.btnSpeichern.addActionListener(l);
 	}
-	
+	/**
+	 * Innere Klasse die den ActionListener zum Passwortändern realisiert
+	 * @author Barathum
+	 *
+	 */
 	class SpeichernListener implements ActionListener{ 
 		private Cryptor _crypt = new Cryptor();
     	private SHAtoTXTFile _sha = new SHAtoTXTFile();
         public void actionPerformed(ActionEvent e) { 
         	if (Arrays.equals(textField_neuesPasswort1.getPassword(), textField_neuesPasswort2.getPassword())) {
-        		try {
         			String oldpw = _sha.generateHash(new String(textField_altesPasswort.getPassword()));
         			String newpw = _sha.generateHash(new String(textField_neuesPasswort1.getPassword()));
+        			try {
                 	_crypt.decryptFile( "db/PraktikantenDB.db", oldpw  , false);
-                    _crypt.encryptFile( "db/PraktikantenDB.db", newpw , false);
-                    FileUtils.forceDelete(new File("db/PraktikantenDB.db.decrypted.db"));
-        	          try {
-        	        	 _crypt.decryptFile("db/keyfile.txt", "123", true);
-        	        	 _sha.keyToFile(_sha.generateHash(newpw));
-        				_crypt.encryptFile( "db/keyfile.txt", "123" , true);
-        				textArea.setText("Passwort erfolgreich geändert");
         			} catch (GeneralSecurityException e2) {
-        				// TODO Auto-generated catch block
-        				textArea.setText("Master Passwort falsch");
+        				textArea.setText("Altes Passwort ist falsch");
         			} catch (IOException e2) {
-						// TODO: handle exception
-        				textArea.setText("Datei KeyFile fehlt");
+        				textArea.setText("Datenbank nicht gefunden");
 					}
-        	          FileUtils.forceDelete(new File("db/keyfile.txt.decrypted.txt"));
-        	          FileUtils.forceDelete(new File("db/keyfile.txt"));
-                } catch (IOException e1) {
-                    // TODO Auto-generated catch block
-                    textArea.setText("Datenbank nicht gefunden");
-                } catch (GeneralSecurityException e1) {
-                    // TODO Auto-generated catch block
-                    textArea.setText("Altes Passwort ist falsch");
-                }
+        			try {
+        				_crypt.decryptFile("db/keyfile.txt", "123", true);
+					} catch (GeneralSecurityException e2) {
+						textArea.setText("Master Passwort falsch");
+					} catch (IOException e1) {
+						textArea.setText("Datei KeyFile fehlt");
+					}
+        			try {
+        				_crypt.encryptFile( "db/PraktikantenDB.db", newpw , false);
+                        FileUtils.forceDelete(new File("db/PraktikantenDB.db.decrypted.db"));
+            	        	 _sha.keyToFile(_sha.generateHash(newpw));
+            				_crypt.encryptFile( "db/keyfile.txt", "123" , true);
+//            				textArea.setText("Passwort erfolgreich geändert");
+            				_model.setPasswort(newpw);
+            				fenster.dispose();
+            	          FileUtils.forceDelete(new File("db/keyfile.txt.decrypted.txt"));
+            	          FileUtils.forceDelete(new File("db/keyfile.txt"));
+					} catch (Exception e2) {
+						textArea.setText("Error");
+					}
 			}else {
 				textArea.setText("Neues Passwort stimmt nicht überein");
 			}
@@ -208,6 +218,9 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	   }
 
 	@Override
+	/**
+	 * ActionEvents abfangen
+	 */
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(btnAbbrechen)) {
 			this.dispose();

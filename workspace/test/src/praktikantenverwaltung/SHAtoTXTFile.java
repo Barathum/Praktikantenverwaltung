@@ -1,4 +1,4 @@
-package bla;
+package praktikantenverwaltung;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,8 +8,6 @@ import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
-
-import praktikantenverwaltung.Cryptor;
 
 public class SHAtoTXTFile {
 	private static Cryptor _crypt = new Cryptor();

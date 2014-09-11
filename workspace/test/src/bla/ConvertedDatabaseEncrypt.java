@@ -6,11 +6,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
+
+import praktikantenverwaltung.SHAtoTXTFile;
 
 public class ConvertedDatabaseEncrypt {
 	private static SHAtoTXTFile _sha = new SHAtoTXTFile();

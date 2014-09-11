@@ -44,8 +44,6 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	private JTextArea textArea; 
 	private JFrame fenster = this;
 
-	
-
 	/**
 	 * Create the frame.
 	 */

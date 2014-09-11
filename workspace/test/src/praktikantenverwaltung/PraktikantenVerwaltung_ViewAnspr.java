@@ -99,7 +99,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	/**
 	 * Der gekapselte Konstruktor für die eingabefelder etc.
 	 */
-	private void viewKontrukt(){
+	public void viewKontrukt(){
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(20, 20, 958, 466);
@@ -398,7 +398,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	    * @param liste Die Liste die die Daten enthällt die eingefügt werden sollen
 	    * @return der fertige SQL Befehl der nurnoch auf die Datenbank ausgeführt werden muss
 	    */
-	   private String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
+	   public String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
 			String sql;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -433,7 +433,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	    * Schneidet unnötige leerzeichen und Tabs weg
 	    * @return 1D ArrayList vom Typ String mit den Inhalten aus den Textfields
 	    */
-	   private ArrayList<String> getInhaltAnspr(){
+	   public ArrayList<String> getInhaltAnspr(){
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			ArrayList<String> liste = new ArrayList<String>();
 			liste.add((String) neueAnsprID.toString());
@@ -477,7 +477,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	    * @param daten Die zu setzenden Daten
 	    * @throws IndexOutOfBoundsException Daten zu wenig = Liste zu kurz
 	    */
-	   private void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
+	   public void setInhaltAnsprBearb(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
 		   SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 			neueAnsprID = daten.get(0).get(0);
 			textField_NameAnsprBearb.setText(daten.get(0).get(1));

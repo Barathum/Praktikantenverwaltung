@@ -62,7 +62,7 @@ import javax.swing.JCheckBox;
  * @author Barathum
  * Klasse die für die Praktikanten Ansicht zuständig ist
  */
-public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener{
+public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener, AnsichtPraktikant{
 	/**
 	 * erstellen der Fields
 	 */
@@ -200,10 +200,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  setInhaltPrakt(Praktikanteneintrag);
 		  this.setTitle(Praktikanteneintrag.get(0).get(3) + " " + Praktikanteneintrag.get(0).get(2) + " bearbeiten");
 	}
-	/**
-	 * Der gekapselte Kontruktor, der Alle Felder Anlegt und positioniert
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#viewKontrukt()
 	 */
-	private void viewKontrukt(){
+	@Override
+	public void viewKontrukt(){
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
@@ -1648,17 +1649,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				}
 		    }
 	};
-	/**
-	 * Setter für den Listener des Speichern Buttons
-	 * @param l Der Listener der gesetzt werden soll
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#setPraktSpeichernListener(java.awt.event.ActionListener)
 	 */
+	@Override
 	public void setPraktSpeichernListener(ActionListener l){ 
         this.btnSpeichern.addActionListener(l); 
 	}
-	/**
-	 * Setter für den Listener des Nachricht Senden Buttons
-	 * @param l Der zu setzende Listener
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#setNachrichtSendenListener(java.awt.event.ActionListener)
 	 */
+	@Override
 	public void setNachrichtSendenListener(ActionListener l){
 		this.btnNachrichtErstellen.addActionListener(l);
 	}
@@ -1721,10 +1722,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		this.textfield_miki.getDocument().addDocumentListener(l);
 	}
 	
-	/**
-	 * Methode die die Inhalte der Eingabefelder der Praktikantenansicht zurück gibt
-	 * @return 1D ArrayList vom Typ String die die Einträge beinhaltet
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#getInhaltPrakt()
 	 */
+	@Override
 	public ArrayList<String> getInhaltPrakt(){
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<String> liste = new ArrayList<String>();
@@ -1784,10 +1785,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			return liste;
 	}
-	/**
-	 * Gibt die Inhalte der Ansprechpartner zurück
-	 * @return 2D ArrayList vom Typ String mit 3 Datensätzen für die 3 Ansprechpartner
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#getInhaltAnspr()
 	 */
+	@Override
 	public ArrayList<ArrayList<String>> getInhaltAnspr(){
 		new SimpleDateFormat("dd.MM.yyyy");
 		ArrayList<ArrayList<String>> liste = new ArrayList<ArrayList<String>>();
@@ -1860,24 +1861,24 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	public boolean getEditAnspr3(){
 		return ansprbearb3gedrueckt;
 	}
-	/**
-	 * Setzt das Feld Praktikanten ID auf den Wert von id
-	 * @param id Die id auf welche das textfield gesetzt werden soll
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#setPraktId(java.lang.String)
 	 */
+	@Override
 	public void setPraktId(String id){
 		textField_id.setText(id);
 	}
-	/**
-	 * setzt das Praktikanten Info/Konsolenfeld
-	 * @param inf Der Text der gesetzt werden soll
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#setInfoPrakt(java.lang.String)
 	 */
+	@Override
 	public void setInfoPrakt(String inf){
 		this.textArea_konsole.setText(inf);
 	}
-	/**
-	 * Gibt den Inhalt des Infofeldes/Konsole zurück
-	 * @return Stringdarstellung des Inhaltes des Infofeldes
+	/* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#getInfoPrakt()
 	 */
+	@Override
 	public String getInfoPrakt(){
 		return this.textArea_konsole.getText();
 	}
@@ -1904,28 +1905,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Methode die prüft ob mehr als 1 Eintrag unter dem eingegebenen Nachnamen vorhanden ist
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
-	    */
-//	   public void Anspr1Ausfuellen (){
-//		   if (getEditAnspr1()==false) {
-//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' ORDER BY NN;");
-//			 if (datenid.size() == 1 || datenid.size() == 0) {
-//				 textField_VornameAnsprWoch1.setEditable(false);
-//				 try {
-//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//				} catch (Exception e) {
-//					daten.add(new ArrayList<String>());
-//				}
-//				 setInhaltAnspr1(0 , daten);
-//			} else {
-//				textField_VornameAnsprWoch1.setEditable(true);
-//				setInhaltAnspr1(0 , new ArrayList<ArrayList<String>>());
-//			}
-//		   }
-//		}
-	   /**
-	    * alternative für interne Daten
 	    */
 	   public void Anspr1Ausfuellen (){
 		   if (getEditAnspr1()==false) {
@@ -1984,19 +1963,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	   /**
 	    * Füllt die Felder entsprechend Vor und Nachname
 	    */
-//	   public void Anspr1AusfuellenVN (){
-//		   if (getEditAnspr1()==false) {
-//			   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr1().get(0) + "%' AND VN LIKE '" + getNameAnspr1().get(1) + "%' ORDER BY NN;");
-//				 try {
-//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//				} catch (Exception e) {
-//					daten.add(new ArrayList<String>());
-//				}
-//				 setInhaltAnspr1(-1 , daten);
-//		   }
-//		}
 		   public void Anspr1AusfuellenVN (){
 			   if (getEditAnspr1()==false) {
 					 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -2083,25 +2049,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
-//	   public void Anspr2Ausfuellen (){
-//		   if (getEditAnspr2()==false) {
-//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' ORDER BY NN;");
-//			 if (datenid.size() == 1 || datenid.size() == 0) {
-//				 textField_VornameAnsprWoch2.setEditable(false);
-//			 try {
-//				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//			} catch (Exception e) {
-//				daten.add(new ArrayList<String>());
-//			}
-//			 setInhaltAnspr2(0 , daten);
-//			 } else {
-//					textField_VornameAnsprWoch2.setEditable(true);
-//					setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
-//				}
-//		   }
-//		}
 	   public void Anspr2Ausfuellen (){
 		   if (getEditAnspr2()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -2151,19 +2098,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				Anspr2AusfuellenVN();
 			}  
 		   }
-//		   public void Anspr2AusfuellenVN (){
-//			   if (getEditAnspr2()==false) {
-//				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr2().get(0) + "%' AND VN LIKE '" + getNameAnspr2().get(1) + "%' ORDER BY NN;");
-//				 try {
-//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//				} catch (Exception e) {
-//					daten.add(new ArrayList<String>());
-//				}
-//				 setInhaltAnspr2(-1 , daten);
-//			   }
-//			}
 	   public void Anspr2AusfuellenVN (){
 		   if (getEditAnspr2()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -2244,25 +2178,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 	    * Wenn nein werden die Inhalte der anderen Felder gesetzt
 	    * sonst wird das Vornamen Feld freigeschaltet
 	    */
-//	   public void Anspr3Ausfuellen (){
-//		   if (getEditAnspr3()==false) {
-//			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//			 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//			 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' ORDER BY NN;");
-//			 if (datenid.size() == 1 || datenid.size() == 0) {
-//				 textField_VornameAnsprWoch3.setEditable(false);
-//			 try {
-//				 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//			} catch (Exception e) {
-//				daten.add(new ArrayList<String>());
-//			}
-//			 setInhaltAnspr3(0 , daten);
-//			 } else {
-//					textField_VornameAnsprWoch3.setEditable(true);
-//					setInhaltAnspr3(0 , new ArrayList<ArrayList<String>>());
-//				}
-//		   }
-//		}
 	   public void Anspr3Ausfuellen (){
 		   if (getEditAnspr3()==false) {
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -2312,19 +2227,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				Anspr3AusfuellenVN();
 			}  
 		   }
-//		   public void Anspr3AusfuellenVN (){
-//			   if (getEditAnspr3()==false) {
-//				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
-//				 ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>();
-//				 datenid = _model.getData("SELECT ID FROM ANSPRECHPARTNER WHERE NN LIKE '" + getNameAnspr3().get(0) + "%' AND VN LIKE '" + getNameAnspr3().get(1) + "%' ORDER BY NN;");
-//				 try {
-//					 daten = _model.getData("SELECT ID , NN , VN , TELE , MAIL , ABTEILUNG , RNR , ANMERKEINSATZORT FROM ANSPRECHPARTNER WHERE ID LIKE '" + datenid.get(0).get(0) + "';");
-//				} catch (Exception e) {
-//					daten.add(new ArrayList<String>());
-//				}
-//				 setInhaltAnspr3(-1 , daten);
-//			   }
-//			}
 	   public void Anspr3AusfuellenVN (){
 		   if (getEditAnspr3()==false) {
 				 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
@@ -2382,12 +2284,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			   
 		   }
-		   /**
-		    * Getter für die Daten des Ansprechpartners aus der Datenbank
-		    * @param id ID des Ansprechpartners
-		    * @return 2D ArrayList vom typ String mit dem Datensatz
-		    */
-	   public ArrayList<ArrayList<String>> getAnsprDaten(String id){
+		   /* (non-Javadoc)
+		 * @see praktikantenverwaltung.AnsichtPraktikant#getAnsprDaten(java.lang.String)
+		 */
+	   @Override
+	public ArrayList<ArrayList<String>> getAnsprDaten(String id){
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
 			 for (int i = 0; i < datenid.size(); i++) {
@@ -2956,11 +2857,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
                statusupdate(nachricht , daten.get(0).get(0));
 			}
 		}
-	   /**
-	    * Getter für die ausgewählte Nachricht
-	    * @return
-	    */
-	   private String getNachrichtWahl(){
+	   /* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#getNachrichtWahl()
+	 */
+	   @Override
+	public String getNachrichtWahl(){
 			return comboBox_NachrichtWahl.getSelectedItem().toString();
 		}
 		public Integer getAnspr1ID(){
@@ -2993,7 +2894,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		/**
 		 * Methode die die Daten fürs Autocomplete setzt
 		 */
-		 private void comboBox_autocomplete(){
+		public void comboBox_autocomplete(){
 			 ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>(allePraktDaten);
 			 for (int i = 0; i < daten.size(); i++) {
 				if (!(daten.get(i).get(13).matches(".*")) ) {
@@ -3143,7 +3044,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBox Wohnort
 			 * @param liste Die Liste der Wohnorte
 			 */
-		 	private void setListItems_wohn(ArrayList<String> liste){
+		 	public void setListItems_wohn(ArrayList<String> liste){
 				Wohnortlist = liste;
 				AutoCompleteDecorator.decorate(textfield_wohn, Wohnortlist, false);
 			}
@@ -3151,7 +3052,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBox Straße
 			 * @param liste Die Liste der Straßen
 			 */
-			private void setListItems_str(ArrayList<String> liste){
+		 	public void setListItems_str(ArrayList<String> liste){
 				Strasselist = liste;
 				AutoCompleteDecorator.decorate(textfield_str, Strasselist, false);
 			}
@@ -3159,7 +3060,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBox Geburtsort
 			 * @param liste Die Liste der Geburtsorte
 			 */
-			private void setListItems_geburtsort(ArrayList<String> liste){
+		 	public void setListItems_geburtsort(ArrayList<String> liste){
 				Geburtsortlist = liste;
 				AutoCompleteDecorator.decorate(textField_geburtsort, Geburtsortlist, false);
 			}
@@ -3168,7 +3069,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * @param liste Die Liste der Schulen
 			 */
 			
-			private void setComboBoxItems_schule(ArrayList<String> liste){
+		 	public void setComboBoxItems_schule(ArrayList<String> liste){
 				schuleList = liste;
 				AutoCompleteDecorator.decorate(textfield_schule, schuleList, false);
 			}
@@ -3176,7 +3077,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBox Schulform
 			 * @param liste Die Liste der Schulform
 			 */
-			private void setComboBoxItems_schulform(ArrayList<String> liste){
+		 	public void setComboBoxItems_schulform(ArrayList<String> liste){
 				schulformList = liste;
 				AutoCompleteDecorator.decorate(textfield_schulform, schulformList, false);
 			}
@@ -3184,19 +3085,17 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			 * Setzt den Inhalt der ComboBoxen der Ansprechpartner Nachnamen
 			 * @param liste Die Liste der Nachnamen der Ansprechpartner
 			 */
-			private void setComboBoxItems_AnsprNN(ArrayList<String> liste){
+		 	public void setComboBoxItems_AnsprNN(ArrayList<String> liste){
 				ansprList = liste;
 				AutoCompleteDecorator.decorate(textfield_NameAnsprWoch1, ansprList, false);
 				AutoCompleteDecorator.decorate(textfield_NameAnsprWoch2, ansprList, false);
 				AutoCompleteDecorator.decorate(textfield_NameAnsprWoch3, ansprList, false);
 			}
-			/**
-			 * Methode um die Sql Befehle für den Praktikanten zu schreiben
-			 * @param i 1 = update; 2 = insert; 4 = delete
-			 * @param liste Die Datenliste des Praktikanten
-			 * @return String mit dem SQL Befehl der auf die Datenbank angewandt werden kann
+			/* (non-Javadoc)
+			 * @see praktikantenverwaltung.AnsichtPraktikant#schreibeEintragPraktsql(int, java.util.ArrayList)
 			 */
-	   private String schreibeEintragPraktsql(int i, ArrayList<String> liste){
+	   @Override
+	public String schreibeEintragPraktsql(int i, ArrayList<String> liste){
 			String sql;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -3243,13 +3142,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			return sql;
 		}
-	   /**
-		 * Methode um die Sql Befehle für den Ansprachpartner zu schreiben
-		 * @param i 1 = update; 2 = insert; 4 = delete
-		 * @param liste Die Datenliste des Ansprechpartners
-		 * @return String mit dem SQL Befehl der auf die Datenbank angewandt werden kann
-		 */
-		private String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
+	   /* (non-Javadoc)
+	 * @see praktikantenverwaltung.AnsichtPraktikant#schreibeEintragAnsprsql(int, java.util.ArrayList)
+	 */
+		@Override
+		public String schreibeEintragAnsprsql(int i, ArrayList<String> liste){
 			String sql;
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());
@@ -3294,11 +3191,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			return sql;
 		}
-		/**
-		 * Setter für die Inhalte des Praktikanten
-		 * @param daten Die zu setzenden Daten
-		 * @throws IndexOutOfBoundsException Es fehlen Daten in der Liste
+		/* (non-Javadoc)
+		 * @see praktikantenverwaltung.AnsichtPraktikant#setInhaltPrakt(java.util.ArrayList)
 		 */
+		@Override
 		public void setInhaltPrakt(ArrayList<ArrayList<String>> daten) throws IndexOutOfBoundsException{
 			SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yyyy");
 				textField_id.setText(daten.get(0).get(0));
@@ -3414,11 +3310,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 					button_editAnspr3.setEnabled(false);
 				} 
 		}
-		/**
-		 * Methode für alle Files aus dem Ordnder f
-		 * Setzt dann den Inhalt des Ordners in die Liste der Nachrichten
-		 * @param f Der Pfad des Ordners in dem gesucht werden soll
+		/* (non-Javadoc)
+		 * @see praktikantenverwaltung.AnsichtPraktikant#getDocx(java.io.File)
 		 */
+		@Override
 		public void getDocx(File f){
 			File[] files = f.listFiles();
 			if (files != null) {
@@ -3439,12 +3334,11 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			}
 			AutoCompleteDecorator.decorate(this.comboBox_NachrichtWahl);
 		}
-		/**
-		 * Updatet den Status des Praktikanten je nach erstellter Nachricht
-		 * @param nachricht Die Nachricht die erstellt wurde
-		 * @param id Die Id des Praktikanten
+		/* (non-Javadoc)
+		 * @see praktikantenverwaltung.AnsichtPraktikant#statusupdate(java.lang.String, java.lang.String)
 		 */
-		private void statusupdate(String nachricht , String id){
+		@Override
+		public void statusupdate(String nachricht , String id){
 			String sql = "";
 			SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
 			Timestamp time = new Timestamp(System.currentTimeMillis());

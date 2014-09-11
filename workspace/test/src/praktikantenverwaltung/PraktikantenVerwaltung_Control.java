@@ -20,7 +20,7 @@ public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
 	 */
-	private PraktikantenVerwaltung_ViewPrakt _viewprakt;
+	private AnsichtPraktikant _viewprakt;
 	private PraktikantenVerwaltung_ViewtabellePrakt _viewprakttabelle;
 	private PraktikantenVerwaltung_ViewTabelleAnspr _viewansprtabelle;
 	private PraktikantenVerwaltung_ViewAnspr _viewanspr;
@@ -158,7 +158,11 @@ public class PraktikantenVerwaltung_Control {
 		            this._viewStart.setPasswortAendernListener(new passwortAendernListerner());
 		            this._viewStart.setDatabaseExportListener(new datenbankExportListener());
 	   } 
-	   
+	   /**
+	    * Listener für das Exportieren der Datenbank
+	    * @author Barathum
+	    *
+	    */
 	   private class datenbankExportListener implements ActionListener{
 		   public void actionPerformed(ActionEvent e) { 
 			   JPanel panelpw = new JPanel();
@@ -192,6 +196,11 @@ public class PraktikantenVerwaltung_Control {
            } 
 	   }
 	   
+	   /**
+	    * Listener zum Aufrufen des Passwort ändern Fensters
+	    * @author Barathum
+	    *
+	    */
 	   private class passwortAendernListerner implements ActionListener{
 		   public void actionPerformed(ActionEvent e) { 
                _viewPasswortaendern = new PraktikantenVerwaltung_ViewPasswortaendern(_control, _model);
@@ -199,6 +208,11 @@ public class PraktikantenVerwaltung_Control {
            } 
 	   }
 	   
+	   /**
+	    * Listener zum aufrufen des Auslastdiagramm Fensters
+	    * @author Barathum
+	    *
+	    */
 	   private class AuslastListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
                 _viewAuslast = new PraktikantenVerwaltung_AuslastDiagramme(_control, _model);

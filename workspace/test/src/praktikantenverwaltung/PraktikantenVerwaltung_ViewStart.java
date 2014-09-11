@@ -218,7 +218,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 			});
 		scrollPane.setViewportView(table_todos);
 	}
-	private JTable getTable(){
+	public JTable getTable(){
 		return table_todos;
 	}
 	
@@ -324,7 +324,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	/**
 	 * Funktion, die bei den momentan anwesenden Praktikanten automatisch den Status auf anwesend setzt
 	 */
-	private void anwesenheitSetter(){
+	public void anwesenheitSetter(){
 		DateTimeFormatter dateStringFormat = DateTimeFormat.forPattern("dd.MM.yyyy");
 		SimpleDateFormat sdfToDate = new SimpleDateFormat("dd.MM.yy");
 		Calendar cal = Calendar.getInstance();

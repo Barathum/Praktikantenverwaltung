@@ -184,8 +184,11 @@ private Cryptor _crypt;
 	  * Disconnected dann von der Datenbank
 	  * @param sql Der auszuführende Befehl
 	  */
+	 private int insert;
 	 protected void insertUpdateDeleteTable(String sql){
 		 {
+			 insert++;
+			 System.out.println("insert" + insert);
 			    Connection c = null;
 			    Statement stmt = null;
 			    try {

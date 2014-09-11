@@ -42,7 +42,7 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	private JButton btnSpeichern;
 	private JButton btnAbbrechen;
 	private JTextArea textArea; 
-	private JFrame fenster;
+	private JFrame fenster = this;
 
 	
 
@@ -50,7 +50,6 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	 * Create the frame.
 	 */
 	public PraktikantenVerwaltung_ViewPasswortaendern(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
-		fenster = this;
 		this._model = model;
 		this._control = control;
 		

@@ -62,7 +62,7 @@ import javax.swing.JCheckBox;
  * @author Barathum
  * Klasse die für die Praktikanten Ansicht zuständig ist
  */
-public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener, AnsichtPraktikant{
+public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionListener, AnsichtPraktikant_Interface{
 	/**
 	 * erstellen der Fields
 	 */

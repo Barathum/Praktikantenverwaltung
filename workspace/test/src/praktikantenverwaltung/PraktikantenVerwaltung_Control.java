@@ -20,7 +20,7 @@ public class PraktikantenVerwaltung_Control {
 	/**
 	 * setzen der Fields
 	 */
-	private AnsichtPraktikant _viewprakt;
+	private AnsichtPraktikant_Interface _viewprakt;
 	private PraktikantenVerwaltung_ViewtabellePrakt _viewprakttabelle;
 	private PraktikantenVerwaltung_ViewTabelleAnspr _viewansprtabelle;
 	private PraktikantenVerwaltung_ViewAnspr _viewanspr;

@@ -50,8 +50,11 @@ private Cryptor _crypt;
 	 * @param pw Das Passwort welches zum entschlüsseln genutzt werden soll
 	 * @return gibt die aufgebaute Verbindung zurück
 	 */
+	private int connect;
 	 private Connection connectToDatabase(String d , String pw)
 	  {
+		 connect++;
+		 System.out.println("connect" + connect);
 		 try {
 			this._crypt.decryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
@@ -80,8 +83,11 @@ private Cryptor _crypt;
 	  * @param d Pfad zur Datenbank ohne bestimmte Endungen also "name.db"
 	  * @param pw das Passwort mit welchem die Datenbank verschlüsselt werden soll
 	  */
+	 private int disconnect;
 	 protected void disconnectFromDatabase(String d , String pw)
 	  {
+		 disconnect++;
+		 System.out.println("disconnect" + disconnect);
 		 try {
 			this._crypt.encryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
@@ -188,7 +194,7 @@ private Cryptor _crypt;
 	 protected void insertUpdateDeleteTable(String sql){
 		 {
 			 insert++;
-			 System.out.println("insert" + insert);
+//			 System.out.println("insert" + insert);
 			    Connection c = null;
 			    Statement stmt = null;
 			    try {
@@ -222,7 +228,7 @@ private Cryptor _crypt;
 	 protected ArrayList<ArrayList<String>> getData(String sql){
 		  {
 			  data++;
-			  System.out.println("getData " + data);
+//			  System.out.println("getData " + data);
 			    Connection c = null;
 			    Statement stmt = null;
 			    ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();

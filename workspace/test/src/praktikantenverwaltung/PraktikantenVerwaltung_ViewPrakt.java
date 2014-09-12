@@ -177,8 +177,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  this._control = control;
 		  updateOrInsert = 2;
 		  viewKontrukt();
-		  allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
-		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
 		  this.setTitle("Neuer Praktikant");
 	}
@@ -194,8 +192,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		  this._control = control;
 		  updateOrInsert = 1;
 		  viewKontrukt();
-		  allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
-		  alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
 		  comboBox_autocomplete();
 		  setInhaltPrakt(Praktikanteneintrag);
 		  this.setTitle(Praktikanteneintrag.get(0).get(3) + " " + Praktikanteneintrag.get(0).get(2) + " bearbeiten");
@@ -208,6 +204,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		/**
 		 * Frame mit allen Panels usw. erstellen
 		 */
+			allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order By NN");
+			alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order By NN");
 			this._replacer = new PlatzhalterReplacerUndDokumentWriter();
 			setResizable(true);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -2273,7 +2271,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		    	   for (int i = 0; i < datenvn.size(); i++) {
 		    		   Liste_DatenVN.add(datenvn.get(i).get(2));
 			    	   }
-		    	   System.out.println(Liste_DatenVN.toString());
+//		    	   System.out.println(Liste_DatenVN.toString());
 					AutoCompleteDecorator.decorate(textField_VornameAnsprWoch3, Liste_DatenVN, false);
 				}
 			}
@@ -2776,6 +2774,8 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
             
             setPraktId(neuePraktID);
             
+            allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN");
+  		  	alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER");
             /**
              * autocomplete beim speichern
              */

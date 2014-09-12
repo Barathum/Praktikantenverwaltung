@@ -48,6 +48,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private JTable table_prakt = new JTable();
+	private ArrayList<ArrayList<String>> alleAnsprDaten = new ArrayList<ArrayList<String>>();
+	private ArrayList<ArrayList<String>> allePraktDaten = new ArrayList<ArrayList<String>>();
 	private JScrollPane scrollPane_Suchliste;
 	private String[] spaltennamenprak = {
             "Nachname",
@@ -84,6 +86,9 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		this._model = model;
 		this._control = control;
 		this._replacer = new PlatzhalterReplacerUndDokumentWriter();
+		allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
+		alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
+		
 		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -242,6 +247,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			ListSelectionModel model = getTable().getSelectionModel();
 			int[] rows = getTable().getSelectedRows();
 			model.clearSelection();
+			allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
 			filterPrakt();
 			for (int i = 0; i < rows.length; i++) {
 				model.addSelectionInterval(rows[i], rows[i]);
@@ -311,6 +317,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			        sql = loescheEintragPrakt(liste);
 			        _model.insertUpdateDeleteTable(sql);
 			}
+	        allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
 	        filterPrakt();
 	     }
 	   }
@@ -379,7 +386,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	}
 	
 	public void filterPrakt() { 
-		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+			ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>(allePraktDaten);
+			ArrayList<ArrayList<String>> listInhaltPrakt = new ArrayList<ArrayList<String>>();
 		   ArrayList<String> datenTextfields = new ArrayList<String>();
 		   datenTextfields = getInhaltSuchFelders();
 		   /**
@@ -399,9 +407,32 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			   Calendar cal = Calendar.getInstance();
 				cal.add(Calendar.YEAR, -50);
 				sdfToDate.set2DigitYearStart(cal.getTime());
-			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
-			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");
+				
+				 for (int j = 0; j < daten.size(); j++) {
+					if (!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
+						!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
+						!(daten.get(j).get(25).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
+						!(daten.get(j).get(26).matches("(?i:.*" + datenTextfields.get(5) + ".)*"))) {
+						daten.remove(j);
+						j--;
+					}
+				}
+				 listInhaltPrakt = new ArrayList<ArrayList<String>>();
+				 for (int j = 0; j < daten.size(); j++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 daten1d.add(daten.get(j).get(2));
+					 daten1d.add(daten.get(j).get(3));
+					 daten1d.add(daten.get(j).get(25));
+					 daten1d.add(daten.get(j).get(23));
+					 daten1d.add(daten.get(j).get(24));
+					 daten1d.add(daten.get(j).get(26));
+					 daten1d.add(daten.get(j).get(31));
+					 listInhaltPrakt.add(daten1d);
+				}
+				
+//			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" +
+//			   datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+//			   + "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' ORDER BY NN;");
 			   char startVonStartDatum;
 			   char startVonEndDatum;
 			   char startVonEditDatum;
@@ -442,13 +473,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					   }
 					   DateTime startDatumAusEingabeDate = new DateTime(startDatumAusEingabeDatesdf);
 //					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String startDatumString = daten.get(i).get(3);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String startDatumString = listInhaltPrakt.get(i).get(3);
 							DateTime startDatumDate;
 							try {
 								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
 								if (startDatumAusEingabeDate.isAfter(startDatumDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -475,13 +506,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 						   }
 					   DateTime startDatumAusEingabeDate = new DateTime(startDatumAusEingabeDatesdf);
 //					   DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String startDatumString = daten.get(i).get(3);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String startDatumString = listInhaltPrakt.get(i).get(3);
 							DateTime startDatumDate;
 							try {
 								startDatumDate = dateStringFormat.parseDateTime(startDatumString);
 								if (startDatumDate.isAfter(startDatumAusEingabeDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -493,10 +524,10 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 				}
 			   } else {
 				   try {
-					for (int i = 0; i < daten.size(); i++) {
-						String startDatumString = daten.get(i).get(3);
+					for (int i = 0; i < listInhaltPrakt.size(); i++) {
+						String startDatumString = listInhaltPrakt.get(i).get(3);
 			            if (startDatumString.matches(".*" + startDatumAusEingabe + ".*") == false) {
-							daten.remove(i);
+			            	listInhaltPrakt.remove(i);
 							i--;
 						}
 					}
@@ -516,13 +547,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 						   }
 					   DateTime endDatumAusEingabeDate = new DateTime(endDatumAusEingabeDatesdf);
 //					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String endDatumString = daten.get(i).get(4);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String endDatumString = listInhaltPrakt.get(i).get(4);
 							DateTime endDatumDate;
 							try {
 								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
 								if (endDatumAusEingabeDate.isAfter(endDatumDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -543,13 +574,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 						   }
 					   DateTime endDatumAusEingabeDate = new DateTime(endDatumAusEingabeDatesdf);
 //					   DateTime endDatumAusEingabeDate = dateStringFormat.parseDateTime(endDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String endDatumString = daten.get(i).get(4);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String endDatumString = listInhaltPrakt.get(i).get(4);
 							DateTime endDatumDate;
 							try {
 								endDatumDate = dateStringFormat.parseDateTime(endDatumString);
 								if (endDatumDate.isAfter(endDatumAusEingabeDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -561,10 +592,10 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					}
 			   } else {
 				   try {
-					for (int i = 0; i < daten.size(); i++) {
-						String endDatumString = daten.get(i).get(4);
+					for (int i = 0; i < listInhaltPrakt.size(); i++) {
+						String endDatumString = listInhaltPrakt.get(i).get(4);
 			            if (endDatumString.matches(".*" + endDatumAusEingabe + ".*") == false) {
-							daten.remove(i);
+			            	listInhaltPrakt.remove(i);
 							i--;
 						}
 					}
@@ -584,13 +615,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 						   }
 					   DateTime editDatumAusEingabeDate = new DateTime(editDatumAusEingabeDatesdf);
 //					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String editDatumString = daten.get(i).get(6);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String editDatumString = listInhaltPrakt.get(i).get(6);
 							DateTime editDatumDate;
 							try {
 								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
 								if (editDatumAusEingabeDate.isAfter(editDatumDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -611,13 +642,13 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 						   }
 					   DateTime editDatumAusEingabeDate = new DateTime(editDatumAusEingabeDatesdf);
 //					   DateTime editDatumAusEingabeDate = dateStringFormat.parseDateTime(editDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String editDatumString = daten.get(i).get(6);
+						for (int i = 0; i < listInhaltPrakt.size(); i++) {
+							String editDatumString = listInhaltPrakt.get(i).get(6);
 							DateTime editDatumDate;
 							try {
 								editDatumDate = dateStringFormat.parseDateTime(editDatumString);
 								if (editDatumDate.isAfter(editDatumAusEingabeDate)) {
-									daten.remove(i);
+									listInhaltPrakt.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -629,10 +660,10 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 					}
 			   } else {
 				   try {
-					for (int i = 0; i < daten.size(); i++) {
-						String editDatumString = daten.get(i).get(6);
+					for (int i = 0; i < listInhaltPrakt.size(); i++) {
+						String editDatumString = listInhaltPrakt.get(i).get(6);
 			            if (editDatumString.matches(".*" + editDatumAusEingabe + ".*") == false) {
-							daten.remove(i);
+			            	listInhaltPrakt.remove(i);
 							i--;
 						}
 					}
@@ -644,11 +675,34 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 			   
 			   
 		   }else {
-			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-				   		+ "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND STARTDATUM LIKE '%" + datenTextfields.get(3) + "%' AND ENDDATUM LIKE '%" + datenTextfields.get(4) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' AND EDIT LIKE '%" + datenTextfields.get(6)
-				   		+ "%' ORDER BY NN;");
+			   for (int j = 0; j < daten.size(); j++) {
+					if (!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
+						!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
+						!(daten.get(j).get(25).matches("(?i:.*" + datenTextfields.get(2) + ".*)")) ||
+						!(daten.get(j).get(23).matches("(?i:.*" + datenTextfields.get(3) + ".*)")) ||
+						!(daten.get(j).get(24).matches("(?i:.*" + datenTextfields.get(4) + ".*)")) ||
+						!(daten.get(j).get(26).matches("(?i:.*" + datenTextfields.get(5) + ".*)"))) {
+						daten.remove(j);
+						j--;
+					}
+				}
+				 listInhaltPrakt = new ArrayList<ArrayList<String>>();
+				 for (int j = 0; j < daten.size(); j++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 daten1d.add(daten.get(j).get(2));
+					 daten1d.add(daten.get(j).get(3));
+					 daten1d.add(daten.get(j).get(25));
+					 daten1d.add(daten.get(j).get(23));
+					 daten1d.add(daten.get(j).get(24));
+					 daten1d.add(daten.get(j).get(26));
+					 daten1d.add(daten.get(j).get(31));
+					 listInhaltPrakt.add(daten1d);
+				}
+//			   daten = _model.getData("SELECT NN , VN , STATUS , STARTDATUM , ENDDATUM , ANMERKPRAKT , EDIT FROM PRAKTIKANTEN WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+//				   		+ "AND STATUS LIKE '%" + datenTextfields.get(2) + "%' AND STARTDATUM LIKE '%" + datenTextfields.get(3) + "%' AND ENDDATUM LIKE '%" + datenTextfields.get(4) + "%' AND ANMERKPRAKT LIKE '%" + datenTextfields.get(5) + "%' AND EDIT LIKE '%" + datenTextfields.get(6)
+//				   		+ "%' ORDER BY NN;");
 		   }
-		   setDatenPrakt(_control.ArrayListtoArray(daten));
+		   setDatenPrakt(_control.ArrayListtoArray(listInhaltPrakt));
 		   updateTablePrakt();
 	}
 	class NachrichtSendenListener implements ActionListener{ 
@@ -795,6 +849,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		   if (src == button_aktualisieren) {
+			   allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
 			   filterPrakt();
 			}
 	}

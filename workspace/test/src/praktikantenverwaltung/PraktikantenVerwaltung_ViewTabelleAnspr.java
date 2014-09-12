@@ -76,6 +76,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	private JCheckBox chckbxInformatik;
 	private JCheckBox chckbxKaufmnnisch;
 	ImageIcon iconAktualisieren = new ImageIcon(new ImageIcon("img/aktualisierenIcon.png").getImage().getScaledInstance(25, 25, java.awt.Image.SCALE_SMOOTH));
+	private ArrayList<ArrayList<String>> alleAnsprDaten;
 
 	/**
 	 * Create the frame.
@@ -83,6 +84,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	public PraktikantenVerwaltung_ViewTabelleAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege) {
 		this._model = model;
 		this._control = control;
+		alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
 		setDatenAnspr(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -466,7 +468,8 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		}
 	}
 	public void filter() { 
-		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
+		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>(alleAnsprDaten);
+		   ArrayList<ArrayList<String>> listInhaltAnspr = new ArrayList<ArrayList<String>>();
 		   ArrayList<String> datenTextfields = new ArrayList<String>();
 		   datenTextfields = getInhaltSuchFelders();
 		  
@@ -478,15 +481,42 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 		   Calendar cal = Calendar.getInstance();
 		   cal.add(Calendar.YEAR, -50);
 		   sdfToDate.set2DigitYearStart(cal.getTime());
-		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5)  + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;"); 
-		   
+//		   daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+//				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5)  + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;"); 
+//		   
 		   /**
 		    * Hier kommen die if abfragen
 		    */
 		   if (datenTextfields.get(6).trim().startsWith("<") || datenTextfields.get(6).trim().startsWith(">")
 				   || datenTextfields.get(7).trim().startsWith("<") || datenTextfields.get(7).trim().startsWith(">")) {
 			   
+			   for (int j = 0; j < daten.size(); j++) {
+					if (!(daten.get(j).get(1).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
+					!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
+					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
+					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".)*")) ||
+					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".)*")) ||
+					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".)*")) ||
+					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".)*")) ||
+					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".)*")) ||
+					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".)*"))) {
+						daten.remove(j);
+						j--;
+					}
+				}
+				 listInhaltAnspr = new ArrayList<ArrayList<String>>();
+				 for (int j = 0; j < daten.size(); j++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 daten1d.add(daten.get(j).get(1));
+					 daten1d.add(daten.get(j).get(2));
+					 daten1d.add(daten.get(j).get(3));
+					 daten1d.add(daten.get(j).get(4));
+					 daten1d.add(daten.get(j).get(5));
+					 daten1d.add(daten.get(j).get(6));
+					 daten1d.add(daten.get(j).get(9));
+					 daten1d.add(daten.get(j).get(10));
+					 listInhaltAnspr.add(daten1d);
+				}
 			   
 			   char startVonBlockiertVon;
 			   char startVonBlockiertBis;
@@ -517,13 +547,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 						}
 						DateTime blockiertVonAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
 //						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenVonString = daten.get(i).get(6);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenVonString = listInhaltAnspr.get(i).get(6);
 							DateTime blockierenVonDate;
 							try {
 								blockierenVonDate = dateStringFormat.parseDateTime(blockierenVonString);
 								if (blockiertVonAusEingabeDate.isAfter(blockierenVonDate)) {
-						        	daten.remove(i);
+									listInhaltAnspr.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -549,13 +579,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 						}
 						DateTime blockierenVonAusEingabeDate = new DateTime(blockierenVonAusEingabeDatesdf);
 //						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenVonString = daten.get(i).get(6);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenVonString = listInhaltAnspr.get(i).get(6);
 							DateTime blockiertVonDate;
 							try {
 								blockiertVonDate = dateStringFormat.parseDateTime(blockierenVonString);
 								if (blockiertVonDate.isAfter(blockierenVonAusEingabeDate)) {
-									daten.remove(i);
+									listInhaltAnspr.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -567,10 +597,10 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 					}
 				} else {
 					try {
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenVonString = daten.get(i).get(6);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenVonString = listInhaltAnspr.get(i).get(6);
 				            if (blockierenVonString.matches(".*" + blockierenVonAusEingabe + ".*") == false) {
-								daten.remove(i);
+				            	listInhaltAnspr.remove(i);
 								i--;
 							}
 						}
@@ -590,13 +620,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 						}
 						DateTime blockiertBisAusEingabeDate = new DateTime(blockierenBisAusEingabeDatesdf);
 //						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenBisString = daten.get(i).get(7);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenBisString = listInhaltAnspr.get(i).get(7);
 							DateTime blockierenBisDate;
 							try {
 								blockierenBisDate = dateStringFormat.parseDateTime(blockierenBisString);
 								if (blockiertBisAusEingabeDate.isAfter(blockierenBisDate)) {
-						        	daten.remove(i);
+									listInhaltAnspr.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -623,13 +653,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 						}
 						DateTime blockierenBisAusEingabeDate = new DateTime(blockierenBisAusEingabeDatesdf);
 //						DateTime startDatumAusEingabeDate = dateStringFormat.parseDateTime(startDatumAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenBisString = daten.get(i).get(7);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenBisString = listInhaltAnspr.get(i).get(7);
 							DateTime blockiertBisDate;
 							try {
 								blockiertBisDate = dateStringFormat.parseDateTime(blockierenBisString);
 								if (blockiertBisDate.isAfter(blockierenBisAusEingabeDate)) {
-									daten.remove(i);
+									listInhaltAnspr.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -641,10 +671,10 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 					}
 				} else {
 					try {
-						for (int i = 0; i < daten.size(); i++) {
-							String blockierenBisString = daten.get(i).get(7);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockierenBisString = listInhaltAnspr.get(i).get(7);
 				            if (blockierenBisString.matches(".*" + blockierenBisAusEingabe + ".*") == false) {
-								daten.remove(i);
+				            	listInhaltAnspr.remove(i);
 								i--;
 							}
 						}
@@ -655,25 +685,54 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 				
 				 
 			} else {
-				daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
-				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
-				   		+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
+				for (int j = 0; j < daten.size(); j++) {
+					if (!(daten.get(j).get(1).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
+					!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
+					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
+					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".)*")) ||
+					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".)*")) ||
+					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".)*")) ||
+					!(daten.get(j).get(9).matches("(?i:.*" + datenTextfields.get(6) + ".)*")) ||
+					!(daten.get(j).get(10).matches("(?i:.*" + datenTextfields.get(7) + ".)*")) ||
+					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".)*")) ||
+					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".)*")) ||
+					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".)*"))) {
+						daten.remove(j);
+						j--;
+					}
+				}
+				 listInhaltAnspr = new ArrayList<ArrayList<String>>();
+				 for (int j = 0; j < daten.size(); j++) {
+					 ArrayList<String> daten1d = new ArrayList<String>();
+					 daten1d.add(daten.get(j).get(1));
+					 daten1d.add(daten.get(j).get(2));
+					 daten1d.add(daten.get(j).get(3));
+					 daten1d.add(daten.get(j).get(4));
+					 daten1d.add(daten.get(j).get(5));
+					 daten1d.add(daten.get(j).get(6));
+					 daten1d.add(daten.get(j).get(9));
+					 daten1d.add(daten.get(j).get(10));
+					 listInhaltAnspr.add(daten1d);
+				}
+//				daten = _model.getData("SELECT NN , VN , TELE , MAIL , ABTEILUNG , RNR , BLOCKIERENVON , BLOCKIERENBIS FROM ANSPRECHPARTNER WHERE NN LIKE '%" + datenTextfields.get(0) + "%' AND VN LIKE '%" + datenTextfields.get(1) + "%' "
+//				   		+ "AND TELE LIKE '%" + datenTextfields.get(2) + "%' AND MAIL LIKE '%" + datenTextfields.get(3) + "%' AND ABTEILUNG LIKE '%" + datenTextfields.get(4) + "%' AND RNR LIKE '%" + datenTextfields.get(5) + "%' AND BLOCKIERENVON LIKE '%" + datenTextfields.get(6) + "%'"
+//				   		+ "AND BLOCKIERENBIS LIKE '%" + datenTextfields.get(7) + "%' AND ETECH LIKE '%" + datenTextfields.get(8) + "%' AND KAUFM LIKE '%" + datenTextfields.get(9) + "%' AND INF LIKE '%" + datenTextfields.get(10) + "%' ORDER BY NN;");
 				try {
 					Date freiVonAusEingabeDatesdf = null;
 					Date freiBisAusEingabeDatesdf = null;
 					try {
 						freiVonAusEingabeDatesdf = sdfToDate.parse(freiVonAusEingabe);
 						freiBisAusEingabeDatesdf = sdfToDate.parse(freiBisAusEingabe);
-						for (int i = 0; i < daten.size(); i++) {
-							String blockiertVonString = daten.get(i).get(6);
-							String blockiertBisString = daten.get(i).get(7);
+						for (int i = 0; i < listInhaltAnspr.size(); i++) {
+							String blockiertVonString = listInhaltAnspr.get(i).get(6);
+							String blockiertBisString = listInhaltAnspr.get(i).get(7);
 							Date blockiertBisDate;
 							Date blockiertVonDate;
 							try {
 								blockiertBisDate = sdfToDate.parse(blockiertBisString);
 								blockiertVonDate = sdfToDate.parse(blockiertVonString);
 								if (!(freiBisAusEingabeDatesdf.compareTo(blockiertVonDate) < 0|| blockiertBisDate.compareTo(freiVonAusEingabeDatesdf) < 0)) {
-						        	daten.remove(i);
+									listInhaltAnspr.remove(i);
 									i--;
 								}
 							} catch (Exception e) {
@@ -689,13 +748,14 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 				}
 			}
 		   
-		   setDatenAnspr(_control.ArrayListtoArray(daten));
+		   setDatenAnspr(_control.ArrayListtoArray(listInhaltAnspr));
 		   updateTable();
 	}
 	private void refresh(){
 		ListSelectionModel model = getTable().getSelectionModel();
 		int[] rows = getTable().getSelectedRows();
 		model.clearSelection();
+		alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
 		filter();
 		for (int i = 0; i < rows.length; i++) {
 			model.addSelectionInterval(rows[i], rows[i]);
@@ -735,6 +795,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	public void actionPerformed(ActionEvent evt) {
 		Object src = evt.getSource();
 		   if (src == button_aktualisieren) {
+			   alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
 			   filter();
 			}
 	}

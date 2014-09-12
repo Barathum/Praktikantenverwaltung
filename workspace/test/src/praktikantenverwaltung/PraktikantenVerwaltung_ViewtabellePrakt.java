@@ -48,7 +48,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private JTable table_prakt = new JTable();
-	private ArrayList<ArrayList<String>> alleAnsprDaten = new ArrayList<ArrayList<String>>();
 	private ArrayList<ArrayList<String>> allePraktDaten = new ArrayList<ArrayList<String>>();
 	private JScrollPane scrollPane_Suchliste;
 	private String[] spaltennamenprak = {
@@ -87,7 +86,6 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		this._control = control;
 		this._replacer = new PlatzhalterReplacerUndDokumentWriter();
 		allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
-		alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
 		
 		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);

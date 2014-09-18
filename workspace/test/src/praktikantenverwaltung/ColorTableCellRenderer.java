@@ -30,4 +30,10 @@ public void setColor(int row,int column,Color color)
     int key=((row+1)*1000)+column;
     cellData.put(key,color);
     }
+public Color getTableCellBackground(JTable table, int row, int col) {
+    TableCellRenderer renderer = table.getCellRenderer(row, col);
+    Component component = table.prepareRenderer(renderer, row, col);
+    return component.getBackground();
+}
+
 }

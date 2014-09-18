@@ -24,6 +24,7 @@ import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableModel;
 
 import java.awt.Color;
 import java.text.ParseException;
@@ -299,11 +300,11 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 	}
 	
 	public void setAlleDatenAnsprFilter(ArrayList<ArrayList<String>> alleDatenAnspr){
-		this.alleDatenAnsprFilter =  alleDatenAnspr;
+		this.alleDatenAnsprFilter = new ArrayList<ArrayList<String>>(alleDatenAnspr);
 	}
 	
 	public void setAlleDatenPraktFilter(ArrayList<ArrayList<String>> alleDatenPrakt){
-		this.alleDatenPraktFilter =  alleDatenPrakt;
+		this.alleDatenPraktFilter = new ArrayList<ArrayList<String>>(alleDatenPrakt);
 	}
 	
 	public void fillDatenMonat(){
@@ -428,13 +429,133 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 					if (dauerblockiert.contains(eintragTime)) {
 						ctr.setColor(j2,j + 1,Color.RED);
 					}
-					//ist der eintrag im interval praktikant vorhanden, wenn ja setze zelle auf gelb
-					if (rootPaneCheckingEnabled) {
-						
-					}
 				}
 			}
 			
+			String AnsprId = alleDatenAnsprFilter.get(i).get(0);
+			ArrayList<ArrayList<String>> alleDatenPraktWoche1 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+			for (int j = 0; j < alleDatenPraktWoche1.size(); j++) {
+				if (!(alleDatenPraktWoche1.get(j).get(27).matches(AnsprId))){
+						alleDatenPraktWoche1.remove(j);
+						j--;
+					}
+			}
+			ArrayList<ArrayList<String>> alleDatenPraktWoche2 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+			for (int j = 0; j < alleDatenPraktWoche2.size(); j++) {
+				if (!(alleDatenPraktWoche2.get(j).get(27).matches(AnsprId))){
+					alleDatenPraktWoche2.remove(j);
+						j--;
+					}
+			}
+			ArrayList<ArrayList<String>> alleDatenPraktWoche3 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+			for (int j = 0; j < alleDatenPraktWoche3.size(); j++) {
+				if (!(alleDatenPraktWoche3.get(j).get(27).matches(AnsprId))){
+					alleDatenPraktWoche3.remove(j);
+						j--;
+					}
+			}
+			for (int l = 0; l < alleDatenPraktWoche1.size(); l++) {
+				Date startDateDatabase = null;
+				Date endDateDatabase = null;
+			   try {
+				   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(23));
+				   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(24));
+			   } catch (ParseException e1) {
+				   e1.printStackTrace();
+			   }
+			   DateTime startDate = new DateTime(startDateDatabase);
+			   DateTime endDate = new DateTime(endDateDatabase);
+			   Interval daueranwesend = new Interval(startDate, startDate.plusWeeks(1));
+			   for (int j = 0; j < table.getColumnCount(); j++) {
+					for (int j2 = 0; j2 < table.getRowCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), j2 + 1, j + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.WHITE)) {
+							ctr.setColor(j2,j + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.YELLOW)){
+							ctr.setColor(j2,j + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.GREEN)){
+							ctr.setColor(j2,j + 1,Color.BLUE);
+						}
+					}
+				}
+			}
+			for (int l = 0; l < alleDatenPraktWoche2.size(); l++) {
+				Date startDateDatabase = null;
+				Date endDateDatabase = null;
+			   try {
+				   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(23));
+				   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(24));
+			   } catch (ParseException e1) {
+				   e1.printStackTrace();
+			   }
+			   DateTime startDate = new DateTime(startDateDatabase);
+			   DateTime endDate = new DateTime(endDateDatabase);
+			   Interval daueranwesend = new Interval(startDate.plusWeeks(1), startDate.plusWeeks(2));
+			   for (int j = 0; j < table.getColumnCount(); j++) {
+					for (int j2 = 0; j2 < table.getRowCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), j2 + 1, j + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.WHITE)) {
+							ctr.setColor(j2,j + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.YELLOW)){
+							ctr.setColor(j2,j + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.GREEN)){
+							ctr.setColor(j2,j + 1,Color.BLUE);
+						}
+					}
+				}
+			}
+			for (int l = 0; l < alleDatenPraktWoche3.size(); l++) {
+				Date startDateDatabase = null;
+				Date endDateDatabase = null;
+			   try {
+				   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(23));
+				   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(24));
+			   } catch (ParseException e1) {
+				   e1.printStackTrace();
+			   }
+			   DateTime startDate = new DateTime(startDateDatabase);
+			   DateTime endDate = new DateTime(endDateDatabase);
+			   Interval daueranwesend = new Interval(startDate.plusWeeks(2), startDate.plusWeeks(3));
+			   for (int j = 0; j < table.getColumnCount(); j++) {
+					for (int j2 = 0; j2 < table.getRowCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), j2 + 1, j + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.WHITE)) {
+							ctr.setColor(j2,j + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.YELLOW)){
+							ctr.setColor(j2,j + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(table, j2, j + 1).equals(Color.GREEN)){
+							ctr.setColor(j2,j + 1,Color.BLUE);
+						}
+					}
+				}
+			}
 			panel.setViewportView(table);
 			panel.setPreferredSize(new Dimension(panel_AnsprechAuslast.getSize().width - 100, (int) (datenanspr.length * 16.5) + 27));
 			
@@ -549,6 +670,138 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 				}
 			}
 			
+			for (int j = 0; j < tablem.getRowCount(); j++) {
+				String AnsprId = alleDatenAnsprFilter.get(j).get(0);
+				ArrayList<ArrayList<String>> alleDatenPraktWoche1 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+				for (int x = 0; x < alleDatenPraktWoche1.size(); x++) {
+					if (!(alleDatenPraktWoche1.get(x).get(27).matches(AnsprId))){
+							alleDatenPraktWoche1.remove(x);
+							x--;
+						}
+				}
+				for (int l = 0; l < alleDatenPraktWoche1.size(); l++) {
+					Date startDateDatabase = null;
+					Date endDateDatabase = null;
+				   try {
+					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(23));
+					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(24));
+				   } catch (ParseException e1) {
+					   e1.printStackTrace();
+				   }
+				   DateTime startDate = new DateTime(startDateDatabase);
+				   DateTime endDate = new DateTime(endDateDatabase);
+				   Interval daueranwesend = new Interval(startDate, startDate.plusWeeks(1));
+					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), i + 1, j2 + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.WHITE)) {
+							ctr.setColor(j,j2 + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.YELLOW)){
+							ctr.setColor(j,j2 + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.GREEN)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.BLUE)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						}
+					}
+				}
+			}
+			for (int j = 0; j < tablem.getRowCount(); j++) {
+				String AnsprId = alleDatenAnsprFilter.get(j).get(0);
+				ArrayList<ArrayList<String>> alleDatenPraktWoche2 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+				for (int x = 0; x < alleDatenPraktWoche2.size(); x++) {
+					if (!(alleDatenPraktWoche2.get(x).get(28).matches(AnsprId))){
+						alleDatenPraktWoche2.remove(x);
+							x--;
+						}
+				}
+				for (int l = 0; l < alleDatenPraktWoche2.size(); l++) {
+					Date startDateDatabase = null;
+					Date endDateDatabase = null;
+				   try {
+					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(23));
+					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(24));
+				   } catch (ParseException e1) {
+					   e1.printStackTrace();
+				   }
+				   DateTime startDate = new DateTime(startDateDatabase);
+				   DateTime endDate = new DateTime(endDateDatabase);
+				   Interval daueranwesend = new Interval(startDate.plusWeeks(1), startDate.plusWeeks(2));
+					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), i + 1, j2 + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.WHITE)) {
+							ctr.setColor(j,j2 + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.YELLOW)){
+							ctr.setColor(j,j2 + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.GREEN)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.BLUE)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						}
+					}
+				}
+			}
+			for (int j = 0; j < tablem.getRowCount(); j++) {
+				String AnsprId = alleDatenAnsprFilter.get(j).get(0);
+				ArrayList<ArrayList<String>> alleDatenPraktWoche3 = new ArrayList<ArrayList<String>>(alleDatenPraktFilter);
+				for (int x = 0; x < alleDatenPraktWoche3.size(); x++) {
+					if (!(alleDatenPraktWoche3.get(x).get(29).matches(AnsprId))){
+						alleDatenPraktWoche3.remove(x);
+							x--;
+						}
+				}
+					for (int l = 0; l < alleDatenPraktWoche3.size(); l++) {
+					Date startDateDatabase = null;
+					Date endDateDatabase = null;
+				   try {
+					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(23));
+					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(24));
+				   } catch (ParseException e1) {
+					   e1.printStackTrace();
+				   }
+				   DateTime startDate = new DateTime(startDateDatabase);
+				   DateTime endDate = new DateTime(endDateDatabase);
+				   Interval daueranwesend = new Interval(startDate.plusWeeks(2), startDate.plusWeeks(3));
+					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
+						//versucht die Eintrag Zeit zu schreiben
+						DateTime eintragTime = new DateTime();
+						try {
+							eintragTime = new DateTime(today.getYear(), i + 1, j2 + 1, 0, 0);
+						} catch (IllegalFieldValueException e) {
+							// in dem angegebenen Monat j2 + 1 gibt es keinen tag nr j + 1 also setze die eintragszeit auf jahr 1 sodass der eintrag
+							//sicher nicht im interval dauerblockiert oder praktikant vorhanden ist
+							eintragTime = new DateTime(1, 1, 2, 0, 0);
+						}
+						//ist der eintrag im blockiert interval, wenn ja setze die zelle auf rot
+						if (daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.WHITE)) {
+							ctr.setColor(j,j2 + 1,Color.YELLOW);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.YELLOW)){
+							ctr.setColor(j,j2 + 1,Color.GREEN);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.GREEN)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						} else if(daueranwesend.contains(eintragTime) && ctr.getTableCellBackground(tablem, j,j2 + 1).equals(Color.BLUE)){
+							ctr.setColor(j,j2 + 1,Color.BLUE);
+						}
+					}
+				}
+			}
 			
 			panelm.setViewportView(tablem);
 			panelm.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 27));

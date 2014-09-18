@@ -190,7 +190,7 @@ public class PraktikantenVerwaltung_Control {
 				/**
 				* Versucht die Datenbank zu entschlüsseln
 				*/
-				_crypt.decryptFile("db/PraktikantenDB.db", getPasswort(), false);
+				_crypt.decryptFiletoFile("db/PraktikantenDB.db", "db/PraktikantenDBsave.db", getPasswort());
 				} catch (GeneralSecurityException e2) {
 				/**
 				* Das Passwort war falsch

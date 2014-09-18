@@ -165,7 +165,42 @@ public class Cryptor {
             target.close();
 		}
     }
+    
+    public void decryptFiletoFile(String fileName,String targetfile , String pass)
+            throws GeneralSecurityException, IOException{
+byte[] encData;
+byte[] decData;
+File inFile = new File(fileName+ ".encrypted");
 
+//Generate the cipher using pass:
+Cipher cipher = Cryptor.makeCipher(pass, false);
+
+//Read in the file:
+FileInputStream inStream = new FileInputStream(inFile );
+encData = new byte[(int)inFile.length()];
+inStream.read(encData);
+inStream.close();
+//Decrypt the file data:
+decData = cipher.doFinal(encData);
+
+//Figure out how much padding to remove
+
+int padCount = (int)decData[decData.length - 1];
+
+//Naive check, will fail if plaintext file actually contained
+//this at the end
+//For robust check, check that padCount bytes at the end have same value
+if( padCount >= 1 && padCount <= 8 ) {
+decData = Arrays.copyOfRange( decData , 0, decData.length - padCount);
+}
+
+//Write the decrypted data to a new file:
+
+
+FileOutputStream target = new FileOutputStream(new File(targetfile));
+target.write(decData);
+target.close();
+}
 //    /**Record the key to a text file for testing:**/
 //    private static void keyToFile(SecretKey key){
 //        try {

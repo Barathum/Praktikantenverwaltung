@@ -683,14 +683,16 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 				for (int l = 0; l < alleDatenPraktWoche1.size(); l++) {
 					Date startDateDatabase = null;
 					Date endDateDatabase = null;
+					DateTime startDate = new DateTime(1,1,2,0,0);
+					DateTime endDate = new DateTime(1,1,2,0,0);
 				   try {
 					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(23));
 					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche1.get(l).get(24));
+					   startDate = new DateTime(startDateDatabase);
+					   endDate = new DateTime(endDateDatabase);
 				   } catch (ParseException e1) {
-					   e1.printStackTrace();
+					   
 				   }
-				   DateTime startDate = new DateTime(startDateDatabase);
-				   DateTime endDate = new DateTime(endDateDatabase);
 				   Interval daueranwesend = new Interval(startDate, startDate.withDayOfWeek(DateTimeConstants.SUNDAY));
 					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
 						//versucht die Eintrag Zeit zu schreiben
@@ -727,14 +729,16 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 				for (int l = 0; l < alleDatenPraktWoche2.size(); l++) {
 					Date startDateDatabase = null;
 					Date endDateDatabase = null;
+					DateTime startDate = new DateTime(1,1,2,0,0);
+					   DateTime endDate = new DateTime(1,1,2,0,0);
 				   try {
 					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(23));
 					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche2.get(l).get(24));
+					   startDate = new DateTime(startDateDatabase);
+					   endDate = new DateTime(endDateDatabase);
 				   } catch (ParseException e1) {
-					   e1.printStackTrace();
+					   
 				   }
-				   DateTime startDate = new DateTime(startDateDatabase);
-				   DateTime endDate = new DateTime(endDateDatabase);
 				   Interval daueranwesend = new Interval(startDate.plusWeeks(1).withDayOfWeek(DateTimeConstants.MONDAY), startDate.plusWeeks(1).withDayOfWeek(DateTimeConstants.SUNDAY));
 					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
 						//versucht die Eintrag Zeit zu schreiben
@@ -771,14 +775,16 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 					for (int l = 0; l < alleDatenPraktWoche3.size(); l++) {
 					Date startDateDatabase = null;
 					Date endDateDatabase = null;
+					DateTime startDate = new DateTime(1,1,2,0,0);
+					DateTime endDate = new DateTime(1,1,2,0,0);
 				   try {
 					   startDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(23));
 					   endDateDatabase = sdfToDate.parse(alleDatenPraktWoche3.get(l).get(24));
+					   startDate = new DateTime(startDateDatabase);
+					   endDate = new DateTime(endDateDatabase);
 				   } catch (ParseException e1) {
-					   e1.printStackTrace();
+					   
 				   }
-				   DateTime startDate = new DateTime(startDateDatabase);
-				   DateTime endDate = new DateTime(endDateDatabase);
 				   Interval daueranwesend = new Interval(startDate.plusWeeks(2).withDayOfWeek(DateTimeConstants.MONDAY), startDate.plusWeeks(2).withDayOfWeek(DateTimeConstants.SUNDAY));
 					for (int j2 = 0; j2 < tablem.getColumnCount(); j2++) {
 						//versucht die Eintrag Zeit zu schreiben

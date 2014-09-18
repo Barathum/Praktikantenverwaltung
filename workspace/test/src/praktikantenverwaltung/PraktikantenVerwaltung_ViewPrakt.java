@@ -2289,7 +2289,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 		   ArrayList<ArrayList<String>> daten = new ArrayList<ArrayList<String>>();
 		   ArrayList<ArrayList<String>> datenid = new ArrayList<ArrayList<String>>(alleAnsprDaten);
 			 for (int i = 0; i < datenid.size(); i++) {
-				if (!(datenid.get(i).get(0).matches(id + ".*")) ) {
+				if (!(datenid.get(i).get(0).matches(id)) ) {
 					datenid.remove(i);
 					i--;
 				}

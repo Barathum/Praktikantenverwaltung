@@ -13,13 +13,10 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
 
-import org.apache.commons.io.FileUtils;
-
-import praktikantenverwaltung.Cryptor;
-import praktikantenverwaltung.SHAtoTXTFile;
+//import praktikantenverwaltung.SHAtoTXTFile;
 
 public class testi {
-	private static SHAtoTXTFile _sha = new SHAtoTXTFile();
+//	private static SHAtoTXTFile _sha = new SHAtoTXTFile();
 	public static void main( String[] args ) {
 
         try {

@@ -50,7 +50,7 @@ public class PraktikantenVerwaltung_ViewPasswortaendern extends JFrame implement
 	public PraktikantenVerwaltung_ViewPasswortaendern(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
 		this._model = model;
 		this._control = control;
-		
+		this.setIconImage(_control.getImg().getImage());
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 229);
 		contentPane = new JPanel();

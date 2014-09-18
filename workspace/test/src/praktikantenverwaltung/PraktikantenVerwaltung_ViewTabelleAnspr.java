@@ -8,9 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -84,6 +81,7 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 	public PraktikantenVerwaltung_ViewTabelleAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> Tabellen_Eintraege) {
 		this._model = model;
 		this._control = control;
+		this.setIconImage(_control.getImg().getImage());
 		alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order by NN");
 		setDatenAnspr(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);

@@ -4,19 +4,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class SHAtoTXTFile {
-	private static Cryptor _crypt = new Cryptor();
+//	private static Cryptor _crypt = new Cryptor();
 	
 	public void signup(String password) {
         String hashedPassword = generateHash(password);
         keyToFile(hashedPassword);
     }
-	public static void keyToFile(String password){
+	public void keyToFile(String password){
 	      try {
 	          File keyFile = new File("db/keyfile.txt");
 	          FileWriter keyStream = new FileWriter(keyFile);
@@ -39,7 +38,7 @@ public class SHAtoTXTFile {
 		try {
 			storedPasswordHash = new Scanner(new File(filepath)).useDelimiter("\\Z").next();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			System.out.println("Datei fehlt!");
 			e.printStackTrace();
 		}
         if(hashedPassword.equals(storedPasswordHash)){
@@ -56,7 +55,7 @@ public class SHAtoTXTFile {
 			return null;
 		}
 	}
-	public static String generateHash(String input) {
+	public String generateHash(String input) {
         String generatedPassword = null;
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-384");

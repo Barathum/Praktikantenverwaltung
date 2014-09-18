@@ -16,7 +16,6 @@ import java.awt.event.KeyListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.IOException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,7 +45,6 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.JTextComponent;
 
-import org.apache.commons.io.FileUtils;
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 import org.jdesktop.swingx.calendar.DatePickerFormatter;
@@ -207,6 +205,7 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 			allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order By NN");
 			alleAnsprDaten = _model.getData("SELECT * FROM ANSPRECHPARTNER Order By NN");
 			this._replacer = new PlatzhalterReplacerUndDokumentWriter();
+			this.setIconImage(_control.getImg().getImage());
 			setResizable(true);
 			setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			setBounds(20, 20, 1280, 720);
@@ -2204,10 +2203,10 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				} catch (Exception e) {
 					daten.add(new ArrayList<String>());
 				}
-				 setInhaltAnspr2(0 , daten);
+				 setInhaltAnspr3(0 , daten);
 			} else {
 				textField_VornameAnsprWoch3.setEditable(true);
-				setInhaltAnspr2(0 , new ArrayList<ArrayList<String>>());
+				setInhaltAnspr3(0 , new ArrayList<ArrayList<String>>());
 			}
 		   }
 		}
@@ -3326,7 +3325,6 @@ public class PraktikantenVerwaltung_ViewPrakt extends JFrame implements ActionLi
 				}
 			}
 		}
-		@SuppressWarnings("unchecked")
 		public void setComboBoxItems_Nachricht(Vector<String> v){
 			comboBox_NachrichtWahl.removeAllItems();
 			for (int i = 0; i < v.size(); i++) {

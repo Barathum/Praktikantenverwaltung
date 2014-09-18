@@ -76,6 +76,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 	public PraktikantenVerwaltung_ViewAnspr(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model) {
 		this._model = model;
 		this._control = control;
+		
 		updateorinsert = 2;
 		viewKontrukt();
 		this.setTitle("Neuer Ansprechpartner");
@@ -103,6 +104,7 @@ public class PraktikantenVerwaltung_ViewAnspr extends JFrame {
 		setResizable(true);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(20, 20, 958, 466);
+		this.setIconImage(_control.getImg().getImage());
 		
 		mainPanel = new JPanel();
 		getContentPane().add(mainPanel, BorderLayout.CENTER);

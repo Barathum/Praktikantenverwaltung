@@ -4,17 +4,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-
-import javax.crypto.SecretKey;
 
 import praktikantenverwaltung.Cryptor;
 
@@ -36,7 +31,7 @@ public class SHAtest {
 
   }
 
-    static Map DB = new HashMap();
+    static Map<String, String> DB = new HashMap<String, String>();
     public static final String SALT = "";
 
     public static void main(String args[]) {

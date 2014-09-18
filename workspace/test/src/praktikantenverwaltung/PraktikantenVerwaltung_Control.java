@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -35,6 +35,7 @@ public class PraktikantenVerwaltung_Control {
 	private String passwort = "";
 	private JPasswordField pass;
 	private SHAtoTXTFile _sha = new SHAtoTXTFile();
+	private ImageIcon img;
 	/**
 	 * Konstruktor der das Modell Initialisiert und die Listener anfügt
 	 * außerdem wird die Methode PasswortPrompt aufgerufen
@@ -42,11 +43,22 @@ public class PraktikantenVerwaltung_Control {
 	public PraktikantenVerwaltung_Control(){
 		this._crypt = new Cryptor();
 		this._model = new PraktikantenVerwaltung_Modell(_crypt); 
+		
+		img = new ImageIcon(new ImageIcon("img/database.png").getImage());
+		
+//		ArrayList<ImageIcon> icons = new ArrayList<ImageIcon>();
+//		icons.add(getImage("someImage16x16.gif"));
+//		icons.add(getImage("someImage32x32.gif"));
+//		window.setIconImages(icons);
 //		_model.createTables();
 		this._control = this;
 		passWortPromptBeforeStart();
 //		System.out.println(passwort);
 	}
+	public ImageIcon getImg(){
+		return this.img;
+	}
+	
 	/**
 	 * Erstellt ein Passwort eingabe Fenster
 	 * überprüft, ob die Datenbank vorhanden und mit dem angegebenen Passwort entschlüsselt werden kann
@@ -172,7 +184,6 @@ public class PraktikantenVerwaltung_Control {
 				int option = JOptionPane.showOptionDialog(null, panelpw, "",
 				JOptionPane.NO_OPTION, JOptionPane.PLAIN_MESSAGE,
 				null, options, options[1]);
-				char[] password = null;
 				if(option == 0) // pressing OK button
 				{
 				try {
@@ -184,8 +195,7 @@ public class PraktikantenVerwaltung_Control {
 				/**
 				* Das Passwort war falsch
 				*/
-				System.out.println("Passwort Falsch!");
-				passWortPromptBeforeStart();
+				System.out.println("Kein Zugriff!");
 				} catch (IOException e2) {
 				/**
 				* Die Datei mit .encrypted ist nicht vorhanden
@@ -215,7 +225,11 @@ public class PraktikantenVerwaltung_Control {
 	    */
 	   private class AuslastListener implements ActionListener{ 
            public void actionPerformed(ActionEvent e) { 
-                _viewAuslast = new PraktikantenVerwaltung_AuslastDiagramme(_control, _model);
+        	   ArrayList<ArrayList<String>> datenanspr = new ArrayList<ArrayList<String>>();
+        	   datenanspr = _model.getData("SELECT * FROM ANSPRECHPARTNER Order By NN;");
+        	   ArrayList<ArrayList<String>> datenprakt = new ArrayList<ArrayList<String>>();
+        	   datenprakt = _model.getData("SELECT * FROM PRAKTIKANTEN Order By NN;");
+                _viewAuslast = new PraktikantenVerwaltung_AuslastDiagramme(_control, _model , datenanspr , datenprakt);
                 _viewAuslast.setVisible(true);
             } 
 	   }

@@ -15,7 +15,9 @@ class SteppedComboBoxUI extends MetalComboBoxUI {
   protected ComboPopup createPopup() {
     BasicComboPopup popup = new BasicComboPopup( comboBox ) {
         
-      public void show() {
+		private static final long serialVersionUID = 1L;
+
+	public void show() {
         Dimension popupSize = ((SteppedComboBox)comboBox).getPopupSize();
         popupSize.setSize( popupSize.width,
           getPopupHeightForRowCount( comboBox.getMaximumRowCount() ) );

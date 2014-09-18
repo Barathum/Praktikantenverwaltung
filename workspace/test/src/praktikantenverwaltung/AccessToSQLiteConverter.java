@@ -1,6 +1,5 @@
 package praktikantenverwaltung;
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+
 import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

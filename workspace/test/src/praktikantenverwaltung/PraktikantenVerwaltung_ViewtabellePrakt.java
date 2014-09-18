@@ -85,6 +85,7 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 		this._model = model;
 		this._control = control;
 		this._replacer = new PlatzhalterReplacerUndDokumentWriter();
+		this.setIconImage(_control.getImg().getImage());
 		allePraktDaten = _model.getData("SELECT * FROM PRAKTIKANTEN Order by NN");
 		
 		setDatenPrakt(_control.ArrayListtoArray(Tabellen_Eintraege));

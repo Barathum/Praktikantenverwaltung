@@ -54,7 +54,7 @@ private Cryptor _crypt;
 	 private Connection connectToDatabase(String d , String pw)
 	  {
 		 connect++;
-		 System.out.println("connect" + connect);
+//		 System.out.println("connect" + connect);
 		 try {
 			this._crypt.decryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
@@ -87,7 +87,7 @@ private Cryptor _crypt;
 	 protected void disconnectFromDatabase(String d , String pw)
 	  {
 		 disconnect++;
-		 System.out.println("disconnect" + disconnect);
+//		 System.out.println("disconnect" + disconnect);
 		 try {
 			this._crypt.encryptFile(d.substring(12), pw , false);
 		} catch (GeneralSecurityException e1) {
@@ -117,83 +117,83 @@ private Cryptor _crypt;
 	  * Erstellt Tabellen Praktikanten und Ansprechpartner
 	  * nur benötigt, wenn die Datenbank nicht existiert
 	  */
-	 private void createTables(){
-		    Connection c = null;
-		    Statement stmt = null;
-		    try {
-		      c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
-		      stmt = c.createStatement();
-		      String sql = "CREATE TABLE PRAKTIKANTEN " +
-	                   "(ID TEXT," +
-	                   " ANREDE TEXT, " + 
-	                   " NN TEXT, " + 
-	                   " VN TEXT, " + 
-	                   " GB TEXT, " +
-	                   " GO TEXT, " +
-	                   " STR TEXT, " +
-	                   " PLZ TEXT, " +
-	                   " LAND TEXT, " +
-	                   " TELE TEXT, " +
-	                   " MAIL TEXT, " +
-	                   " MOBIL TEXT, " +
-	                   " HAUSNR TEXT, " +
-	                   " ORT TEXT, " +
-	                   " GNN TEXT, " +
-	                   " GVN TEXT, " +
-	                   " SCHULE TEXT, " +
-	                   " SCHULFORM TEXT, " +
-	                   " PARTNERS TEXT, " +
-	                   " ANMERKSCHULE TEXT, " +
-	                   " MIKI TEXT, " +
-	                   " GRAD TEXT, " +
-	                   " ANMERKPERSON TEXT, " +
-	                   " STARTDATUM TEXT, " +
-	                   " ENDDATUM TEXT, " +
-	                   " STATUS TEXT, " +
-	                   " ANMERKPRAKT TEXT, " +
-	                   " ANSPR1 TEXT, " +
-	                   " ANSPR2 TEXT, " +
-	                   " ANSPR3 TEXT, " +
-	                   " INFO TEXT, " +
-	                   " EDIT TEXT, " +
-	                   " UNTERLAGENVOLLST TEXT, " +
-	                   " ANTWORTBIS TEXT)"; 
-		      stmt.executeUpdate(sql);
-		      sql = "CREATE TABLE ANSPRECHPARTNER " +
-	                   "(ID TEXT," +
-	                   " NN TEXT, " + 
-	                   " VN TEXT, " + 
-	                   " TELE TEXT, " + 
-	                   " MAIL TEXT, " +
-	                   " ABTEILUNG TEXT, " +
-	                   " RNR TEXT, " +
-	                   " ANMERKEINSATZORT TEXT, " +
-	                   " INFO TEXT, " +
-	                   " BLOCKIERENVON  TEXT, " +
-	                   " BLOCKIERENBIS  TEXT, " +
-	                   " ETECH  TEXT, " +
-	                   " KAUFM  TEXT, " +
-	                   " INF TEXT)";
-		      stmt.executeUpdate(sql);
-		      stmt.close();
-		      c.close();
-		      disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
-		    } catch ( Exception e ) {
-		      e.printStackTrace();
-		      System.exit(0);
-		    }
-//		    System.out.println("Tabelle erfolgreich erstellt");
-	 }
+//	 private void createTables(){
+//		    Connection c = null;
+//		    Statement stmt = null;
+//		    try {
+//		      c = connectToDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
+//		      stmt = c.createStatement();
+//		      String sql = "CREATE TABLE PRAKTIKANTEN " +
+//	                   "(ID TEXT," +
+//	                   " ANREDE TEXT, " + 
+//	                   " NN TEXT, " + 
+//	                   " VN TEXT, " + 
+//	                   " GB TEXT, " +
+//	                   " GO TEXT, " +
+//	                   " STR TEXT, " +
+//	                   " PLZ TEXT, " +
+//	                   " LAND TEXT, " +
+//	                   " TELE TEXT, " +
+//	                   " MAIL TEXT, " +
+//	                   " MOBIL TEXT, " +
+//	                   " HAUSNR TEXT, " +
+//	                   " ORT TEXT, " +
+//	                   " GNN TEXT, " +
+//	                   " GVN TEXT, " +
+//	                   " SCHULE TEXT, " +
+//	                   " SCHULFORM TEXT, " +
+//	                   " PARTNERS TEXT, " +
+//	                   " ANMERKSCHULE TEXT, " +
+//	                   " MIKI TEXT, " +
+//	                   " GRAD TEXT, " +
+//	                   " ANMERKPERSON TEXT, " +
+//	                   " STARTDATUM TEXT, " +
+//	                   " ENDDATUM TEXT, " +
+//	                   " STATUS TEXT, " +
+//	                   " ANMERKPRAKT TEXT, " +
+//	                   " ANSPR1 TEXT, " +
+//	                   " ANSPR2 TEXT, " +
+//	                   " ANSPR3 TEXT, " +
+//	                   " INFO TEXT, " +
+//	                   " EDIT TEXT, " +
+//	                   " UNTERLAGENVOLLST TEXT, " +
+//	                   " ANTWORTBIS TEXT)"; 
+//		      stmt.executeUpdate(sql);
+//		      sql = "CREATE TABLE ANSPRECHPARTNER " +
+//	                   "(ID TEXT," +
+//	                   " NN TEXT, " + 
+//	                   " VN TEXT, " + 
+//	                   " TELE TEXT, " + 
+//	                   " MAIL TEXT, " +
+//	                   " ABTEILUNG TEXT, " +
+//	                   " RNR TEXT, " +
+//	                   " ANMERKEINSATZORT TEXT, " +
+//	                   " INFO TEXT, " +
+//	                   " BLOCKIERENVON  TEXT, " +
+//	                   " BLOCKIERENBIS  TEXT, " +
+//	                   " ETECH  TEXT, " +
+//	                   " KAUFM  TEXT, " +
+//	                   " INF TEXT)";
+//		      stmt.executeUpdate(sql);
+//		      stmt.close();
+//		      c.close();
+//		      disconnectFromDatabase("jdbc:sqlite:db/PraktikantenDB.db" , passwort);
+//		    } catch ( Exception e ) {
+//		      e.printStackTrace();
+//		      System.exit(0);
+//		    }
+////		    System.out.println("Tabelle erfolgreich erstellt");
+//	 }
 	 /**
 	  * Baut verbindung auf und für das Statement definiert durch den String sql auf der Datenbank aus
 	  * Insert Update oder Delete Befehle
 	  * Disconnected dann von der Datenbank
 	  * @param sql Der auszuführende Befehl
 	  */
-	 private int insert;
+//	 private int insert;
 	 protected void insertUpdateDeleteTable(String sql){
 		 {
-			 insert++;
+//			 insert++;
 //			 System.out.println("insert" + insert);
 			    Connection c = null;
 			    Statement stmt = null;
@@ -224,10 +224,10 @@ private Cryptor _crypt;
 	  * @param sql Der auszuführende Select Befehl
 	  * @return 2D ArrayList der Daten; return.get(0) = Datensatz 1; return.get(0).get(0) = Datensatz 1 Eintrag 1
 	  */
-	 private int data;
+//	 private int data;
 	 protected ArrayList<ArrayList<String>> getData(String sql){
 		  {
-			  data++;
+//			  data++;
 //			  System.out.println("getData " + data);
 			    Connection c = null;
 			    Statement stmt = null;

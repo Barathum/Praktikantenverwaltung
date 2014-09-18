@@ -10,18 +10,14 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -36,7 +32,6 @@ import org.joda.time.format.DateTimeFormatter;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.JButton;
-import javax.swing.Icon;
 import javax.swing.BorderFactory;
 /**
  * Das Startfenster der Praktikantenverwaltung
@@ -78,6 +73,7 @@ public class PraktikantenVerwaltung_ViewStart extends JFrame {
 	public PraktikantenVerwaltung_ViewStart(PraktikantenVerwaltung_Modell model , PraktikantenVerwaltung_Control control , ArrayList<ArrayList<String>> Tabellen_Eintraege) {
 		this._model = model;
 		this._control = control;
+		this.setIconImage(_control.getImg().getImage());
 		setDatenTodos(_control.ArrayListtoArray(Tabellen_Eintraege));
 		setResizable(true);
 		setBounds(5, 5, 1280, 720);

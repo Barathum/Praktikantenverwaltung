@@ -21,8 +21,11 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.BoxLayout;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
@@ -111,6 +114,8 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 	private ArrayList<ArrayList<String>> alleDatenPrakt;
 	private ArrayList<ArrayList<String>> alleDatenAnsprFilter;
 	private ArrayList<ArrayList<String>> alleDatenPraktFilter;
+	private ArrayList<JTable> tablesAnspr = new ArrayList<JTable>();
+	private ArrayList<JTable> tablesMonat = new ArrayList<JTable>();
 	
 	
 	public PraktikantenVerwaltung_AuslastDiagramme(PraktikantenVerwaltung_Control control , PraktikantenVerwaltung_Modell model , ArrayList<ArrayList<String>> alleDatenAnspr , ArrayList<ArrayList<String>> alleDatenPrakt){
@@ -257,6 +262,7 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 		
 		createTableAnspr();
 		createTableMonat();
+		setTabellenFilterAnspr(new TabellenFilterAnspr());
 		
 	}
 	
@@ -275,6 +281,14 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 	    }
 	};
 	
+	public String getInhaltTextfieldMonatFilter(){
+		return textField_filterMonat.getText();
+	}
+	
+	public String getInhaltTextfieldAnsprFilter(){
+		return textField_filterAnspr.getText();
+	}
+	
 	public void setDatenMonat(Object[][] daten){
 		this.datenmonat = daten;
 	}
@@ -291,13 +305,6 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 		}else if (src == btnMonatsansicht) {
 			cardLayout.show(panel_auslast,"card_monat");
 		}
-	}
-	public void setNameAnsprTable(String s){
-		spaltenTage[0] = s;
-	}
-	
-	public void setNameMonatTable(String s){
-		spaltenTage[0] = s;
 	}
 	
 	public void setAlleDatenAnsprFilter(ArrayList<ArrayList<String>> alleDatenAnspr){
@@ -374,19 +381,10 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 	}
 	public void createTableAnspr(){
 		for (int i = 0; i < alleDatenAnsprFilter.size(); i++) {
-			setNameAnsprTable(alleDatenAnsprFilter.get(i).get(1));
-			panel_1 = new JPanel();
-			panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
-			panel_1.setPreferredSize(new Dimension(panel_AnsprechAuslast.getSize().width - 100, (int) (datenanspr.length * 16.5) + 60));
+			String[] spaltenTageAnspr = spaltenTage.clone();
+			spaltenTageAnspr[0] = alleDatenAnsprFilter.get(i).get(1);
 			
-			Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
-		    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
-		    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
-			panel_1.setBorder(twoBorder);
-			
-			panel = new JScrollPane();
-			
-			table = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltenTage, datenanspr));
+			table = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltenTageAnspr, datenanspr));
 			table.setColumnSelectionAllowed(false);
 			table.setRowSelectionAllowed(false);
 			table.getColumnModel().getColumn(0).setPreferredWidth(200);
@@ -557,74 +555,126 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 					}
 				}
 			}
-			panel.setViewportView(table);
-			panel.setPreferredSize(new Dimension(panel_AnsprechAuslast.getSize().width - 100, (int) (datenanspr.length * 16.5) + 27));
-			
-			btnDrucken = new JButton("Drucken");
-			btnDrucken.setHorizontalAlignment(SwingConstants.LEFT);
-			
-			panel_1.add(btnDrucken);
-			panel_1.add(panel);
-			panel_tableAnsprAuslast.add(panel_1);
+			tablesAnspr.add(table);
 		}
+		setTablesAnspr(tablesAnspr);
+	}
+	public void setTablesAnspr(ArrayList<JTable> tablesanspr){
+		panel_tableAnsprAuslast.removeAll();
+		if (tablesanspr.size() == 0) {
+			panel_1 = new JPanel();
+			panel_tableAnsprAuslast.add(panel_1);
+		} else {
+			for (int i = 0; i < tablesanspr.size(); i++) {
+				panel_1 = new JPanel();
+				
+				panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.Y_AXIS));
+				panel_1.setPreferredSize(new Dimension(panel_AnsprechAuslast.getSize().width - 100, (int) (datenanspr.length * 16.5) + 60));
+				
+				Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
+			    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+			    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
+				panel_1.setBorder(twoBorder);
+				
+				panel = new JScrollPane();
+				panel.setViewportView(tablesanspr.get(i));
+				panel.setPreferredSize(new Dimension(panel_AnsprechAuslast.getSize().width - 100, (int) (datenanspr.length * 16.5) + 27));
+				
+				btnDrucken = new JButton("Drucken");
+				btnDrucken.setHorizontalAlignment(SwingConstants.LEFT);
+				
+				panel_1.add(btnDrucken);
+				panel_1.add(panel);
+				panel_tableAnsprAuslast.add(panel_1);
+			}
+		}
+		revalidate();
+	}
+	public ArrayList<JTable> getTablesAnspr(){
+		return tablesAnspr;
+	}
+	
+	private void setTabellenFilterAnspr(DocumentListener l){
+        this.textField_filterAnspr.getDocument().addDocumentListener(l);
+	}
+	
+	class TabellenFilterAnspr implements DocumentListener{ 
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			filterTablesAnspr();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			filterTablesAnspr();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			filterTablesAnspr();
+		}
+	}
+	
+	public void filterTablesAnspr(){
+		ArrayList<JTable> tablesAnprFilter = new ArrayList<JTable>(getTablesAnspr());
+		for (int i = 0; i < tablesAnprFilter.size(); i++) {
+			if (!(tablesAnprFilter.get(i).getModel().getColumnName(0).matches("(?i:.*" + getInhaltTextfieldAnsprFilter() + ".*)"))) {
+				tablesAnprFilter.remove(i);
+				i--;
+			}
+		}
+		setTablesAnspr(tablesAnprFilter);
 	}
 	
 	public void createTableMonat(){
 		for (int i = 0; i < 12; i++) {
+			String[] spaltenTageMonat = spaltenTage.clone();
 			switch (i) {
 			case 0:
-				setNameMonatTable("Januar");
+				spaltenTageMonat[0] = "Januar";
 				break;
 			case 1:
-				setNameMonatTable("Februar");
+				spaltenTageMonat[0] = "Februar";
 				break;
 			case 2:
-				setNameMonatTable("März");
+				spaltenTageMonat[0] = "März";
 				break;
 			case 3:
-				setNameMonatTable("April");
+				spaltenTageMonat[0] = "April";
 				break;
 			case 4:
-				setNameMonatTable("Mai");
+				spaltenTageMonat[0] = "Mai";
 				break;
 			case 5:
-				setNameMonatTable("Juni");
+				spaltenTageMonat[0] = "Juni";
 				break;
 			case 6:
-				setNameMonatTable("Juli");
+				spaltenTageMonat[0] = "Juli";
 				break;
 			case 7:
-				setNameMonatTable("August");
+				spaltenTageMonat[0] = "August";
 				break;
 			case 8:
-				setNameMonatTable("September");
+				spaltenTageMonat[0] = "September";
 				break;
 			case 9:
-				setNameMonatTable("Oktober");
+				spaltenTageMonat[0] = "Oktober";
 				break;
 			case 10:
-				setNameMonatTable("November");
+				spaltenTageMonat[0] = "November";
 				break;
 			case 11:
-				setNameMonatTable("Dezember");
+				spaltenTageMonat[0] = "Dezember";
 				break;
 			default:
-				setNameMonatTable("Monat");
+				spaltenTageMonat[0] = "Monat";
 				break;
 			}
-			panel_2 = new JPanel();
-			panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
-			panel_2.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 60));
-			panel_2.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-			
-			Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
-		    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
-		    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
-			panel_2.setBorder(twoBorder);
 			
 			panelm = new JScrollPane();
 			
-			tablem = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltenTage, datenmonat));
+			tablem = new JTable(new DefaultTableModel_PraktikantenVerwaltung(spaltenTageMonat, datenmonat));
 			tablem.setColumnSelectionAllowed(false);
 			tablem.setRowSelectionAllowed(false);
 			tablem.getColumnModel().getColumn(0).setPreferredWidth(230);
@@ -810,17 +860,39 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 				}
 			}
 			
-			panelm.setViewportView(tablem);
+			tablesMonat.add(tablem);
+		}
+		setTablesMonat(tablesMonat);
+	}
+	public void setTablesMonat(ArrayList<JTable> tablesmonat){
+		panel_tableMonatAuslast.removeAll();
+		for (int i = 0; i < tablesmonat.size(); i++) {
+			panelm = new JScrollPane();
+			panelm.setViewportView(tablesmonat.get(i));
 			panelm.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 27));
 			
 			btnDruckenm = new JButton("Drucken");
 			btnDruckenm.setHorizontalAlignment(SwingConstants.LEFT);
 			
+			panel_2 = new JPanel();
+			panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+			panel_2.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 60));
+			panel_2.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+			
+			Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
+		    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+		    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
+		    
+			panel_2.setBorder(twoBorder);
 			panel_2.add(btnDruckenm);
 			panel_2.add(panelm);
 			panel_tableMonatAuslast.add(panel_2);
 		}
 	}
+	public ArrayList<JTable> getTablesMonat(){
+		return tablesMonat;
+	}
+	
 	
 	
 }

@@ -491,13 +491,13 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 			   for (int j = 0; j < daten.size(); j++) {
 					if (!(daten.get(j).get(1).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
 					!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
-					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
-					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".)*")) ||
-					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".)*")) ||
-					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".)*")) ||
-					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".)*")) ||
-					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".)*")) ||
-					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".)*"))) {
+					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".*)")) ||
+					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".*)")) ||
+					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".*)")) ||
+					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".*)")) ||
+					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".*)")) ||
+					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".*)")) ||
+					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".*)"))) {
 						daten.remove(j);
 						j--;
 					}
@@ -686,15 +686,15 @@ public class PraktikantenVerwaltung_ViewTabelleAnspr extends JFrame implements A
 				for (int j = 0; j < daten.size(); j++) {
 					if (!(daten.get(j).get(1).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
 					!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
-					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
-					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".)*")) ||
-					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".)*")) ||
-					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".)*")) ||
-					!(daten.get(j).get(9).matches("(?i:.*" + datenTextfields.get(6) + ".)*")) ||
-					!(daten.get(j).get(10).matches("(?i:.*" + datenTextfields.get(7) + ".)*")) ||
-					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".)*")) ||
-					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".)*")) ||
-					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".)*"))) {
+					!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(2) + ".*)")) ||
+					!(daten.get(j).get(4).matches("(?i:.*" + datenTextfields.get(3) + ".*)")) ||
+					!(daten.get(j).get(5).matches("(?i:.*" + datenTextfields.get(4) + ".*)")) ||
+					!(daten.get(j).get(6).matches("(?i:.*" + datenTextfields.get(5) + ".*)")) ||
+					!(daten.get(j).get(9).matches("(?i:.*" + datenTextfields.get(6) + ".*)")) ||
+					!(daten.get(j).get(10).matches("(?i:.*" + datenTextfields.get(7) + ".*)")) ||
+					!(daten.get(j).get(11).matches("(?i:.*" + datenTextfields.get(8) + ".*)")) ||
+					!(daten.get(j).get(12).matches("(?i:.*" + datenTextfields.get(9) + ".*)")) ||
+					!(daten.get(j).get(13).matches("(?i:.*" + datenTextfields.get(10) + ".*)"))) {
 						daten.remove(j);
 						j--;
 					}

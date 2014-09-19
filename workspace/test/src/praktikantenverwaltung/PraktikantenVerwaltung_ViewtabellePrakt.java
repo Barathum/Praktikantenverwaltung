@@ -410,8 +410,8 @@ public class PraktikantenVerwaltung_ViewtabellePrakt extends JFrame implements A
 				 for (int j = 0; j < daten.size(); j++) {
 					if (!(daten.get(j).get(2).matches("(?i:.*" + datenTextfields.get(0) + ".*)")) ||
 						!(daten.get(j).get(3).matches("(?i:.*" + datenTextfields.get(1) + ".*)")) ||
-						!(daten.get(j).get(25).matches("(?i:.*" + datenTextfields.get(2) + ".)*")) ||
-						!(daten.get(j).get(26).matches("(?i:.*" + datenTextfields.get(5) + ".)*"))) {
+						!(daten.get(j).get(25).matches("(?i:.*" + datenTextfields.get(2) + ".*)")) ||
+						!(daten.get(j).get(26).matches("(?i:.*" + datenTextfields.get(5) + ".*)"))) {
 						daten.remove(j);
 						j--;
 					}

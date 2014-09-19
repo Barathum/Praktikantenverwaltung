@@ -263,7 +263,7 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 		createTableAnspr();
 		createTableMonat();
 		setTabellenFilterAnspr(new TabellenFilterAnspr());
-		
+		setTabellenFilterMonat(new TabellenFilterMonat());
 	}
 	
 	
@@ -866,33 +866,71 @@ public class PraktikantenVerwaltung_AuslastDiagramme extends JFrame implements A
 	}
 	public void setTablesMonat(ArrayList<JTable> tablesmonat){
 		panel_tableMonatAuslast.removeAll();
-		for (int i = 0; i < tablesmonat.size(); i++) {
-			panelm = new JScrollPane();
-			panelm.setViewportView(tablesmonat.get(i));
-			panelm.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 27));
-			
-			btnDruckenm = new JButton("Drucken");
-			btnDruckenm.setHorizontalAlignment(SwingConstants.LEFT);
-			
+		if (tablesmonat.size() == 0) {
 			panel_2 = new JPanel();
-			panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
-			panel_2.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 60));
-			panel_2.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-			
-			Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
-		    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
-		    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
-		    
-			panel_2.setBorder(twoBorder);
-			panel_2.add(btnDruckenm);
-			panel_2.add(panelm);
 			panel_tableMonatAuslast.add(panel_2);
+		} else {
+			for (int i = 0; i < tablesmonat.size(); i++) {
+				panelm = new JScrollPane();
+				panelm.setViewportView(tablesmonat.get(i));
+				panelm.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 27));
+				
+				btnDruckenm = new JButton("Drucken");
+				btnDruckenm.setHorizontalAlignment(SwingConstants.LEFT);
+				
+				panel_2 = new JPanel();
+				panel_2.setLayout(new BoxLayout(panel_2, BoxLayout.Y_AXIS));
+				panel_2.setPreferredSize(new Dimension(panel_MonatAuslast.getSize().width - 100, (int) (datenmonat.length * 16.1) + 60));
+				panel_2.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+				
+				Border blackBorder = BorderFactory.createLineBorder(Color.BLACK, 2);
+			    Border emptyBorder = BorderFactory.createEmptyBorder(0, 0, 10, 0);
+			    Border twoBorder = new CompoundBorder(emptyBorder, blackBorder);
+			    
+				panel_2.setBorder(twoBorder);
+				panel_2.add(btnDruckenm);
+				panel_2.add(panelm);
+				panel_tableMonatAuslast.add(panel_2);
+			}
 		}
+		revalidate();
 	}
 	public ArrayList<JTable> getTablesMonat(){
 		return tablesMonat;
 	}
 	
+	private void setTabellenFilterMonat(DocumentListener l){
+        this.textField_filterMonat.getDocument().addDocumentListener(l);
+	}
+	
+	class TabellenFilterMonat implements DocumentListener{ 
+
+		@Override
+		public void changedUpdate(DocumentEvent e) {
+			filterTablesMonat();
+		}
+
+		@Override
+		public void insertUpdate(DocumentEvent e) {
+			filterTablesMonat();
+		}
+
+		@Override
+		public void removeUpdate(DocumentEvent e) {
+			filterTablesMonat();
+		}
+	}
+	
+	public void filterTablesMonat(){
+		ArrayList<JTable> tablesMonatFilter = new ArrayList<JTable>(getTablesMonat());
+		for (int i = 0; i < tablesMonatFilter.size(); i++) {
+			if (!(tablesMonatFilter.get(i).getModel().getColumnName(0).matches("(?i:.*" + getInhaltTextfieldMonatFilter() + ".*)"))) {
+				tablesMonatFilter.remove(i);
+				i--;
+			}
+		}
+		setTablesMonat(tablesMonatFilter);
+	}
 	
 	
 }
